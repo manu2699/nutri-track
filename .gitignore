@@ -1,4 +1,8 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Build output
+dist/
 
 pnpm-lock.yaml
 
