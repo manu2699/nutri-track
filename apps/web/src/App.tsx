@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Button, Badge } from "@nutri-track/ui";
+import { BADGE_VARIANTS, Badge, BUTTON_VARIANTS, Button } from "@nutri-track/ui";
 
 import "./App.css";
 
@@ -11,13 +11,13 @@ function App() {
 		<>
 			<h1>Vite + React</h1>
 			<div className="card">
-				<Button className="font-bold py-2 px-4 rounded m-4" onClick={() => setCount((count) => count + 1)}>
+				<Button variant={BUTTON_VARIANTS.SECONDARY} onClick={() => setCount((count) => count + 1)}>
 					count is {count}
 				</Button>
 				<p>
 					Edit <code>src/App.tsx</code> and save to test HMR
 					<br />
-					<Badge variant="destructive">Badge</Badge>
+					<Badge variant={BADGE_VARIANTS.DESTRUCTIVE}>Badge</Badge>
 				</p>
 			</div>
 			<p className="read-the-docs">Click on the Vite and React logos to learn more</p>

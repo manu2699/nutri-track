@@ -1,0 +1,21 @@
+{
+	"format_on_save": "on",
+	"formatter": {
+		"external": {
+			"command": "./node_modules/.bin/biome",
+			"arguments": ["format", "--stdin-file-path", "{buffer_path}"]
+		}
+	},
+	"code_actions_on_format": {
+		"source.fixAll": true,
+		"source.organizeImports.biome": true
+	},
+	"lsp": {
+		"biome": {
+			"binary": {
+				"path": "./node_modules/.bin/biome",
+				"arguments": ["lsp-proxy"]
+			}
+		}
+	}
+}

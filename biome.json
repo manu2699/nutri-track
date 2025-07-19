@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
 	"formatter": {
 		"enabled": true,
 		"attributePosition": "auto",
@@ -10,6 +10,7 @@
 	},
 	"javascript": {
 		"formatter": {
+			"quoteStyle": "double",
 			"trailingCommas": "none"
 		}
 	},
@@ -19,9 +20,37 @@
 		}
 	},
 	"linter": {
-		"enabled": false
+		"enabled": true,
+		"includes": ["**", "!dist"],
+		"rules": {
+			"recommended": true,
+			"style": {
+				"useImportType": "error"
+			}
+		}
 	},
 	"assist": {
-		"enabled": false
+		"actions": {
+			"source": {
+				"organizeImports": {
+					"level": "on",
+					"options": {
+						"groups": [
+							["react", "react-dom", "react-*"],
+							["@types/react", "@types/react-*"],
+							[":PACKAGE:", "!@nutri-track/**"],
+							":BLANK_LINE:",
+							["@nutri-track/**"],
+							["@/**", "~/**"],
+							":BLANK_LINE:",
+							["./**", "../**"],
+							":BLANK_LINE:",
+							["**/*.css", "**/*.scss", "**/*.less"],
+							["**/*.svg", "**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.gif"]
+						]
+					}
+				}
+			}
+		}
 	}
 }

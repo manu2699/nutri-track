@@ -1,4 +1,4 @@
-import * as React from "react";
+import type { ComponentProps } from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
@@ -32,19 +32,33 @@ const buttonVariants = cva(
 	}
 );
 
-function Button({
-	className,
-	variant,
-	size,
-	asChild = false,
-	...props
-}: React.ComponentProps<"button"> &
-	VariantProps<typeof buttonVariants> & {
-		asChild?: boolean;
-	}) {
+type ButtonVariants = VariantProps<typeof buttonVariants>;
+export type ButtonVariant = NonNullable<ButtonVariants["variant"]>;
+export type ButtonSize = NonNullable<ButtonVariants["size"]>;
+
+export interface ButtonProps extends ComponentProps<"button">, ButtonVariants {
+	asChild?: boolean;
+}
+
+function Button({ className, variant, size, asChild = false, ...props }: ButtonProps) {
 	const Comp = asChild ? Slot : "button";
 
 	return <Comp data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props} />;
 }
+export const BUTTON_VARIANTS = {
+	DEFAULT: "default",
+	DESTRUCTIVE: "destructive",
+	OUTLINE: "outline",
+	SECONDARY: "secondary",
+	GHOST: "ghost",
+	LINK: "link"
+} as const satisfies Record<string, ButtonVariant>;
 
-export { Button, buttonVariants };
+export const BUTTON_SIZES = {
+	DEFAULT: "default",
+	SMALL: "sm",
+	LARGE: "lg",
+	ICON: "icon"
+} as const satisfies Record<string, ButtonSize>;
+
+export { Button };
