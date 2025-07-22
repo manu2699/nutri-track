@@ -1,4 +1,4 @@
-import { Button, BUTTON_VARIANTS, type ButtonVariant } from "../../components/general/Button";
+import { Button, BUTTON_VARIANTS, type ButtonVariant } from "../../components/general/button";
 
 const buttonVariants = Object.values(BUTTON_VARIANTS) as ButtonVariant[];
 const buttonSizes = ["sm", "default", "lg"] as const;

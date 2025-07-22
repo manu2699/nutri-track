@@ -1,11 +1,17 @@
 import { useState, Suspense, lazy } from "react";
-import { Button } from "@/components/general/Button";
+import { Button } from "../components/general/button";
 
 // Component registry - maps component names to their lazy-loaded showcase components
 const componentRegistry = {
   Button: lazy(() => import("./components/Button")),
   Badge: lazy(() => import("./components/Badge")),
   Drawer: lazy(() => import("./components/Drawer")),
+  Checkbox: lazy(() => import("./components/Checkbox")),
+  RadioGroup: lazy(() => import("./components/RadioGroup")),
+  Select: lazy(() => import("./components/Select")),
+  Separator: lazy(() => import("./components/Seperator")),
+  Switch: lazy(() => import("./components/Switch")),
+  Tabs: lazy(() => import("./components/Tabs")),
 } as const;
 
 type ComponentName = keyof typeof componentRegistry;

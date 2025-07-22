@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "../../components/general/Button";
+import { Button } from "../../components/general/button";
 import {
   Drawer,
   DrawerClose,
@@ -9,7 +9,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "../../components/general/Drawer";
+} from "../../components/general/drawer";
 
 export default function DrawerShowcase() {
   const [isOpen, setIsOpen] = useState(false);
