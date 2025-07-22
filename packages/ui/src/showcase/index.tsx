@@ -1,5 +1,5 @@
 import { useState, Suspense, lazy } from "react";
-import { Button } from "../components/general/Button";
+import { Button } from "@/components/general/Button";
 
 // Component registry - maps component names to their lazy-loaded showcase components
 const componentRegistry = {

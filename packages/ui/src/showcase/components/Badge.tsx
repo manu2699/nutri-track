@@ -1,4 +1,4 @@
-import { Badge, BADGE_VARIANTS, type BadgeVariant } from "../../components/datadisplay/Badge";
+import { Badge, BADGE_VARIANTS, type BadgeVariant } from "@/components/datadisplay/Badge";
 
 const badgeVariants = Object.values(BADGE_VARIANTS) as BadgeVariant[];
 
