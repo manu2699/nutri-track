@@ -2,8 +2,9 @@ import "./styles/index.css";
 
 // Data display
 export * from "./components/datadisplay/badge";
-export * from "./components/dataentry/checkbox";
+export * from "./components/datadisplay/carousel";
 // Data Entry / Inputs
+export * from "./components/dataentry/checkbox";
 export * from "./components/dataentry/input";
 export * from "./components/dataentry/radio-group";
 export * from "./components/dataentry/select";

@@ -12,7 +12,8 @@ const componentRegistry = {
 	Select: lazy(() => import("./components/Select")),
 	Separator: lazy(() => import("./components/Seperator")),
 	Switch: lazy(() => import("./components/Switch")),
-	Tabs: lazy(() => import("./components/Tabs"))
+	Tabs: lazy(() => import("./components/Tabs")),
+	Carousel: lazy(() => import("./components/Carousel"))
 } as const;
 
 type ComponentName = keyof typeof componentRegistry;
