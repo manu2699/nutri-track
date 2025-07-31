@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 
 import { Button } from "../components/general/button";
 
@@ -13,15 +13,56 @@ const componentRegistry = {
 	Separator: lazy(() => import("./components/Seperator")),
 	Switch: lazy(() => import("./components/Switch")),
 	Tabs: lazy(() => import("./components/Tabs")),
-	Carousel: lazy(() => import("./components/Carousel"))
+	Carousel: lazy(() => import("./components/Carousel")),
+	NavBar: lazy(() => import("./components/NavBar"))
 } as const;
 
 type ComponentName = keyof typeof componentRegistry;
 
 const componentNames = Object.keys(componentRegistry) as ComponentName[];
 
+// Helper functions for URL management
+const getComponentFromURL = (): ComponentName => {
+	const urlParams = new URLSearchParams(window.location.search);
+	const component = urlParams.get("component") as ComponentName;
+
+	if (component && componentNames.includes(component)) {
+		return component;
+	}
+
+	return "Button";
+};
+
+const updateURLWithComponent = (component: ComponentName) => {
+	if (typeof window === "undefined") return; // SSR safety
+
+	const url = new URL(window.location.href);
+	url.searchParams.set("component", component);
+
+	// Update URL without causing a page reload
+	window.history.replaceState({}, "", url.toString());
+};
+
 export default function ComponentShowcase() {
-	const [selectedComponent, setSelectedComponent] = useState<ComponentName>("Button");
+	const [selectedComponent, setSelectedComponent] = useState<ComponentName>(() => getComponentFromURL());
+
+	// Update URL when component changes
+	useEffect(() => {
+		updateURLWithComponent(selectedComponent);
+	}, [selectedComponent]);
+
+	// Handle browser back/forward navigation
+	useEffect(() => {
+		const handlePopState = () => {
+			setSelectedComponent(getComponentFromURL());
+		};
+
+		window.addEventListener("popstate", handlePopState);
+
+		return () => {
+			window.removeEventListener("popstate", handlePopState);
+		};
+	}, []);
 
 	const SelectedShowcase = componentRegistry[selectedComponent];
 
@@ -47,17 +88,25 @@ export default function ComponentShowcase() {
 			{/* Main Content */}
 			<div className="flex-1 p-8 overflow-auto">
 				<h2 className="text-3xl font-bold mb-8 text-foreground">{selectedComponent}</h2>
-
-				<Suspense
-					fallback={
-						<div className="flex items-center justify-center h-64">
-							<div className="text-muted-foreground">Loading component...</div>
-						</div>
-					}
-				>
-					<SelectedShowcase />
-				</Suspense>
+				<ShowcaseWrapper component={selectedComponent} />
 			</div>
 		</div>
+	);
+}
+
+function ShowcaseWrapper({ component }: { component: ComponentName }) {
+	const SelectedShowcase = componentRegistry[component];
+
+	return (
+		<Suspense
+			key={component}
+			fallback={
+				<div className="flex items-center justify-center h-64">
+					<div className="text-muted-foreground">Loading component...</div>
+				</div>
+			}
+		>
+			<SelectedShowcase />
+		</Suspense>
 	);
 }
