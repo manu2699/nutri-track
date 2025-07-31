@@ -13,6 +13,9 @@ export default defineConfig({
 	root: resolve(__dirname, "./src/showcase"),
 	server: {
 		port: 3001,
-		open: true
+		open: true,
+		hmr: {
+			overlay: true
+		}
 	}
 });
