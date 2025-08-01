@@ -1,0 +1,20 @@
+{
+    "name": "@nutri-track/data",
+    "version": "1.0.0",
+    "description": "Nutri Track DB",
+    "main": "src/index.ts",
+    "scripts": {
+      "dev": "vite"
+    },
+    "dependencies": {
+      "@hono/node-server": "1.18.0",
+      "hono": "4.8.10"
+    },
+    "devDependencies": {
+      "@hono/vite-build": "1.6.2",
+      "@hono/vite-dev-server": "0.20.0",
+      "@types/node": "24.1.0",
+      "vite": "^7.0.4"
+    }
+}
+  
