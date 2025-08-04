@@ -1,7 +1,7 @@
 {
-	"name": "@nutri-track/data",
+	"name": "@nutri-track/core",
 	"version": "1.0.0",
-	"description": "Nutri Track DB",
+	"description": "Nutri Track Core",
 	"type": "module",
 	"main": "src/index.ts",
 	"scripts": {

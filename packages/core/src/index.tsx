@@ -37,7 +37,7 @@ app.post("/", async (c) => {
 	try {
 		writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 		return c.json({ ok: true });
-	} catch (e) {
+	} catch {
 		return c.json({ ok: false, error: "Could not write file." });
 	}
 });

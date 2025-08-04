@@ -471,6 +471,7 @@ export function Editor({ initialFoodsObj = {} }: EditorProps) {
 	);
 }
 
+// biome-ignore lint/style/noNonNullAssertion: --
 const root = document.getElementById("root")!;
 render(<Editor initialFoodsObj={window.__NUTRI_DATA__ || {}} />, root);
 
