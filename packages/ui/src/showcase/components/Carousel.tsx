@@ -19,7 +19,7 @@ export default function CarouselSize() {
 		>
 			<CarouselContent>
 				{Array.from({ length: 5 }).map((_, index) => (
-					<CarouselItem key={index} className="basis-[80%]">
+					<CarouselItem key={crypto.randomUUID()} className="basis-[80%]">
 						<div className="p-1">
 							<Card>
 								<CardContent className="flex aspect-square items-center justify-center p-6">

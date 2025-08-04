@@ -129,6 +129,7 @@ function Carousel({
 				canScrollNext
 			}}
 		>
+			{/** biome-ignore lint/a11y/useSemanticElements: -- */}
 			<div
 				onKeyDownCapture={handleKeyDown}
 				className={cn("relative", className)}
@@ -237,7 +238,7 @@ function CarouselDots({ className, dotClassName }: React.ComponentProps<"div"> &
 		<div className={cn("flex items-center justify-center gap-2", className)}>
 			{scrollSnaps.map((snap, index) => (
 				<button
-					key={index}
+					key={`carousel-dot-${snap}`}
 					type="button"
 					className={cn(
 						"size-3 rounded-full !cursor-pointer",

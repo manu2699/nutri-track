@@ -1,27 +1,24 @@
-import { useState } from "react";
+import { lazy, Suspense } from "react";
+import { Route, Routes } from "react-router";
 
-import { BADGE_VARIANTS, Badge, BUTTON_VARIANTS, Button } from "@nutri-track/ui";
+// Lazy load components with named export
+const WelcomePage = lazy(() => import("./pages/welcome").then((module) => ({ default: module.WelcomePage })));
+const OnBoardFromPage = lazy(() => import("./pages/onboard").then((module) => ({ default: module.OnBoardFromPage })));
 
-import "./App.css";
+const LoadingFallback = () => (
+	<div className="page flex items-center justify-center h-screen">
+		<p className="text-lg">Loading...</p>
+	</div>
+);
 
 function App() {
-	const [count, setCount] = useState(0);
-
 	return (
-		<>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<Button variant={BUTTON_VARIANTS.SECONDARY} onClick={() => setCount((count) => count + 1)}>
-					count is {count}
-				</Button>
-				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
-					<br />
-					<Badge variant={BADGE_VARIANTS.DESTRUCTIVE}>Badge</Badge>
-				</p>
-			</div>
-			<p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-		</>
+		<Suspense fallback={<LoadingFallback />}>
+			<Routes>
+				<Route path="/" element={<WelcomePage />} />
+				<Route path="/onboard" element={<OnBoardFromPage />} />
+			</Routes>
+		</Suspense>
 	);
 }
 
