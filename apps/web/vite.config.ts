@@ -2,8 +2,11 @@ import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
 
-// https://vite.dev/config/
-export default defineConfig(({ mode }) => ({
+// https://vitejs.dev/config/
+export default defineConfig({
 	plugins: [react(), svgr()],
-	watch: mode === "development" ? {} : null
-}));
+	server: {
+		host: "0.0.0.0", // This makes the server accessible from your network
+		port: 5173 // Or whatever port your app runs on
+	}
+});

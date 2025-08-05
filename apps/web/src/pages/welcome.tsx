@@ -15,7 +15,7 @@ export const WelcomePage = () => {
 				<Meal />
 				<p className="subHeading text-base text-secondary">Track your nutrients with ease.</p>
 			</div>
-			<Button className="w-max self-end heading text-base mb-16 mr-8 group" onClick={() => navigate("/onboard")}>
+			<Button className="w-max self-end heading text-base mb-6 mr-4" onClick={() => navigate("/onboard")}>
 				Get Started
 				<motion.div
 					animate={{
