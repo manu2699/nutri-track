@@ -20,8 +20,9 @@
 	],
 	"scripts": {
 		"build": "vite build && tsc --emitDeclarationOnly",
-		"dev": "vite build --watch && vite serve --config vite.dev.config.ts",
-		"showcase": "vite serve --config vite.dev.config.ts",
+		"watch": "vite build --watch && tsc --emitDeclarationOnly",
+		"dev": "pnpm run showcase & pnpm run watch",
+		"showcase": "vite -c vite.dev.config.ts",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],
