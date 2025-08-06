@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 
 import { Button } from "@/components/general/button";
 import { cn } from "@/lib/utils";
@@ -129,6 +129,7 @@ function Carousel({
 				canScrollNext
 			}}
 		>
+			{/** biome-ignore lint/a11y/useSemanticElements: -- */}
 			<div
 				onKeyDownCapture={handleKeyDown}
 				className={cn("relative", className)}
@@ -183,7 +184,7 @@ function CarouselPrevious({
 	size = "icon",
 	...props
 }: React.ComponentProps<typeof Button>) {
-	const { scrollPrev, canScrollPrev } = useCarousel();
+	const { scrollPrev, canScrollPrev, orientation } = useCarousel();
 
 	return (
 		<Button
@@ -195,7 +196,7 @@ function CarouselPrevious({
 			onClick={scrollPrev}
 			{...props}
 		>
-			<ArrowLeft />
+			{orientation === "horizontal" ? <ChevronLeft /> : <ChevronUp />}
 			<span className="sr-only">Previous slide</span>
 		</Button>
 	);
@@ -207,7 +208,7 @@ function CarouselNext({
 	size = "icon",
 	...props
 }: React.ComponentProps<typeof Button>) {
-	const { scrollNext, canScrollNext } = useCarousel();
+	const { scrollNext, canScrollNext, orientation } = useCarousel();
 
 	return (
 		<Button
@@ -219,7 +220,7 @@ function CarouselNext({
 			onClick={scrollNext}
 			{...props}
 		>
-			<ArrowRight />
+			{orientation === "horizontal" ? <ChevronRight /> : <ChevronDown />}
 			<span className="sr-only">Next slide</span>
 		</Button>
 	);
@@ -237,7 +238,7 @@ function CarouselDots({ className, dotClassName }: React.ComponentProps<"div"> &
 		<div className={cn("flex items-center justify-center gap-2", className)}>
 			{scrollSnaps.map((snap, index) => (
 				<button
-					key={index}
+					key={`carousel-dot-${snap}`}
 					type="button"
 					className={cn(
 						"size-3 rounded-full !cursor-pointer",

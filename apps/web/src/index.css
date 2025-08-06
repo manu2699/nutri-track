@@ -12,13 +12,63 @@
 
 body {
 	margin: 0;
-	font-family: system-ui, -apple-system, sans-serif;
+	padding: 0;
+	box-sizing: border-box;
+	width: 100vw;
+	height: 100dvh;
+
+	/* sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' */
+	font-family: var(--font-serif);
+
+	/* serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif */
+	/* font-family: var(--font-serif);  */
+
+	/* monospace: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace */
+	/* font-family: var(--font-mono);  */
+
 	background-color: hsl(var(--background));
 	color: hsl(var(--foreground));
-	min-height: 100vh;
 }
 
 /* Remove default button styles since we're using the UI package */
 button {
 	all: unset;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.heading {
+	font-weight: 600;
+	font-family: var(--font-mono);
+}
+
+.subHeading {
+	font-family: var(--font-sans);
+}
+
+#root {
+	height: 100%;
+	width: 100%;
+}
+
+.page {
+	/* Mobile first base styles */
+	padding: 0.5rem 1rem;
+	min-height: 100%;
+	width: 100%;
+	margin: 0 auto;
+
+	/* Tablet (768px and up) */
+	@media (min-width: 768px) {
+		width: 90%;
+	}
+
+	/* Desktop (1024px and up) */
+	@media (min-width: 1024px) {
+		max-width: 50vw;
+	}
 }

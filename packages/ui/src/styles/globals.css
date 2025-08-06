@@ -1,4 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Limelight&family=Oxygen:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Limelight&family=Oxygen:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Artifika&family=Limelight&family=Oxygen:wght@300;400;700&display=swap");
+
 @layer base {
+	h1 {
+		font-size: var(--text-2xl);
+	}
+	h2 {
+		font-size: var(--text-xl);
+	}
+	h3 {
+		font-size: var(--text-lg);
+	}
+	h4 {
+		font-size: var(--text-base);
+	}
+	h5 {
+		font-size: var(--text-sm);
+	}
+	h6 {
+		font-size: var(--text-xs);
+	}
+	a {
+		color: var(--color-blue-600);
+		text-decoration-line: underline;
+	}
+
 	:root {
 		--background: 0 0% 100%;
 		--foreground: 0 0% 3.9216%;
@@ -7,7 +34,7 @@
 		--popover: 0 0% 100%;
 		--popover-foreground: 0 0% 3.9216%;
 		--primary: 102 86.9565% 18.0392%;
-		--primary-foreground: 0 0% 98.0392%;
+		--primary-foreground: 0 0% 100%;
 		--secondary: 40 25.9259% 84.1176%;
 		--secondary-foreground: 103.75 85.7143% 10.9804%;
 		--muted: 0 0% 96.0784%;
@@ -26,10 +53,11 @@
 		--chart-4: 162.8571 52.2388% 86.8627%;
 		--chart-5: 127.0588 7.7626% 57.0588%;
 
-		--font-sans: Geist Mono, monospace;
-		--font-serif: Geist Mono, monospace;
-		--font-mono: Geist Mono, monospace;
-		--radius: 0.2rem;
+		--font-sans: Libre Baskerville, serif;
+		--font-serif: Artifika, ui-serif, serif;
+		--font-mono: Limelight, ui-serif, serif;
+
+		--radius: 0.4rem;
 
 		--shadow-2xs: 0px 1px 0px 0px hsl(0 0% 0% / 0);
 		--shadow-xs: 0px 1px 0px 0px hsl(0 0% 0% / 0);
@@ -71,10 +99,11 @@
 		--chart-4: 0 0% 45.0980%;
 		--chart-5: 0 0% 45.0980%;
 
-		--font-sans: Geist Mono, monospace;
-		--font-serif: Geist Mono, monospace;
-		--font-mono: Geist Mono, monospace;
-		--radius: 0.2rem;
+		--font-sans: Libre Baskerville, serif;
+		--font-serif: Artifika, ui-serif, serif;
+		--font-mono: Limelight, ui-serif, serif;
+
+		--radius: 0.4rem;
 
 		--shadow-2xs: 0px 1px 0px 0px hsl(0 0% 0% / 0);
 		--shadow-xs: 0px 1px 0px 0px hsl(0 0% 0% / 0);
@@ -86,3 +115,8 @@
 		--shadow-2xl: 0px 1px 0px 0px hsl(0 0% 0% / 0);
 	}
 }
+
+/*
+Edited using:
+https://tweakcn.com/editor/theme
+*/

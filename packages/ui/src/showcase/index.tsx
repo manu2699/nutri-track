@@ -7,6 +7,7 @@ const componentRegistry = {
 	Button: lazy(() => import("./components/Button")),
 	Badge: lazy(() => import("./components/Badge")),
 	Drawer: lazy(() => import("./components/Drawer")),
+	Input: lazy(() => import("./components/Input")),
 	Checkbox: lazy(() => import("./components/Checkbox")),
 	RadioGroup: lazy(() => import("./components/RadioGroup")),
 	Select: lazy(() => import("./components/Select")),

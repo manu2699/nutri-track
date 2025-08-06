@@ -1,27 +1,43 @@
-import { useState } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router";
 
-import { BADGE_VARIANTS, Badge, BUTTON_VARIANTS, Button } from "@nutri-track/ui";
+import { useDataStore } from "./data/store";
 
-import "./App.css";
+// Lazy load components with named export
+const WelcomePage = lazy(() => import("./pages/welcome").then((module) => ({ default: module.WelcomePage })));
+const OnBoardFromPage = lazy(() => import("./pages/onboard").then((module) => ({ default: module.OnBoardFromPage })));
+const HomePage = lazy(() => import("./pages/home").then((module) => ({ default: module.HomePage })));
+
+const LoadingFallback = () => (
+	<div className="page flex items-center justify-center h-screen">
+		<p className="text-lg">Loading...</p>
+	</div>
+);
 
 function App() {
-	const [count, setCount] = useState(0);
+	const navigate = useNavigate();
+	const currentUser = useDataStore((s) => s.currentUser);
+	// const isInitialized = useDataStore((s) => s.isInitialized);
+	const initialize = useDataStore((s) => s.initialize);
+
+	useEffect(() => {
+		initialize();
+	}, [initialize]);
+
+	useEffect(() => {
+		if (currentUser) {
+			navigate("/home");
+		}
+	}, [currentUser, navigate]);
 
 	return (
-		<>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<Button variant={BUTTON_VARIANTS.SECONDARY} onClick={() => setCount((count) => count + 1)}>
-					count is {count}
-				</Button>
-				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
-					<br />
-					<Badge variant={BADGE_VARIANTS.DESTRUCTIVE}>Badge</Badge>
-				</p>
-			</div>
-			<p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-		</>
+		<Suspense fallback={<LoadingFallback />}>
+			<Routes>
+				<Route path="/" element={<WelcomePage />} />
+				<Route path="/onboard" element={<OnBoardFromPage />} />
+				<Route path="/home" element={<HomePage />} />
+			</Routes>
+		</Suspense>
 	);
 }
 
