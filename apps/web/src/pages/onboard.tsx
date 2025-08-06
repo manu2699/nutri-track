@@ -1,8 +1,12 @@
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
 import { Button, Input, RadioGroup, RadioGroupItem } from "@nutri-track/ui";
+
+import type { UserInterface } from "../data/database/users";
+import { useDataStore } from "../data/store";
 
 const formFields = [
 	{
@@ -22,12 +26,15 @@ const formFields = [
 		hint: "Your age helps us provide age-appropriate nutritional advice."
 	},
 	{
-		id: "sex",
-		label: "What's your sex?",
+		id: "gender",
+		label: "What's your gender?",
 		type: "radio",
-		options: ["Male", "Female"],
+		options: [
+			{ label: "Male", value: "male" },
+			{ label: "Female", value: "female" }
+		],
 		required: true,
-		hint: "Sex can influence nutritional requirements."
+		hint: "Gender can influence nutritional requirements."
 	},
 	{
 		id: "email",
@@ -56,11 +63,13 @@ const formFields = [
 ];
 
 export const OnBoardFromPage = () => {
+	const navigate = useNavigate();
+
 	const [currentStep, setCurrentStep] = useState(0);
 	const [formData, setFormData] = useState({
 		name: "",
 		age: "",
-		sex: "",
+		gender: "",
 		email: "",
 		weight: "",
 		height: ""
@@ -83,11 +92,34 @@ export const OnBoardFromPage = () => {
 		setCurrentStep(step);
 	};
 
+	const handleSubmit = () => {
+		const userController = useDataStore.getState().userController;
+		if (!userController) throw new Error("User controller is not initialized");
+		userController
+			.createUser({
+				name: formData.name,
+				age: Number(formData.age),
+				email: formData.email,
+				gender: formData.gender,
+				weight: Number(formData.weight),
+				height: Number(formData.height)
+			} as UserInterface)
+			.then(() => {
+				navigate("/home");
+			});
+	};
+
 	return (
 		<div className="page flex flex-col justify-center items-center">
 			<p className="text-2xl heading font-bold text-primary">Get Started</p>
 			<div className="flex flex-col items-center w-full px-4 mt-8">
-				<AnimatedCarousel onStepChange={handleStepChange} showControls={true} canGoNext={canGoNext} canGoPrev={true}>
+				<StepperForm
+					onStepChange={handleStepChange}
+					canGoNext={canGoNext}
+					canGoPrev={true}
+					submitText="Proceed"
+					onSubmit={handleSubmit}
+				>
 					{formFields.map((field) => (
 						<div key={field.id} className="flex flex-col gap-2">
 							<label htmlFor={field.id} className="font-semibold">
@@ -99,9 +131,9 @@ export const OnBoardFromPage = () => {
 									onValueChange={(val: string) => handleRadioChange(field.id, val)}
 								>
 									{field.options?.map((option) => (
-										<div className="flex items-center space-x-2" key={option}>
-											<RadioGroupItem key={option} value={option} />
-											<label htmlFor={option}>{option}</label>
+										<div className="flex items-center space-x-2" key={option.value}>
+											<RadioGroupItem key={option.value} value={option.value} />
+											<label htmlFor={option.value}>{option.label}</label>
 										</div>
 									))}
 								</RadioGroup>
@@ -119,39 +151,32 @@ export const OnBoardFromPage = () => {
 							{field.hint && <p className="text-sm text-gray-500">{field.hint}</p>}
 						</div>
 					))}
-				</AnimatedCarousel>
-				{/* {currentStep === formFields.length - 1 && (
-					<motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-						<Button onClick={() => console.log(formData)} disabled={!canGoNext}>
-							Submit
-						</Button>
-					</motion.div>
-				)} */}
+				</StepperForm>
 			</div>
 		</div>
 	);
 };
 
-type CarouselProps = {
+type StepperFormProps = {
 	children: React.ReactNode[];
 	onStepChange?: (step: number) => void;
-	initialStep?: number;
-	showControls?: boolean;
 	controlsClassName?: string;
 	canGoNext?: boolean;
 	canGoPrev?: boolean;
+	submitText?: string;
+	onSubmit?: () => void;
 };
 
-const AnimatedCarousel = ({
+const StepperForm = ({
 	children,
 	onStepChange,
-	initialStep = 0,
-	showControls = true,
-	controlsClassName = "my-6 flex justify-between self-end",
+	controlsClassName = "mt-6 flex justify-between self-end",
 	canGoNext = true,
-	canGoPrev = true
-}: CarouselProps) => {
-	const [currentStep, setCurrentStep] = useState(initialStep);
+	canGoPrev = true,
+	submitText = "",
+	onSubmit
+}: StepperFormProps) => {
+	const [currentStep, setCurrentStep] = useState(0);
 	const [direction, setDirection] = useState(0); // -1 for backward, 1 for forward
 	const containerRef = useRef<HTMLDivElement>(null);
 	const touchStartY = useRef(0);
@@ -183,11 +208,9 @@ const AnimatedCarousel = ({
 		const deltaY = touchEndY - touchStartY.current;
 
 		if (deltaY < -50) {
-			// swipe up
-			goToNextStep();
+			goToNextStep(); // swipe up
 		} else if (deltaY > 50) {
-			// swipe down
-			goToPrevStep();
+			goToPrevStep(); // swipe down
 		}
 	};
 
@@ -216,34 +239,33 @@ const AnimatedCarousel = ({
 							y: { type: "spring", stiffness: 300, damping: 30 },
 							opacity: { duration: 0.2 }
 						}}
-						className="absolute w-full h-[200px] flex flex-col gap-2 justify-center"
+						className="absolute w-full h-[200px] flex flex-col gap-2 justify-center overscroll-contain touch-pan-x"
 					>
 						{children[currentStep]}
 					</motion.div>
 				</AnimatePresence>
 			</div>
-			{showControls && (
-				<div className={controlsClassName}>
-					<Button
-						onClick={goToPrevStep}
-						disabled={currentStep === 0 || !canGoPrev}
-						variant="outline"
-						size="icon"
-						className="rounded-full"
-					>
-						<ChevronUp />
+
+			<div className={controlsClassName}>
+				<Button
+					onClick={goToPrevStep}
+					disabled={currentStep === 0 || !canGoPrev}
+					variant="outline"
+					size="icon"
+					className="rounded-full"
+				>
+					<ChevronUp />
+				</Button>
+				{submitText && currentStep === children.length - 1 ? (
+					<Button onClick={onSubmit} disabled={!canGoNext} className="py-1 px-4">
+						{submitText}
 					</Button>
-					<Button
-						onClick={goToNextStep}
-						disabled={currentStep === children.length - 1 || !canGoNext}
-						variant="outline"
-						size="icon"
-						className="rounded-full"
-					>
+				) : (
+					<Button onClick={goToNextStep} disabled={!canGoNext} variant="outline" size="icon" className="rounded-full">
 						<ChevronDown />
 					</Button>
-				</div>
-			)}
+				)}
+			</div>
 		</div>
 	);
 };

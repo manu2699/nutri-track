@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { ArrowBigRight } from "lucide-react";
 import { motion } from "motion/react";
@@ -5,9 +6,18 @@ import { motion } from "motion/react";
 import { Button } from "@nutri-track/ui";
 
 import Meal from "./../assets/meal.svg?react";
+import { useDataStore } from "../data/store";
 
 export const WelcomePage = () => {
 	const navigate = useNavigate();
+	const currentUser = useDataStore((s) => s.currentUser);
+
+	useEffect(() => {
+		if (currentUser) {
+			navigate("/home");
+		}
+	}, [currentUser, navigate]);
+
 	return (
 		<div className="page flex flex-col justify-between items-center">
 			<h1 className="text-4xl font-bold text-primary mt-16">NUTRI - TRACK</h1>
