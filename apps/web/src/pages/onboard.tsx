@@ -5,8 +5,8 @@ import { AnimatePresence, motion } from "motion/react";
 
 import { Button, Input, RadioGroup, RadioGroupItem } from "@nutri-track/ui";
 
-import type { UserInterface } from "../data/database/users";
-import { useDataStore } from "../data/store";
+import type { UserInterface } from "@/data/database/users";
+import { useDataStore } from "@/data/store";
 
 const formFields = [
 	{
