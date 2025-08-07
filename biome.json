@@ -41,12 +41,13 @@
 							[":PACKAGE:", "!@nutri-track/**"],
 							":BLANK_LINE:",
 							["@nutri-track/**"],
-							["@/**", "~/**"],
+							":BLANK_LINE:",
+							["@/**", "~/**", "!**/*.svg\\?react"],
 							":BLANK_LINE:",
 							["./**", "../**"],
 							":BLANK_LINE:",
 							["**/*.css", "**/*.scss", "**/*.less"],
-							["**/*.svg", "**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.gif"]
+							["**/*.svg", "**/*.svg\\?react", "**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.gif"]
 						]
 					}
 				}

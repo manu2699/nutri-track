@@ -1,4 +1,4 @@
-import { useDataStore } from "../data/store";
+import { useDataStore } from "@/data/store";
 
 export const HomePage = () => {
 	const currentUser = useDataStore((s) => s.currentUser);

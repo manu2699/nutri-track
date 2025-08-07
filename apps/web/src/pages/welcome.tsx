@@ -5,8 +5,9 @@ import { motion } from "motion/react";
 
 import { Button } from "@nutri-track/ui";
 
-import Meal from "./../assets/meal.svg?react";
-import { useDataStore } from "../data/store";
+import { useDataStore } from "@/data/store";
+
+import Meal from "@/assets/meal.svg?react";
 
 export const WelcomePage = () => {
 	const navigate = useNavigate();
