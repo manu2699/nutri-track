@@ -3,7 +3,7 @@ import { Hono } from "hono";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-const DATA_FILE = join(process.cwd(), "db.json");
+const DATA_FILE = join(process.cwd(), "data/foods.db.json");
 
 const app = new Hono();
 
