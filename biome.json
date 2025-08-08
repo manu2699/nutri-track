@@ -8,6 +8,9 @@
 		"lineWidth": 120,
 		"lineEnding": "lf"
 	},
+	"files": {
+		"experimentalScannerIgnores": ["node_modules/**", "dist/**", "assets/**"]
+	},
 	"javascript": {
 		"formatter": {
 			"quoteStyle": "double",
