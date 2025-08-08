@@ -20,10 +20,13 @@ export default defineConfig({
 			"Cross-Origin-Opener-Policy": "same-origin",
 			"Cross-Origin-Embedder-Policy": "require-corp"
 		},
-		https: {
-			key: fs.readFileSync("./keys/192.168.0.102-key.pem"),
-			cert: fs.readFileSync("./keys/192.168.0.102-cert.pem")
-		}
+		https:
+			process.env.NODE_ENV === "development"
+				? {
+						key: fs.readFileSync("./keys/localhost-key.pem"),
+						cert: fs.readFileSync("./keys/localhost-cert.pem")
+					}
+				: undefined
 	},
 	optimizeDeps: {
 		exclude: ["@sqlite.org/sqlite-wasm"]

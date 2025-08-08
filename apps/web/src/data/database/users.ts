@@ -50,15 +50,28 @@ export class UserController {
 		const bmi = 0;
 		const bmr = 0;
 
-		const { result } = await this.db.promiser("exec", {
+		await this.db.promiser("exec", {
 			dbId: this.db.dbId,
 			sql: `INSERT INTO users (name, age, email, gender, weight, height, bmi, bmr, activity_level) 
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 			bind: [name, age, email, gender, weight, height, bmi, bmr, activity_level]
 		});
 
-		console.log("NTDB :: Create user", result);
-		return result.insertId;
+		const { result } = await this.db.promiser("exec", {
+			dbId: this.db.dbId,
+			sql: "SELECT * FROM users WHERE name = ? AND email = ? AND gender = ? AND age = ?",
+			bind: [name, email, gender, age],
+			rowMode: "object",
+			returnValue: "resultRows"
+		});
+
+		console.log("NTDB :: Created user", result);
+
+		if (result.resultRows.length === 0) {
+			throw new Error("User not created");
+		}
+
+		return result.resultRows[0] as UserInterface;
 	}
 
 	async updateUser(userId: number, userData: UserInterface) {
@@ -141,6 +154,26 @@ export class UserController {
 			dbId: this.db.dbId,
 			sql: "DELETE FROM users WHERE id = ?",
 			bind: [userId]
+		});
+	}
+
+	// Only for dev purposes
+	async deleteAllUsers() {
+		if (!import.meta.env.DEV) {
+			return;
+		}
+		if (!this.db.promiser || !this.db.dbId) {
+			throw new Error("Database not initialized");
+		}
+
+		await this.db.promiser("exec", {
+			dbId: this.db.dbId,
+			sql: "DELETE FROM users"
+		});
+		// To reset the auto-increment counter
+		await this.db.promiser("exec", {
+			dbId: this.db.dbId,
+			sql: "DELETE FROM sqlite_sequence WHERE name = 'users'"
 		});
 	}
 }

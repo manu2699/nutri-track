@@ -104,7 +104,8 @@ export const OnBoardFromPage = () => {
 				weight: Number(formData.weight),
 				height: Number(formData.height)
 			} as UserInterface)
-			.then(() => {
+			.then((user) => {
+				useDataStore.getState().setCurrentUser(user);
 				navigate("/home");
 			});
 	};
