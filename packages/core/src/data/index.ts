@@ -21,6 +21,7 @@ export interface Nutrients {
 
 export interface FoodItem {
 	itemName: string;
+	id: string;
 	calories: number;
 	calorieMeasurement: string;
 	nutrients: Nutrients;

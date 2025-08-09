@@ -26,7 +26,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Low calorie, easy to digest, fermented food with probiotics",
-		"description": "Soft, fluffy steamed rice cake made from fermented rice and lentil batter, a healthy breakfast staple"
+		"description": "Soft, fluffy steamed rice cake made from fermented rice and lentil batter, a healthy breakfast staple",
+		"id": "idli"
 	},
 	"dosa": {
 		"itemName": "Dosa",
@@ -55,7 +56,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Fermented food with probiotics, good source of carbohydrates",
-		"description": "Thin, crispy pancake made from fermented rice and lentil batter, served with chutneys and sambar"
+		"description": "Thin, crispy pancake made from fermented rice and lentil batter, served with chutneys and sambar",
+		"id": "dosa"
 	},
 	"sambar": {
 		"itemName": "Sambar",
@@ -84,7 +86,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "High in fiber and protein, good source of folate from lentils",
-		"description": "Traditional South Indian soup made with lentils, tamarind, vegetables, and aromatic spices like turmeric and asafoetida"
+		"description": "Traditional South Indian soup made with lentils, tamarind, vegetables, and aromatic spices like turmeric and asafoetida",
+		"id": "sambar"
 	},
 	"ragi_ball": {
 		"itemName": "Ragi Ball (Ragi Mudde)",
@@ -114,7 +117,8 @@
 		"isVegan": true,
 		"note": "Excellent source of calcium and iron, gluten-free, high in fiber",
 		"description": "Traditional steamed ball made from finger millet (ragi) flour, a staple food rich in nutrients and minerals",
-		"searchKeys": ["Ragi Mudde", "Kali"]
+		"searchKeys": ["Ragi Mudde", "Kali"],
+		"id": "ragi_ball"
 	},
 	"paneer_butter_masala": {
 		"itemName": "Paneer Butter Masala",
@@ -143,7 +147,8 @@
 		"isVeg": true,
 		"isVegan": false,
 		"note": "High in saturated fat and sodium, consume in moderation",
-		"description": "Rich North Indian curry made with cottage cheese cubes in creamy tomato-based gravy with butter and cream"
+		"description": "Rich North Indian curry made with cottage cheese cubes in creamy tomato-based gravy with butter and cream",
+		"id": "paneer_butter_masala"
 	},
 	"parotta": {
 		"itemName": "Parotta",
@@ -172,7 +177,8 @@
 		"isVeg": true,
 		"isVegan": false,
 		"note": "High in calories and fat, consume in moderation",
-		"description": "Flaky, layered flatbread made with refined flour, oil, and egg, kneaded and stretched thin before cooking"
+		"description": "Flaky, layered flatbread made with refined flour, oil, and egg, kneaded and stretched thin before cooking",
+		"id": "parotta"
 	},
 	"appam": {
 		"itemName": "Appam",
@@ -201,7 +207,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Low in fat, naturally fermented, easy to digest",
-		"description": "Bowl-shaped pancake made from fermented rice batter and coconut milk, soft center with crispy edges"
+		"description": "Bowl-shaped pancake made from fermented rice batter and coconut milk, soft center with crispy edges",
+		"id": "appam"
 	},
 	"puttu": {
 		"itemName": "Puttu",
@@ -230,7 +237,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Low in fat, high in carbohydrates, good source of energy",
-		"description": "Steamed cylindrical cake made from rice flour and grated coconut, traditionally served with banana and jaggery"
+		"description": "Steamed cylindrical cake made from rice flour and grated coconut, traditionally served with banana and jaggery",
+		"id": "puttu"
 	},
 	"fish_curry": {
 		"itemName": "Fish Curry",
@@ -260,7 +268,8 @@
 		"isVegan": false,
 		"note": "High in omega-3 fatty acids, good source of protein",
 		"description": "Spicy fish preparation cooked in coconut milk with curry leaves, tamarind, and aromatic spices",
-		"searchKeys": ["Chettinad Fish Curry", "Fish Kari"]
+		"searchKeys": ["Chettinad Fish Curry", "Fish Kari"],
+		"id": "fish_curry"
 	},
 	"chicken_chettinad": {
 		"itemName": "Chicken Chettinad",
@@ -289,7 +298,8 @@
 		"isVeg": false,
 		"isVegan": false,
 		"note": "Very spicy, high in protein, rich in antioxidants from spices",
-		"description": "Fiery chicken curry from Chettinad region, made with roasted spices, coconut, and poppy seeds"
+		"description": "Fiery chicken curry from Chettinad region, made with roasted spices, coconut, and poppy seeds",
+		"id": "chicken_chettinad"
 	},
 	"beef_fry": {
 		"itemName": "Beef Fry",
@@ -318,7 +328,8 @@
 		"isVeg": false,
 		"isVegan": false,
 		"note": "High in saturated fat and cholesterol, consume in moderation",
-		"description": "Spicy dry-roasted beef preparation with coconut slices, curry leaves, and Kerala spices"
+		"description": "Spicy dry-roasted beef preparation with coconut slices, curry leaves, and Kerala spices",
+		"id": "beef_fry"
 	},
 	"coconut_chutney": {
 		"itemName": "Coconut Chutney",
@@ -347,7 +358,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "High in healthy fats, good source of medium-chain fatty acids",
-		"description": "Creamy condiment made from fresh coconut, green chilies, ginger, and curry leaves"
+		"description": "Creamy condiment made from fresh coconut, green chilies, ginger, and curry leaves",
+		"id": "coconut_chutney"
 	},
 	"rasam": {
 		"itemName": "Rasam",
@@ -377,7 +389,8 @@
 		"isVegan": true,
 		"note": "Good for digestion, high in vitamin C, helps with cold symptoms",
 		"description": "Tangy soup made with tamarind, tomatoes, spices, and curry leaves, often consumed as digestive",
-		"searchKeys": ["Rasa Charu", "Charu", "Charu Rasam", "Tamarind Rasam", "Tamarind Soup"]
+		"searchKeys": ["Rasa Charu", "Charu", "Charu Rasam", "Tamarind Rasam", "Tamarind Soup"],
+		"id": "rasam"
 	},
 	"payasam": {
 		"itemName": "Payasam",
@@ -406,7 +419,8 @@
 		"isVeg": true,
 		"isVegan": false,
 		"note": "High in sugar, festival dessert, consume in small portions",
-		"description": "Traditional sweet pudding made with milk, rice/vermicelli, jaggery, and flavored with cardamom"
+		"description": "Traditional sweet pudding made with milk, rice/vermicelli, jaggery, and flavored with cardamom",
+		"id": "payasam"
 	},
 	"murukku": {
 		"itemName": "Murukku",
@@ -435,7 +449,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "High in calories and fat, deep-fried snack, eat in moderation",
-		"description": "Crunchy spiral-shaped snack made from rice flour and lentil flour, seasoned with cumin and asafoetida"
+		"description": "Crunchy spiral-shaped snack made from rice flour and lentil flour, seasoned with cumin and asafoetida",
+		"id": "murukku"
 	},
 	"banana_chips": {
 		"itemName": "Banana Chips",
@@ -464,7 +479,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Very high in calories and saturated fat, consume sparingly",
-		"description": "Crispy sliced raw bananas deep-fried in coconut oil, popular Kerala snack"
+		"description": "Crispy sliced raw bananas deep-fried in coconut oil, popular Kerala snack",
+		"id": "banana_chips"
 	},
 	"thalassery_biryani": {
 		"itemName": "Thalassery Biryani",
@@ -494,7 +510,8 @@
 		"isVegan": false,
 		"note": "High in calories, rich in protein, festive dish",
 		"description": "Aromatic rice dish cooked with mutton, short-grain rice, and Malabar spices using dum cooking method",
-		"searchKeys": ["Kerala Biryani"]
+		"searchKeys": ["Kerala Biryani"],
+		"id": "thalassery_biryani"
 	},
 	"salt": {
 		"itemName": "Salt",
@@ -523,7 +540,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "High sodium content, use sparingly, essential for body functions",
-		"description": "Mineral compound used for seasoning and preservation of food"
+		"description": "Mineral compound used for seasoning and preservation of food",
+		"id": "salt"
 	},
 	"pineapple": {
 		"itemName": "Pineapple",
@@ -553,7 +571,8 @@
 		"isVegan": true,
 		"note": "High in vitamin C and antioxidants, aids digestion",
 		"description": "Tropical fruit rich in vitamins, minerals, and digestive enzymes, naturally sweet and tangy",
-		"glycemicIndex": 59
+		"glycemicIndex": 59,
+		"id": "pineapple"
 	},
 	"vada": {
 		"itemName": "Vada",
@@ -582,7 +601,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Deep-fried snack, moderate in calories, good source of protein from lentils",
-		"description": "Crispy deep-fried doughnut made from black gram (urad dal) batter, commonly served with sambar and chutney"
+		"description": "Crispy deep-fried doughnut made from black gram (urad dal) batter, commonly served with sambar and chutney",
+		"id": "vada"
 	},
 	"uttapam": {
 		"itemName": "Uttapam",
@@ -611,7 +631,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Healthier than dosa due to vegetables, fermented food with probiotics",
-		"description": "Thick pancake made from fermented rice and lentil batter topped with vegetables like onions, tomatoes, and chilies"
+		"description": "Thick pancake made from fermented rice and lentil batter topped with vegetables like onions, tomatoes, and chilies",
+		"id": "uttapam"
 	},
 	"pongal": {
 		"itemName": "Pongal",
@@ -640,7 +661,8 @@
 		"isVeg": true,
 		"isVegan": false,
 		"note": "Good source of energy, contains ghee so moderate in saturated fat",
-		"description": "Comfort food made with rice and moong dal, tempered with ghee, cumin, black pepper, and curry leaves"
+		"description": "Comfort food made with rice and moong dal, tempered with ghee, cumin, black pepper, and curry leaves",
+		"id": "pongal"
 	},
 	"curd_rice": {
 		"itemName": "Curd Rice",
@@ -669,7 +691,8 @@
 		"isVeg": true,
 		"isVegan": false,
 		"note": "Cooling effect, good for digestion, probiotic benefits from curd",
-		"description": "Comfort food made with cooked rice mixed with yogurt, tempered with mustard seeds, curry leaves, and ginger"
+		"description": "Comfort food made with cooked rice mixed with yogurt, tempered with mustard seeds, curry leaves, and ginger",
+		"id": "curd_rice"
 	},
 	"tomato_chutney": {
 		"itemName": "Tomato Chutney",
@@ -698,7 +721,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Rich in lycopene and vitamin C, low in calories",
-		"description": "Tangy condiment made with tomatoes, tamarind, red chilies, and spices, served with dosa and idli"
+		"description": "Tangy condiment made with tomatoes, tamarind, red chilies, and spices, served with dosa and idli",
+		"id": "tomato_chutney"
 	},
 	"avial": {
 		"itemName": "Avial",
@@ -727,7 +751,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "High in fiber and vitamins, nutritious mixed vegetable dish",
-		"description": "Traditional mixed vegetable curry made with coconut, curry leaves, and minimal spices, often served during festivals"
+		"description": "Traditional mixed vegetable curry made with coconut, curry leaves, and minimal spices, often served during festivals",
+		"id": "avial"
 	},
 	"kootu": {
 		"itemName": "Kootu",
@@ -756,7 +781,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Balanced protein and fiber from lentils and vegetables",
-		"description": "Semi-dry curry made with vegetables and lentils, seasoned with coconut and spices"
+		"description": "Semi-dry curry made with vegetables and lentils, seasoned with coconut and spices",
+		"id": "kootu"
 	},
 	"milagai_podi": {
 		"itemName": "Milagai Podi",
@@ -785,7 +811,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Very spicy, high in antioxidants, use sparingly",
-		"description": "Spicy powder made from roasted lentils, dried red chilies, and sesame seeds, mixed with oil and eaten with idli"
+		"description": "Spicy powder made from roasted lentils, dried red chilies, and sesame seeds, mixed with oil and eaten with idli",
+		"id": "milagai_podi"
 	},
 	"idiyappam": {
 		"itemName": "Idiyappam",
@@ -815,7 +842,8 @@
 		"isVegan": true,
 		"note": "Low in fat, easily digestible, good for light meals",
 		"description": "Steamed rice noodles made from rice flour, served with coconut milk or curry",
-		"searchKeys": ["hoppers"]
+		"searchKeys": ["hoppers"],
+		"id": "idiyappam"
 	},
 	"upma": {
 		"itemName": "Upma",
@@ -844,7 +872,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Quick breakfast option, moderate in calories and nutrients",
-		"description": "Savory semolina porridge cooked with vegetables, mustard seeds, curry leaves, and spices"
+		"description": "Savory semolina porridge cooked with vegetables, mustard seeds, curry leaves, and spices",
+		"id": "upma"
 	},
 	"mysore_pak": {
 		"itemName": "Mysore Pak",
@@ -873,7 +902,8 @@
 		"isVeg": true,
 		"isVegan": false,
 		"note": "Very high in calories and sugar, festival sweet, consume in small portions",
-		"description": "Rich traditional sweet made with chickpea flour, sugar, and ghee, known for its melt-in-mouth texture"
+		"description": "Rich traditional sweet made with chickpea flour, sugar, and ghee, known for its melt-in-mouth texture",
+		"id": "mysore_pak"
 	},
 	"adhirasam": {
 		"itemName": "Adhirasam",
@@ -902,7 +932,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "High in calories, traditional festival sweet, deep-fried",
-		"description": "Traditional deep-fried sweet made with rice flour and jaggery, prepared during festivals like Diwali"
+		"description": "Traditional deep-fried sweet made with rice flour and jaggery, prepared during festivals like Diwali",
+		"id": "adhirasam"
 	},
 	"thattai": {
 		"itemName": "Thattai",
@@ -931,7 +962,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "High in calories and fat, deep-fried snack, consume occasionally",
-		"description": "Crispy deep-fried crackers made from rice flour and lentil flour, seasoned with cumin and curry leaves"
+		"description": "Crispy deep-fried crackers made from rice flour and lentil flour, seasoned with cumin and curry leaves",
+		"id": "thattai"
 	},
 	"kesari": {
 		"itemName": "Kesari",
@@ -960,7 +992,8 @@
 		"isVeg": true,
 		"isVegan": false,
 		"note": "High in sugar and calories, temple offering sweet",
-		"description": "Sweet semolina pudding made with ghee, sugar, and flavored with saffron and cardamom"
+		"description": "Sweet semolina pudding made with ghee, sugar, and flavored with saffron and cardamom",
+		"id": "kesari"
 	},
 	"tamarind_rice": {
 		"itemName": "Tamarind Rice",
@@ -989,7 +1022,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Tangy and flavorful, good for travel, aids digestion",
-		"description": "Tangy rice dish made with cooked rice, tamarind paste, and South Indian spice tempering"
+		"description": "Tangy rice dish made with cooked rice, tamarind paste, and South Indian spice tempering",
+		"id": "tamarind_rice"
 	},
 	"lemon_rice": {
 		"itemName": "Lemon Rice",
@@ -1018,7 +1052,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "High in vitamin C, refreshing and tangy, good for hot weather",
-		"description": "Citrusy rice dish made with cooked rice, lemon juice, curry leaves, and mustard seed tempering"
+		"description": "Citrusy rice dish made with cooked rice, lemon juice, curry leaves, and mustard seed tempering",
+		"id": "lemon_rice"
 	},
 	"coconut_rice": {
 		"itemName": "Coconut Rice",
@@ -1047,7 +1082,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Rich in healthy fats from coconut, aromatic and flavorful",
-		"description": "Fragrant rice dish made with cooked rice, fresh grated coconut, and curry leaf tempering"
+		"description": "Fragrant rice dish made with cooked rice, fresh grated coconut, and curry leaf tempering",
+		"id": "coconut_rice"
 	},
 	"kottu_parotta": {
 		"itemName": "Kottu Parotta",
@@ -1076,7 +1112,8 @@
 		"isVeg": false,
 		"isVegan": false,
 		"note": "High in calories and fat, street food dish, consume occasionally",
-		"description": "Street food made by chopping parotta and stir-frying with vegetables, eggs, or meat with spices"
+		"description": "Street food made by chopping parotta and stir-frying with vegetables, eggs, or meat with spices",
+		"id": "kottu_parotta"
 	},
 	"paniyaram": {
 		"itemName": "Paniyaram",
@@ -1105,7 +1142,8 @@
 		"isVeg": true,
 		"isVegan": true,
 		"note": "Fermented food with probiotics, bite-sized and easy to digest",
-		"description": "Small round dumplings made from fermented rice and lentil batter, cooked in special paniyaram pan"
+		"description": "Small round dumplings made from fermented rice and lentil batter, cooked in special paniyaram pan",
+		"id": "paniyaram"
 	},
 	"sugar": {
 		"itemName": "Sugar",
@@ -1135,7 +1173,8 @@
 		"isVegan": true,
 		"note": "High in calories, no nutrients, limit intake for better health",
 		"description": "Refined sweetener derived from sugarcane or sugar beets, pure carbohydrate",
-		"glycemicIndex": 65
+		"glycemicIndex": 65,
+		"id": "sugar"
 	},
 	"masala_dosa": {
 		"itemName": "Masala Dosa",
@@ -1165,7 +1204,8 @@
 		"isVegan": true,
 		"note": "Fermented food with probiotics, filling breakfast option",
 		"description": "Crispy rice and lentil crepe filled with spiced potato curry, served with sambar and chutneys",
-		"glycemicIndex": 55
+		"glycemicIndex": 55,
+		"id": "masala_dosa"
 	},
 	"chapati": {
 		"itemName": "Chapati",
@@ -1195,7 +1235,8 @@
 		"isVegan": true,
 		"note": "High in fiber, whole wheat provides complex carbohydrates",
 		"description": "Unleavened flatbread made from whole wheat flour, rolled thin and cooked on a griddle",
-		"glycemicIndex": 62
+		"glycemicIndex": 62,
+		"id": "chapati"
 	},
 	"rice_cooked": {
 		"itemName": "Rice (Cooked)",
@@ -1225,7 +1266,8 @@
 		"isVegan": true,
 		"note": "Good source of energy, easily digestible carbohydrate",
 		"description": "Steamed white rice, staple grain providing energy and serving as base for many dishes",
-		"glycemicIndex": 73
+		"glycemicIndex": 73,
+		"id": "rice_cooked"
 	},
 	"dal_cooked": {
 		"itemName": "Dal (Cooked)",
@@ -1255,7 +1297,8 @@
 		"isVegan": true,
 		"note": "High in protein and fiber, excellent source of folate and iron",
 		"description": "Cooked lentils seasoned with turmeric and salt, primary protein source in vegetarian diet",
-		"glycemicIndex": 32
+		"glycemicIndex": 32,
+		"id": "dal_cooked"
 	},
 	"curd_yogurt": {
 		"itemName": "Curd/Yogurt",
@@ -1285,7 +1328,8 @@
 		"isVegan": false,
 		"note": "Rich in probiotics, good source of calcium and protein",
 		"description": "Fermented dairy product with beneficial bacteria, aids digestion and provides cooling effect",
-		"glycemicIndex": 35
+		"glycemicIndex": 35,
+		"id": "curd_yogurt"
 	},
 	"ghee": {
 		"itemName": "Ghee",
@@ -1315,7 +1359,8 @@
 		"isVegan": false,
 		"note": "High in saturated fat, rich in vitamin A, use in moderation",
 		"description": "Clarified butter used for cooking and flavoring, considered sacred in Indian culture",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "ghee"
 	},
 	"coconut_oil": {
 		"itemName": "Coconut Oil",
@@ -1345,7 +1390,8 @@
 		"isVegan": true,
 		"note": "High in saturated fat, contains medium-chain fatty acids",
 		"description": "Oil extracted from coconut meat, commonly used in South Indian cooking",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "coconut_oil"
 	},
 	"banana": {
 		"itemName": "Banana",
@@ -1375,7 +1421,8 @@
 		"isVegan": true,
 		"note": "High in potassium and natural sugars, quick energy source",
 		"description": "Tropical fruit rich in potassium and vitamin B6, naturally sweet and energy-dense",
-		"glycemicIndex": 48
+		"glycemicIndex": 48,
+		"id": "banana"
 	},
 	"mango": {
 		"itemName": "Mango",
@@ -1405,7 +1452,8 @@
 		"isVegan": true,
 		"note": "High in vitamin C and beta-carotene, seasonal summer fruit",
 		"description": "King of fruits, rich in vitamins A and C, naturally sweet with distinctive aroma",
-		"glycemicIndex": 51
+		"glycemicIndex": 51,
+		"id": "mango"
 	},
 	"onion": {
 		"itemName": "Onion",
@@ -1435,7 +1483,8 @@
 		"isVegan": true,
 		"note": "Contains antioxidants, may help reduce inflammation",
 		"description": "Bulb vegetable used as base for many dishes, provides flavor and aroma when cooked",
-		"glycemicIndex": 10
+		"glycemicIndex": 10,
+		"id": "onion"
 	},
 	"tomato": {
 		"itemName": "Tomato",
@@ -1465,7 +1514,8 @@
 		"isVegan": true,
 		"note": "Rich in lycopene and vitamin C, low in calories",
 		"description": "Acidic fruit used as vegetable, rich in lycopene and adds umami flavor to dishes",
-		"glycemicIndex": 15
+		"glycemicIndex": 15,
+		"id": "tomato"
 	},
 	"ginger": {
 		"itemName": "Ginger",
@@ -1495,7 +1545,8 @@
 		"isVegan": true,
 		"note": "Anti-inflammatory properties, aids digestion, helps with nausea",
 		"description": "Aromatic rhizome used as spice and medicine, adds heat and flavor to dishes",
-		"glycemicIndex": 10
+		"glycemicIndex": 10,
+		"id": "ginger"
 	},
 	"turmeric_powder": {
 		"itemName": "Turmeric Powder",
@@ -1525,7 +1576,8 @@
 		"isVegan": true,
 		"note": "Powerful anti-inflammatory, contains curcumin, natural antiseptic",
 		"description": "Golden spice powder from turmeric root, used for color, flavor, and medicinal properties",
-		"glycemicIndex": 5
+		"glycemicIndex": 5,
+		"id": "turmeric_powder"
 	},
 	"cumin_powder": {
 		"itemName": "Cumin Powder",
@@ -1555,7 +1607,8 @@
 		"isVegan": true,
 		"note": "Good source of iron, aids digestion, aromatic spice",
 		"description": "Ground cumin seeds, earthy and warm spice used in tempering and spice blends",
-		"glycemicIndex": 5
+		"glycemicIndex": 5,
+		"id": "cumin_powder"
 	},
 	"tea_black_plain": {
 		"itemName": "Tea (Black, Plain)",
@@ -1585,7 +1638,8 @@
 		"isVegan": true,
 		"note": "Contains caffeine and antioxidants, hydrating beverage",
 		"description": "Brewed tea leaves without milk or sugar, contains antioxidants and provides caffeine",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "tea_black_plain"
 	},
 	"coffee_black": {
 		"itemName": "Coffee (Black)",
@@ -1615,7 +1669,8 @@
 		"isVegan": true,
 		"note": "High in caffeine, contains antioxidants, may boost metabolism",
 		"description": "Brewed coffee beans without milk or sugar, rich in caffeine and antioxidants",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "coffee_black"
 	},
 	"coconut_fresh": {
 		"itemName": "Coconut (Fresh)",
@@ -1645,7 +1700,8 @@
 		"isVegan": true,
 		"note": "High in saturated fat and calories, rich in medium-chain fatty acids",
 		"description": "Fresh coconut meat and water, high in healthy fats and electrolytes",
-		"glycemicIndex": 45
+		"glycemicIndex": 45,
+		"id": "coconut_fresh"
 	},
 	"green_chili": {
 		"itemName": "Green Chili",
@@ -1675,7 +1731,8 @@
 		"isVegan": true,
 		"note": "Very high in vitamin C, contains capsaicin, boosts metabolism",
 		"description": "Fresh hot peppers used for heat and flavor, extremely rich in vitamin C",
-		"glycemicIndex": 10
+		"glycemicIndex": 10,
+		"id": "green_chili"
 	},
 	"paruppu_rasam": {
 		"itemName": "Paruppu Rasam",
@@ -1705,7 +1762,8 @@
 		"isVegan": true,
 		"note": "Good source of protein from lentils, aids digestion",
 		"description": "Lentil-based tangy soup with tamarind, tomatoes, and spices, richer in protein than regular rasam",
-		"glycemicIndex": 35
+		"glycemicIndex": 35,
+		"id": "paruppu_rasam"
 	},
 	"kuzhambu": {
 		"itemName": "Kuzhambu",
@@ -1735,7 +1793,8 @@
 		"isVegan": true,
 		"note": "Tangy and spicy, good with rice, aids digestion",
 		"description": "Tamil gravy made with tamarind, vegetables, and spices, thicker than rasam",
-		"glycemicIndex": 40
+		"glycemicIndex": 40,
+		"id": "kuzhambu"
 	},
 	"paruppu_usili": {
 		"itemName": "Paruppu Usili",
@@ -1765,7 +1824,8 @@
 		"isVegan": true,
 		"note": "High in protein and fiber, nutritious combination of lentils and vegetables",
 		"description": "Dry curry made with crumbled steamed lentils mixed with vegetables, typically beans or cabbage",
-		"glycemicIndex": 35
+		"glycemicIndex": 35,
+		"id": "paruppu_usili"
 	},
 	"paal_kozhukattai": {
 		"itemName": "Paal Kozhukattai",
@@ -1795,7 +1855,8 @@
 		"isVegan": false,
 		"note": "Festival sweet, high in sugar and calories, contains milk",
 		"description": "Sweet rice flour dumplings cooked in milk with jaggery and cardamom, traditional festival dessert",
-		"glycemicIndex": 68
+		"glycemicIndex": 68,
+		"id": "paal_kozhukattai"
 	},
 	"coffee_milk": {
 		"itemName": "Coffee with Milk",
@@ -1825,7 +1886,8 @@
 		"isVegan": false,
 		"note": "Contains caffeine, good source of calcium from milk",
 		"description": "Coffee brewed with milk and sugar, popular morning beverage providing caffeine and nutrients",
-		"glycemicIndex": 31
+		"glycemicIndex": 31,
+		"id": "coffee_milk"
 	},
 	"tea_milk": {
 		"itemName": "Tea with Milk",
@@ -1855,7 +1917,8 @@
 		"isVegan": false,
 		"note": "Contains caffeine and antioxidants, good source of calcium",
 		"description": "Tea brewed with milk and sugar, popular beverage providing antioxidants and nutrients from milk",
-		"glycemicIndex": 30
+		"glycemicIndex": 30,
+		"id": "tea_milk"
 	},
 	"milk": {
 		"itemName": "Milk",
@@ -1885,19 +1948,20 @@
 		"isVegan": false,
 		"note": "Excellent source of calcium and protein, complete protein with all amino acids",
 		"description": "Dairy milk from cows, rich in calcium, protein, and vitamins, essential for bone health",
-		"glycemicIndex": 47
+		"glycemicIndex": 47,
+		"id": "milk"
 	},
 	"butter_chicken": {
 		"itemName": "Butter Chicken",
 		"calories": 490,
 		"calorieMeasurement": "100gm",
 		"nutrients": {
-			"totalFats": 35.0,
+			"totalFats": 35,
 			"saturatedFats": 18.5,
 			"unSaturatedFats": null,
 			"sugar": 8.5,
-			"carbs": 12.0,
-			"proteins": 32.0,
+			"carbs": 12,
+			"proteins": 32,
 			"sodium": 850,
 			"potassium": 285,
 			"magnesium": 25,
@@ -1915,7 +1979,8 @@
 		"isVegan": false,
 		"note": "Very high in calories and saturated fat, rich in protein",
 		"description": "Creamy tomato-based curry of marinated chicken cooked in a tandoor or pan, finished with butter and cream; hallmark of Punjabi/Mughlai cuisine",
-		"glycemicIndex": 45
+		"glycemicIndex": 45,
+		"id": "butter_chicken"
 	},
 	"dal_makhani": {
 		"itemName": "Dal Makhani",
@@ -1945,7 +2010,8 @@
 		"isVegan": false,
 		"note": "High in protein and fiber, rich dish with butter and cream",
 		"description": "Slow-simmered black gram (urad) and kidney beans cooked overnight with tomato, butter, and cream; classic Punjabi lentil dish",
-		"glycemicIndex": 30
+		"glycemicIndex": 30,
+		"id": "dal_makhani"
 	},
 	"chole_bhature": {
 		"itemName": "Chole Bhature",
@@ -1956,7 +2022,7 @@
 			"saturatedFats": 4.2,
 			"unSaturatedFats": null,
 			"sugar": 3.5,
-			"carbs": 52.0,
+			"carbs": 52,
 			"proteins": 15.8,
 			"sodium": 785,
 			"potassium": 425,
@@ -1975,7 +2041,8 @@
 		"isVegan": true,
 		"note": "High in calories, good source of plant protein and fiber",
 		"description": "Spicy chickpea curry (chole) served with deep-fried leavened bread (bhature); popular Punjabi/Delhi street-food meal",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "chole_bhature"
 	},
 	"rajma": {
 		"itemName": "Rajma",
@@ -2005,7 +2072,8 @@
 		"isVegan": true,
 		"note": "Excellent source of plant protein and fiber, kidney bean curry",
 		"description": "Red kidney bean curry cooked with onions, tomatoes, and North Indian spices; staple comfort food served with rice",
-		"glycemicIndex": 35
+		"glycemicIndex": 35,
+		"id": "rajma"
 	},
 	"sarson_ka_saag": {
 		"itemName": "Sarson Ka Saag",
@@ -2035,7 +2103,8 @@
 		"isVegan": false,
 		"note": "Very high in vitamins A and C, rich in iron and calcium",
 		"description": "Creamy mustard greens cooked with spinach and other leafy vegetables, finished with butter; winter specialty served with makki roti",
-		"glycemicIndex": 15
+		"glycemicIndex": 15,
+		"id": "sarson_ka_saag"
 	},
 	"makki_ki_roti": {
 		"itemName": "Makki Ki Roti",
@@ -2065,7 +2134,8 @@
 		"isVegan": true,
 		"note": "Gluten-free corn flour bread, good source of fiber",
 		"description": "Flatbread made from corn flour, traditionally eaten with sarson ka saag and white butter during winter months",
-		"glycemicIndex": 68
+		"glycemicIndex": 68,
+		"id": "makki_ki_roti"
 	},
 	"tandoori_chicken": {
 		"itemName": "Tandoori Chicken",
@@ -2095,7 +2165,8 @@
 		"isVegan": false,
 		"note": "High in protein, marinated and grilled, healthier cooking method",
 		"description": "Chicken marinated in yogurt and spices, cooked in a clay tandoor oven at high temperature; signature Punjabi dish",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "tandoori_chicken"
 	},
 	"naan": {
 		"itemName": "Naan",
@@ -2125,7 +2196,8 @@
 		"isVegan": false,
 		"note": "Leavened bread, higher in calories than roti, contains dairy",
 		"description": "Soft leavened flatbread made with refined flour, yogurt, and baked in tandoor; popular accompaniment to curries",
-		"glycemicIndex": 71
+		"glycemicIndex": 71,
+		"id": "naan"
 	},
 	"kulcha": {
 		"itemName": "Kulcha",
@@ -2155,7 +2227,8 @@
 		"isVegan": false,
 		"note": "Stuffed bread, higher in calories, often filled with vegetables",
 		"description": "Stuffed leavened bread typically filled with potatoes, onions, or paneer, baked in tandoor and served with chole",
-		"glycemicIndex": 65
+		"glycemicIndex": 65,
+		"id": "kulcha"
 	},
 	"aloo_gobi": {
 		"itemName": "Aloo Gobi",
@@ -2185,7 +2258,8 @@
 		"isVegan": true,
 		"note": "High in vitamin C from cauliflower, good source of fiber",
 		"description": "Dry curry of potatoes and cauliflower cooked with turmeric, cumin, and other spices; popular vegetarian dish",
-		"glycemicIndex": 55
+		"glycemicIndex": 55,
+		"id": "aloo_gobi"
 	},
 	"palak_paneer": {
 		"itemName": "Palak Paneer",
@@ -2215,7 +2289,8 @@
 		"isVegan": false,
 		"note": "Very high in vitamin A, calcium, and iron from spinach and paneer",
 		"description": "Creamy spinach curry with cottage cheese cubes, rich in nutrients and popular vegetarian protein source",
-		"glycemicIndex": 25
+		"glycemicIndex": 25,
+		"id": "palak_paneer"
 	},
 	"lassi": {
 		"itemName": "Lassi",
@@ -2245,7 +2320,8 @@
 		"isVegan": false,
 		"note": "Probiotic drink, cooling effect, good source of calcium",
 		"description": "Traditional yogurt-based drink, sweet or salty, often flavored with mango or rose; cooling summer beverage",
-		"glycemicIndex": 35
+		"glycemicIndex": 35,
+		"id": "lassi"
 	},
 	"amritsari_kulcha": {
 		"itemName": "Amritsari Kulcha",
@@ -2275,7 +2351,8 @@
 		"isVegan": false,
 		"note": "Specialty stuffed bread from Amritsar, rich and filling",
 		"description": "Famous stuffed bread from Amritsar with potato filling, served with butter, chole, and pickled onions",
-		"glycemicIndex": 68
+		"glycemicIndex": 68,
+		"id": "amritsari_kulcha"
 	},
 	"kadhi_pakora": {
 		"itemName": "Kadhi Pakora",
@@ -2305,7 +2382,8 @@
 		"isVegan": false,
 		"note": "Tangy yogurt-based curry with fried dumplings, comfort food",
 		"description": "Yogurt-based curry with chickpea flour dumplings (pakoras), flavored with ginger and spices; popular comfort food",
-		"glycemicIndex": 45
+		"glycemicIndex": 45,
+		"id": "kadhi_pakora"
 	},
 	"biryani_mutton": {
 		"itemName": "Mutton Biryani (North Indian)",
@@ -2343,7 +2421,8 @@
 		"isVegan": false,
 		"note": "High in protein and calories, festive dish with aromatic spices",
 		"description": "Layered rice dish with marinated mutton, cooked with saffron, fried onions, and aromatic spices; Mughlai specialty",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "biryani_mutton"
 	},
 	"aloo_paratha": {
 		"itemName": "Aloo Paratha",
@@ -2373,7 +2452,8 @@
 		"isVegan": false,
 		"note": "Stuffed with potato, higher in calories than plain roti, contains ghee",
 		"description": "Whole wheat flatbread stuffed with spiced mashed potatoes, cooked with ghee and served with yogurt and pickle",
-		"glycemicIndex": 65
+		"glycemicIndex": 65,
+		"id": "aloo_paratha"
 	},
 	"gobi_paratha": {
 		"itemName": "Gobi Paratha",
@@ -2403,7 +2483,8 @@
 		"isVegan": false,
 		"note": "High in vitamin C from cauliflower, good source of fiber",
 		"description": "Whole wheat flatbread stuffed with spiced grated cauliflower, cooked with ghee and served hot with yogurt",
-		"glycemicIndex": 62
+		"glycemicIndex": 62,
+		"id": "gobi_paratha"
 	},
 	"paneer_tikka": {
 		"itemName": "Paneer Tikka",
@@ -2433,7 +2514,8 @@
 		"isVegan": false,
 		"note": "High in protein and calcium, grilled preparation is healthier",
 		"description": "Marinated cottage cheese cubes grilled in tandoor with bell peppers and onions, popular vegetarian appetizer",
-		"glycemicIndex": 15
+		"glycemicIndex": 15,
+		"id": "paneer_tikka"
 	},
 	"dal_tadka": {
 		"itemName": "Dal Tadka",
@@ -2463,7 +2545,8 @@
 		"isVegan": true,
 		"note": "High in protein and fiber, lighter than dal makhani",
 		"description": "Yellow lentils cooked with turmeric and finished with cumin-onion tempering, everyday dal preparation",
-		"glycemicIndex": 30
+		"glycemicIndex": 30,
+		"id": "dal_tadka"
 	},
 	"malai_kofta": {
 		"itemName": "Malai Kofta",
@@ -2493,7 +2576,8 @@
 		"isVegan": false,
 		"note": "Very high in calories and fat, rich festive dish",
 		"description": "Deep-fried paneer and potato balls served in rich creamy tomato gravy with nuts and cream",
-		"glycemicIndex": 45
+		"glycemicIndex": 45,
+		"id": "malai_kofta"
 	},
 	"shahi_paneer": {
 		"itemName": "Shahi Paneer",
@@ -2523,7 +2607,8 @@
 		"isVegan": false,
 		"note": "Rich in protein and calcium, high in saturated fat",
 		"description": "Royal paneer curry cooked in rich cashew-based gravy with cream and aromatic spices",
-		"glycemicIndex": 35
+		"glycemicIndex": 35,
+		"id": "shahi_paneer"
 	},
 	"keema": {
 		"itemName": "Keema",
@@ -2553,7 +2638,8 @@
 		"isVegan": false,
 		"note": "High in protein and iron, spiced minced meat dish",
 		"description": "Spiced minced goat or lamb curry cooked with onions, tomatoes, and aromatic spices",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "keema"
 	},
 	"nihari": {
 		"itemName": "Nihari",
@@ -2583,7 +2669,8 @@
 		"isVegan": false,
 		"note": "Very high in calories and protein, slow-cooked meat stew",
 		"description": "Slow-cooked beef or mutton stew with bone marrow, traditionally eaten for breakfast with naan",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "nihari"
 	},
 	"seekh_kebab": {
 		"itemName": "Seekh Kebab",
@@ -2613,7 +2700,8 @@
 		"isVegan": false,
 		"note": "High in protein, grilled preparation, lower in fat than fried items",
 		"description": "Spiced minced meat formed around skewers and grilled in tandoor, popular appetizer and street food",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "seekh_kebab"
 	},
 	"kachori": {
 		"itemName": "Kachori",
@@ -2643,7 +2731,8 @@
 		"isVegan": true,
 		"note": "High in calories and fat, deep-fried snack, consume occasionally",
 		"description": "Deep-fried stuffed pastry filled with spiced lentils or peas, popular street food snack",
-		"glycemicIndex": 68
+		"glycemicIndex": 68,
+		"id": "kachori"
 	},
 	"puri": {
 		"itemName": "Puri",
@@ -2673,7 +2762,8 @@
 		"isVegan": true,
 		"note": "Very high in calories due to deep-frying, eat in moderation",
 		"description": "Small deep-fried bread that puffs up, served with curry or vegetables, festival and special occasion food",
-		"glycemicIndex": 75
+		"glycemicIndex": 75,
+		"id": "puri"
 	},
 	"bhel_puri": {
 		"itemName": "Bhel Puri",
@@ -2703,7 +2793,8 @@
 		"isVegan": true,
 		"note": "Light snack with vegetables, moderate in calories, tangy flavor",
 		"description": "Popular street food made with puffed rice, vegetables, chutneys, and sev, tangy and crunchy snack",
-		"glycemicIndex": 55
+		"glycemicIndex": 55,
+		"id": "bhel_puri"
 	},
 	"paav_bhaji": {
 		"itemName": "Paav Bhaji",
@@ -2733,7 +2824,8 @@
 		"isVegan": false,
 		"note": "Good source of vegetables, high in butter and sodium",
 		"description": "Spiced vegetable curry served with buttered bread rolls, popular Mumbai street food now widespread",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "paav_bhaji"
 	},
 	"gajar_ka_halwa": {
 		"itemName": "Gajar Ka Halwa",
@@ -2763,7 +2855,8 @@
 		"isVegan": false,
 		"note": "Very high in sugar and calories, excellent source of vitamin A",
 		"description": "Traditional winter dessert made with grated carrots cooked in milk, sugar, and ghee, garnished with nuts",
-		"glycemicIndex": 65
+		"glycemicIndex": 65,
+		"id": "gajar_ka_halwa"
 	},
 	"kulfi": {
 		"itemName": "Kulfi",
@@ -2793,7 +2886,8 @@
 		"isVegan": false,
 		"note": "High in sugar and fat, traditional frozen dessert, good source of calcium",
 		"description": "Dense frozen dessert made with condensed milk and flavored with cardamom, pistachios, or saffron",
-		"glycemicIndex": 55
+		"glycemicIndex": 55,
+		"id": "kulfi"
 	},
 	"macher_jhol": {
 		"itemName": "Macher Jhol",
@@ -2823,7 +2917,8 @@
 		"isVegan": false,
 		"note": "High in protein and omega-3 fatty acids, light fish curry",
 		"description": "Traditional Bengali fish curry cooked with potatoes, tomatoes, and panch phoron spices in a light gravy",
-		"glycemicIndex": 25
+		"glycemicIndex": 25,
+		"id": "macher_jhol"
 	},
 	"rice_bengali": {
 		"itemName": "Rice (Bengali Style)",
@@ -2853,7 +2948,8 @@
 		"isVegan": true,
 		"note": "Staple carbohydrate, eaten with fish and vegetable curries",
 		"description": "Steamed white rice, the foundation of Bengali meals, typically served with multiple courses",
-		"glycemicIndex": 73
+		"glycemicIndex": 73,
+		"id": "rice_bengali"
 	},
 	"ilish_maach": {
 		"itemName": "Ilish Maach",
@@ -2883,7 +2979,8 @@
 		"isVegan": false,
 		"note": "King of Bengali fish, very high in omega-3, seasonal delicacy",
 		"description": "Hilsa fish curry, considered the king of Bengali fish, cooked with mustard oil and minimal spices",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "ilish_maach"
 	},
 	"luchi": {
 		"itemName": "Luchi",
@@ -2913,7 +3010,8 @@
 		"isVegan": true,
 		"note": "Deep-fried bread, high in calories, special occasion food",
 		"description": "Deep-fried puffed bread made with refined flour, Bengali equivalent of puri, served during festivals",
-		"glycemicIndex": 72
+		"glycemicIndex": 72,
+		"id": "luchi"
 	},
 	"kosha_mangsho": {
 		"itemName": "Kosha Mangsho",
@@ -2943,7 +3041,8 @@
 		"isVegan": false,
 		"note": "Very high in calories and protein, slow-cooked mutton dish",
 		"description": "Slow-cooked spicy mutton curry with onions and aromatic Bengali spices, cooked until dry",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "kosha_mangsho"
 	},
 	"aloo_posto": {
 		"itemName": "Aloo Posto",
@@ -2973,7 +3072,8 @@
 		"isVegan": true,
 		"note": "Rich in calcium from poppy seeds, unique Bengali preparation",
 		"description": "Potato curry cooked with poppy seed paste, a signature Bengali vegetarian dish with distinctive flavor",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "aloo_posto"
 	},
 	"shukto": {
 		"itemName": "Shukto",
@@ -3003,7 +3103,8 @@
 		"isVegan": true,
 		"note": "High in fiber and vitamins, mixed vegetable with bitter taste",
 		"description": "Mixed vegetable curry with bitter gourd, brinjal, and other vegetables, typically eaten first in Bengali meals",
-		"glycemicIndex": 35
+		"glycemicIndex": 35,
+		"id": "shukto"
 	},
 	"mishti_doi": {
 		"itemName": "Mishti Doi",
@@ -3033,7 +3134,8 @@
 		"isVegan": false,
 		"note": "High in sugar, probiotic dessert, good source of calcium",
 		"description": "Sweet fermented yogurt dessert, caramelized and set in clay pots, iconic Bengali sweet",
-		"glycemicIndex": 45
+		"glycemicIndex": 45,
+		"id": "mishti_doi"
 	},
 	"rasgulla": {
 		"itemName": "Rasgulla",
@@ -3063,7 +3165,8 @@
 		"isVegan": false,
 		"note": "Very high in sugar, spongy cottage cheese balls, festival sweet",
 		"description": "Spongy white cottage cheese balls cooked in sugar syrup, famous Bengali sweet dessert",
-		"glycemicIndex": 72
+		"glycemicIndex": 72,
+		"id": "rasgulla"
 	},
 	"sandesh": {
 		"itemName": "Sandesh",
@@ -3093,7 +3196,8 @@
 		"isVegan": false,
 		"note": "High in sugar and protein, soft cottage cheese sweet",
 		"description": "Soft cottage cheese sweet flavored with cardamom or saffron, delicate Bengali confection",
-		"glycemicIndex": 65
+		"glycemicIndex": 65,
+		"id": "sandesh"
 	},
 	"machher_kalia": {
 		"itemName": "Machher Kalia",
@@ -3123,7 +3227,8 @@
 		"isVegan": false,
 		"note": "Rich fish curry with vegetables, high in protein",
 		"description": "Rich fish curry cooked with potatoes and cauliflower in spiced tomato-onion gravy",
-		"glycemicIndex": 30
+		"glycemicIndex": 30,
+		"id": "machher_kalia"
 	},
 	"begun_bhaja": {
 		"itemName": "Begun Bhaja",
@@ -3153,7 +3258,8 @@
 		"isVegan": true,
 		"note": "Fried eggplant, absorbs oil, moderate in calories",
 		"description": "Sliced eggplant marinated with turmeric and salt, then shallow-fried until golden, popular Bengali side dish",
-		"glycemicIndex": 15
+		"glycemicIndex": 15,
+		"id": "begun_bhaja"
 	},
 	"chingri_malai_curry": {
 		"itemName": "Chingri Malai Curry",
@@ -3183,7 +3289,8 @@
 		"isVegan": false,
 		"note": "Rich in protein, creamy coconut-based prawn curry",
 		"description": "Prawns cooked in rich coconut milk gravy with aromatic Bengali spices, festive dish",
-		"glycemicIndex": 15
+		"glycemicIndex": 15,
+		"id": "chingri_malai_curry"
 	},
 	"pitha": {
 		"itemName": "Pitha",
@@ -3213,7 +3320,8 @@
 		"isVegan": false,
 		"note": "Traditional winter sweet, made with rice flour and jaggery",
 		"description": "Traditional rice flour cake stuffed with jaggery and coconut, steamed or fried, winter festival food",
-		"glycemicIndex": 68
+		"glycemicIndex": 68,
+		"id": "pitha"
 	},
 	"dhokar_dalna": {
 		"itemName": "Dhokar Dalna",
@@ -3243,7 +3351,8 @@
 		"isVegan": true,
 		"note": "High in protein from lentils, steamed and curried preparation",
 		"description": "Steamed lentil cakes cooked in spicy curry, unique Bengali vegetarian protein dish",
-		"glycemicIndex": 38
+		"glycemicIndex": 38,
+		"id": "dhokar_dalna"
 	},
 	"patishapta": {
 		"itemName": "Patishapta",
@@ -3273,7 +3382,8 @@
 		"isVegan": false,
 		"note": "High in sugar, traditional winter crepe dessert",
 		"description": "Thin rice flour crepes filled with coconut and jaggery mixture, rolled and served as winter festival sweet",
-		"glycemicIndex": 65
+		"glycemicIndex": 65,
+		"id": "patishapta"
 	},
 	"doi_maach": {
 		"itemName": "Doi Maach",
@@ -3303,7 +3413,8 @@
 		"isVegan": false,
 		"note": "High in protein and probiotics from yogurt, tangy fish curry",
 		"description": "Fish curry cooked in yogurt-based gravy with aromatic spices, creamy and tangy Bengali delicacy",
-		"glycemicIndex": 20
+		"glycemicIndex": 20,
+		"id": "doi_maach"
 	},
 	"khichuri": {
 		"itemName": "Khichuri",
@@ -3333,7 +3444,8 @@
 		"isVegan": true,
 		"note": "Comfort food, easy to digest, complete protein from rice and lentils",
 		"description": "Rice and lentil porridge cooked with vegetables and mild spices, Bengali comfort food served during illness",
-		"glycemicIndex": 55
+		"glycemicIndex": 55,
+		"id": "khichuri"
 	},
 	"palong_shaak": {
 		"itemName": "Palong Shaak",
@@ -3363,7 +3475,8 @@
 		"isVegan": true,
 		"note": "Extremely high in iron and vitamin A, nutritious leafy green",
 		"description": "Spinach cooked with garlic and green chilies, simple and nutritious Bengali preparation",
-		"glycemicIndex": 15
+		"glycemicIndex": 15,
+		"id": "palong_shaak"
 	},
 	"maacher_matha": {
 		"itemName": "Maacher Matha",
@@ -3393,7 +3506,8 @@
 		"isVegan": false,
 		"note": "High in calcium and protein, fish head curry delicacy",
 		"description": "Fish head curry cooked with vegetables in light spiced gravy, considered a delicacy in Bengali cuisine",
-		"glycemicIndex": 25
+		"glycemicIndex": 25,
+		"id": "maacher_matha"
 	},
 	"tel_koi": {
 		"itemName": "Tel Koi",
@@ -3423,7 +3537,8 @@
 		"isVegan": false,
 		"note": "High in protein, climbing perch fish preparation",
 		"description": "Climbing perch fish cooked in mustard oil with nigella seeds and green chilies, traditional Bengali preparation",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "tel_koi"
 	},
 	"aloo_dum": {
 		"itemName": "Aloo Dum",
@@ -3453,7 +3568,8 @@
 		"isVegan": true,
 		"note": "Good source of vitamin C, spicy potato curry",
 		"description": "Baby potatoes cooked in rich tomato and onion gravy with aromatic Bengali spices",
-		"glycemicIndex": 62
+		"glycemicIndex": 62,
+		"id": "aloo_dum"
 	},
 	"payesh": {
 		"itemName": "Payesh",
@@ -3483,7 +3599,8 @@
 		"isVegan": false,
 		"note": "High in sugar, traditional rice pudding, good source of calcium",
 		"description": "Sweet rice pudding cooked in milk with cardamom and nuts, Bengali version of kheer",
-		"glycemicIndex": 65
+		"glycemicIndex": 65,
+		"id": "payesh"
 	},
 	"ghugni": {
 		"itemName": "Ghugni",
@@ -3513,7 +3630,8 @@
 		"isVegan": true,
 		"note": "High in protein and fiber from dried peas, popular street food",
 		"description": "Spiced dried yellow peas curry, popular street food served with chopped onions and green chilies",
-		"glycemicIndex": 45
+		"glycemicIndex": 45,
+		"id": "ghugni"
 	},
 	"mutton_curry_bengali": {
 		"itemName": "Mutton Curry (Bengali)",
@@ -3543,7 +3661,8 @@
 		"isVegan": false,
 		"note": "High in protein and iron, rich festive meat dish",
 		"description": "Mutton cooked in Bengali spices with potatoes, rich gravy preparation for special occasions",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "mutton_curry_bengali"
 	},
 	"tel_bhaja": {
 		"itemName": "Tel Bhaja",
@@ -3573,7 +3692,8 @@
 		"isVegan": true,
 		"note": "High in calories due to deep-frying, mixed vegetable fritters",
 		"description": "Mixed vegetable fritters deep-fried in mustard oil, popular Bengali side dish and snack",
-		"glycemicIndex": 55
+		"glycemicIndex": 55,
+		"id": "tel_bhaja"
 	},
 	"chitol_maacher_muitha": {
 		"itemName": "Chitol Maacher Muitha",
@@ -3603,7 +3723,8 @@
 		"isVegan": false,
 		"note": "High in protein, traditional fish dumpling curry",
 		"description": "Fish dumplings made from chitol fish cooked in spiced gravy, elaborate Bengali preparation",
-		"glycemicIndex": 35
+		"glycemicIndex": 35,
+		"id": "chitol_maacher_muitha"
 	},
 	"bhapa_ilish": {
 		"itemName": "Bhapa Ilish",
@@ -3633,7 +3754,8 @@
 		"isVegan": false,
 		"note": "Very high in omega-3, steamed hilsa preparation",
 		"description": "Hilsa fish marinated with mustard paste and steamed in banana leaf, signature Bengali delicacy",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "bhapa_ilish"
 	},
 	"narkel_naru": {
 		"itemName": "Narkel Naru",
@@ -3663,7 +3785,8 @@
 		"isVegan": true,
 		"note": "High in saturated fat and sugar, coconut and jaggery sweet",
 		"description": "Round coconut and jaggery balls, simple traditional Bengali sweet made during festivals",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "narkel_naru"
 	},
 	"muri_ghonto": {
 		"itemName": "Muri Ghonto",
@@ -3693,7 +3816,8 @@
 		"isVegan": true,
 		"note": "Mixed vegetable dish, good source of carbohydrates and fiber",
 		"description": "Mixed vegetable mash with fish head stock, traditional Bengali preparation using leftover vegetables",
-		"glycemicIndex": 45
+		"glycemicIndex": 45,
+		"id": "muri_ghonto"
 	},
 	"pani_puri": {
 		"itemName": "Pani Puri",
@@ -3723,7 +3847,8 @@
 		"isVegan": true,
 		"note": "Low calorie per piece, high sodium from flavored water, eat fresh",
 		"description": "Crispy hollow puris filled with spiced flavored water, tamarind chutney, and chickpeas, iconic Indian street food",
-		"glycemicIndex": 55
+		"glycemicIndex": 55,
+		"id": "pani_puri"
 	},
 	"sev_puri": {
 		"itemName": "Sev Puri",
@@ -3753,7 +3878,8 @@
 		"isVegan": true,
 		"note": "Higher in calories due to sev, crunchy street food snack",
 		"description": "Crispy puris topped with potatoes, onions, chutneys, and generous amount of sev (gram flour noodles)",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "sev_puri"
 	},
 	"dahi_puri": {
 		"itemName": "Dahi Puri",
@@ -3783,7 +3909,8 @@
 		"isVegan": false,
 		"note": "Contains yogurt, probiotic benefits, cooling effect",
 		"description": "Crispy puris filled with spiced yogurt, chutneys, and topped with sev, creamy chaat variety",
-		"glycemicIndex": 45
+		"glycemicIndex": 45,
+		"id": "dahi_puri"
 	},
 	"aloo_chaat": {
 		"itemName": "Aloo Chaat",
@@ -3813,7 +3940,8 @@
 		"isVegan": true,
 		"note": "Good source of vitamin C and potassium from potatoes",
 		"description": "Spiced boiled potato cubes mixed with chutneys, onions, and chaat masala, popular street food",
-		"glycemicIndex": 62
+		"glycemicIndex": 62,
+		"id": "aloo_chaat"
 	},
 	"papdi_chaat": {
 		"itemName": "Papdi Chaat",
@@ -3843,7 +3971,8 @@
 		"isVegan": false,
 		"note": "High in calories due to fried papdi and yogurt, crispy chaat",
 		"description": "Crispy fried wafers topped with potatoes, chickpeas, yogurt, and chutneys, layered chaat",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "papdi_chaat"
 	},
 	"samosa": {
 		"itemName": "Samosa",
@@ -3873,7 +4002,8 @@
 		"isVegan": true,
 		"note": "High in calories due to deep-frying, popular tea-time snack",
 		"description": "Deep-fried triangular pastry stuffed with spiced potatoes and peas, quintessential Indian snack",
-		"glycemicIndex": 65
+		"glycemicIndex": 65,
+		"id": "samosa"
 	},
 	"kachori_chaat": {
 		"itemName": "Kachori Chaat",
@@ -3903,7 +4033,8 @@
 		"isVegan": false,
 		"note": "Very high in calories, deep-fried snack with yogurt topping",
 		"description": "Deep-fried lentil-stuffed pastry served with yogurt, chutneys, and spices as chaat",
-		"glycemicIndex": 68
+		"glycemicIndex": 68,
+		"id": "kachori_chaat"
 	},
 	"raj_kachori": {
 		"itemName": "Raj Kachori",
@@ -3933,7 +4064,8 @@
 		"isVegan": false,
 		"note": "Very high in calories, king of chaats, complete meal-sized snack",
 		"description": "Large crispy kachori filled with multiple stuffings, yogurt, chutneys, and garnishes, elaborate chaat",
-		"glycemicIndex": 65
+		"glycemicIndex": 65,
+		"id": "raj_kachori"
 	},
 	"chole_kulche": {
 		"itemName": "Chole Kulche",
@@ -3963,7 +4095,8 @@
 		"isVegan": false,
 		"note": "High in protein and fiber, filling street food meal",
 		"description": "Spicy chickpea curry served with soft leavened bread, popular North Indian street food combination",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "chole_kulche"
 	},
 	"pav_bhaji": {
 		"itemName": "Pav Bhaji",
@@ -3993,7 +4126,8 @@
 		"isVegan": false,
 		"note": "Good source of vegetables, high in butter and sodium",
 		"description": "Spiced mashed vegetable curry served with buttered bread rolls, Mumbai street food favorite",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "pav_bhaji"
 	},
 	"vada_pav": {
 		"itemName": "Vada Pav",
@@ -4023,7 +4157,8 @@
 		"isVegan": true,
 		"note": "Deep-fried snack, Mumbai's burger equivalent",
 		"description": "Deep-fried potato dumpling served in bread bun with chutneys, Mumbai's iconic street food",
-		"glycemicIndex": 68
+		"glycemicIndex": 68,
+		"id": "vada_pav"
 	},
 	"dabeli": {
 		"itemName": "Dabeli",
@@ -4053,7 +4188,8 @@
 		"isVegan": true,
 		"note": "Sweet and spicy, Gujarati street food specialty",
 		"description": "Spiced potato mixture in bun with sweet and tangy chutneys, pomegranate, and sev, Gujarati specialty",
-		"glycemicIndex": 65
+		"glycemicIndex": 65,
+		"id": "dabeli"
 	},
 	"momos": {
 		"itemName": "Momos",
@@ -4083,7 +4219,8 @@
 		"isVegan": true,
 		"note": "Steamed preparation, healthier than fried snacks",
 		"description": "Steamed dumplings stuffed with vegetables or meat, Tibetan-origin food popular across India",
-		"glycemicIndex": 55
+		"glycemicIndex": 55,
+		"id": "momos"
 	},
 	"frankie": {
 		"itemName": "Frankie",
@@ -4113,7 +4250,8 @@
 		"isVegan": false,
 		"note": "Complete meal wrapped in roti, good source of protein",
 		"description": "Indian wrap made with roti filled with spiced vegetables, paneer, or chicken with chutneys",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "frankie"
 	},
 	"burger_indian": {
 		"itemName": "Indian Style Burger",
@@ -4143,7 +4281,8 @@
 		"isVegan": false,
 		"note": "High in calories, processed fast food, consume occasionally",
 		"description": "Burger with Indian-spiced patty, vegetables, and chutneys instead of traditional condiments",
-		"glycemicIndex": 65
+		"glycemicIndex": 65,
+		"id": "burger_indian"
 	},
 	"pizza_indian": {
 		"itemName": "Indian Style Pizza",
@@ -4173,7 +4312,8 @@
 		"isVegan": false,
 		"note": "High in cheese and calories, Indian fusion fast food",
 		"description": "Pizza topped with Indian ingredients like paneer, tandoori chicken, or spiced vegetables",
-		"glycemicIndex": 68
+		"glycemicIndex": 68,
+		"id": "pizza_indian"
 	},
 	"noodles_hakka": {
 		"itemName": "Hakka Noodles",
@@ -4203,7 +4343,8 @@
 		"isVegan": true,
 		"note": "Indo-Chinese fusion, high in sodium from sauces",
 		"description": "Stir-fried noodles with vegetables and Indo-Chinese sauces, popular fusion fast food",
-		"glycemicIndex": 72
+		"glycemicIndex": 72,
+		"id": "noodles_hakka"
 	},
 	"fried_rice_chinese": {
 		"itemName": "Chinese Fried Rice",
@@ -4233,7 +4374,8 @@
 		"isVegan": true,
 		"note": "Indo-Chinese fusion, moderate in calories",
 		"description": "Stir-fried rice with vegetables and Indo-Chinese seasonings, popular street food",
-		"glycemicIndex": 75
+		"glycemicIndex": 75,
+		"id": "fried_rice_chinese"
 	},
 	"dosa_chinese": {
 		"itemName": "Chinese Dosa",
@@ -4263,7 +4405,8 @@
 		"isVegan": true,
 		"note": "Fusion of South Indian and Chinese cuisines",
 		"description": "Dosa filled with Hakka noodles and Chinese-style vegetables, creative fusion street food",
-		"glycemicIndex": 62
+		"glycemicIndex": 62,
+		"id": "dosa_chinese"
 	},
 	"margherita_pizza": {
 		"itemName": "Margherita Pizza",
@@ -4293,7 +4436,8 @@
 		"isVegan": false,
 		"note": "High in cheese and refined flour, moderate calories",
 		"description": "Classic Italian pizza with tomato sauce, mozzarella cheese, and fresh basil, adapted to Indian tastes",
-		"glycemicIndex": 68
+		"glycemicIndex": 68,
+		"id": "margherita_pizza"
 	},
 	"chicken_burger": {
 		"itemName": "Chicken Burger",
@@ -4323,7 +4467,8 @@
 		"isVegan": false,
 		"note": "High in calories and sodium, processed fast food",
 		"description": "Grilled or fried chicken patty in bun with lettuce, tomato, and sauce, international fast food staple",
-		"glycemicIndex": 62
+		"glycemicIndex": 62,
+		"id": "chicken_burger"
 	},
 	"french_fries": {
 		"itemName": "French Fries",
@@ -4353,7 +4498,8 @@
 		"isVegan": true,
 		"note": "Very high in calories and trans fats, deep-fried snack",
 		"description": "Deep-fried potato strips seasoned with salt, popular fast food side dish worldwide",
-		"glycemicIndex": 75
+		"glycemicIndex": 75,
+		"id": "french_fries"
 	},
 	"garlic_bread": {
 		"itemName": "Garlic Bread",
@@ -4383,7 +4529,8 @@
 		"isVegan": false,
 		"note": "High in butter and refined flour, popular appetizer",
 		"description": "Toasted bread with butter, garlic, and herbs, popular appetizer in Italian restaurants",
-		"glycemicIndex": 72
+		"glycemicIndex": 72,
+		"id": "garlic_bread"
 	},
 	"pasta_arrabiata": {
 		"itemName": "Pasta Arrabiata",
@@ -4413,7 +4560,8 @@
 		"isVegan": true,
 		"note": "Moderate calories, good source of carbohydrates",
 		"description": "Pasta in spicy tomato sauce with garlic and red chilies, popular Italian dish adapted to Indian palate",
-		"glycemicIndex": 68
+		"glycemicIndex": 68,
+		"id": "pasta_arrabiata"
 	},
 	"chicken_wings": {
 		"itemName": "Chicken Wings",
@@ -4443,7 +4591,8 @@
 		"isVegan": false,
 		"note": "High in protein and fat, often heavily sauced",
 		"description": "Fried or baked chicken wings tossed in various sauces, popular American fast food appetizer",
-		"glycemicIndex": 0
+		"glycemicIndex": 0,
+		"id": "chicken_wings"
 	},
 	"club_sandwich": {
 		"itemName": "Club Sandwich",
@@ -4473,7 +4622,8 @@
 		"isVegan": false,
 		"note": "High in calories, complete meal sandwich with multiple layers",
 		"description": "Multi-layered sandwich with chicken, lettuce, tomato, and mayonnaise, popular cafe food",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "club_sandwich"
 	},
 	"paneer_sandwich": {
 		"itemName": "Paneer Sandwich",
@@ -4503,7 +4653,8 @@
 		"isVegan": false,
 		"note": "Good source of protein and calcium from paneer",
 		"description": "Grilled sandwich with spiced paneer, vegetables, and chutneys, Indian adaptation of western sandwich",
-		"glycemicIndex": 55
+		"glycemicIndex": 55,
+		"id": "paneer_sandwich"
 	},
 	"chicken_nuggets": {
 		"itemName": "Chicken Nuggets",
@@ -4533,7 +4684,8 @@
 		"isVegan": false,
 		"note": "Highly processed, breaded and fried chicken pieces",
 		"description": "Bite-sized breaded and deep-fried chicken pieces, popular fast food snack especially among children",
-		"glycemicIndex": 45
+		"glycemicIndex": 45,
+		"id": "chicken_nuggets"
 	},
 	"mac_and_cheese": {
 		"itemName": "Mac and Cheese",
@@ -4563,7 +4715,8 @@
 		"isVegan": false,
 		"note": "High in cheese and refined pasta, comfort food",
 		"description": "Macaroni pasta in rich cheese sauce, American comfort food popular in international chains",
-		"glycemicIndex": 65
+		"glycemicIndex": 65,
+		"id": "mac_and_cheese"
 	},
 	"hot_dog": {
 		"itemName": "Hot Dog",
@@ -4593,7 +4746,8 @@
 		"isVegan": false,
 		"note": "Highly processed meat, very high in sodium",
 		"description": "Grilled sausage in bun with condiments, classic American fast food adapted to Indian tastes",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "hot_dog"
 	},
 	"chicken_wrap": {
 		"itemName": "Chicken Wrap",
@@ -4623,7 +4777,8 @@
 		"isVegan": false,
 		"note": "Balanced meal wrap, good source of protein",
 		"description": "Tortilla wrap filled with grilled chicken, vegetables, and sauce, healthy fast food option",
-		"glycemicIndex": 52
+		"glycemicIndex": 52,
+		"id": "chicken_wrap"
 	},
 	"quesadilla": {
 		"itemName": "Quesadilla",
@@ -4653,7 +4808,8 @@
 		"isVegan": false,
 		"note": "High in cheese, Mexican-origin dish popular in India",
 		"description": "Grilled tortilla filled with cheese and vegetables, Mexican dish adapted to Indian fast food scene",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "quesadilla"
 	},
 	"chicken_pizza": {
 		"itemName": "Chicken Pizza",
@@ -4683,7 +4839,8 @@
 		"isVegan": false,
 		"note": "Higher protein than vegetarian pizza, still high in calories",
 		"description": "Pizza topped with chicken pieces, often with Indian spices and vegetables, popular non-veg option",
-		"glycemicIndex": 65
+		"glycemicIndex": 65,
+		"id": "chicken_pizza"
 	},
 	"fish_and_chips": {
 		"itemName": "Fish and Chips",
@@ -4713,7 +4870,8 @@
 		"isVegan": false,
 		"note": "High in calories due to deep-frying, British classic",
 		"description": "Beer-battered fried fish with thick-cut potato chips, British dish popular in international chains",
-		"glycemicIndex": 68
+		"glycemicIndex": 68,
+		"id": "fish_and_chips"
 	},
 	"veggie_burger": {
 		"itemName": "Veggie Burger",
@@ -4743,7 +4901,8 @@
 		"isVegan": false,
 		"note": "Lower in protein than meat burgers, high in fiber",
 		"description": "Burger with vegetable or plant-based patty, popular vegetarian alternative in fast food chains",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "veggie_burger"
 	},
 	"chicken_shawarma": {
 		"itemName": "Chicken Shawarma",
@@ -4773,7 +4932,8 @@
 		"isVegan": false,
 		"note": "High in protein, Middle Eastern dish popular in India",
 		"description": "Pita bread filled with marinated grilled chicken, vegetables, and sauce, Middle Eastern fast food",
-		"glycemicIndex": 55
+		"glycemicIndex": 55,
+		"id": "chicken_shawarma"
 	},
 	"spring_rolls": {
 		"itemName": "Spring Rolls",
@@ -4803,7 +4963,8 @@
 		"isVegan": true,
 		"note": "Lighter than most fried snacks, good vegetable content",
 		"description": "Crispy fried rolls filled with vegetables and noodles, Chinese-origin snack popular in Indo-Chinese cuisine",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "spring_rolls"
 	},
 	"donuts": {
 		"itemName": "Donuts",
@@ -4833,7 +4994,8 @@
 		"isVegan": false,
 		"note": "Very high in sugar and calories, fried dessert snack",
 		"description": "Ring-shaped fried dough pastry often glazed or filled, American dessert popular in international chains",
-		"glycemicIndex": 78
+		"glycemicIndex": 78,
+		"id": "donuts"
 	},
 	"chicken_popcorn": {
 		"itemName": "Chicken Popcorn",
@@ -4863,7 +5025,8 @@
 		"isVegan": false,
 		"note": "High in protein but also high in sodium and fat",
 		"description": "Bite-sized breaded and fried chicken pieces, popular snack in fast food chains",
-		"glycemicIndex": 45
+		"glycemicIndex": 45,
+		"id": "chicken_popcorn"
 	},
 	"oats_raw": {
 		"itemName": "Oats Raw",
@@ -4893,7 +5056,8 @@
 		"isVegan": true,
 		"note": "High in fiber and protein, excellent source of beta-glucan for heart health",
 		"description": "Whole grain oat flakes, rich in soluble fiber and complex carbohydrates, ideal for sustained energy",
-		"glycemicIndex": 55
+		"glycemicIndex": 55,
+		"id": "oats_raw"
 	},
 	"oats_with_milk": {
 		"itemName": "Oats cooked with Milk",
@@ -4923,7 +5087,8 @@
 		"isVegan": false,
 		"note": "Complete protein with milk, good source of calcium and fiber",
 		"description": "Cooked oats prepared with milk, providing balanced nutrition with enhanced protein and calcium content",
-		"glycemicIndex": 49
+		"glycemicIndex": 49,
+		"id": "oats_with_milk"
 	},
 	"rolled_oats_with_milk": {
 		"itemName": "Rolled Oats with Milk",
@@ -4953,7 +5118,8 @@
 		"isVegan": false,
 		"note": "Slower cooking rolled oats retain more texture, excellent breakfast option",
 		"description": "Traditional rolled oats cooked with milk until creamy, retaining chewy texture and maximum nutritional benefits",
-		"glycemicIndex": 51
+		"glycemicIndex": 51,
+		"id": "rolled_oats_with_milk"
 	},
 	"oats_upma": {
 		"itemName": "Oats Upma",
@@ -4983,7 +5149,8 @@
 		"isVegan": true,
 		"note": "Healthy Indian preparation with vegetables, lower glycemic index",
 		"description": "South Indian style savory oats cooked with vegetables, curry leaves, and spices, nutritious breakfast alternative",
-		"glycemicIndex": 48
+		"glycemicIndex": 48,
+		"id": "oats_upma"
 	},
 	"oats_porridge": {
 		"itemName": "Oats Porridge",
@@ -4994,7 +5161,7 @@
 			"saturatedFats": 0.3,
 			"unSaturatedFats": null,
 			"sugar": 0.8,
-			"carbs": 12.0,
+			"carbs": 12,
 			"proteins": 2.4,
 			"sodium": 95,
 			"potassium": 61,
@@ -5013,7 +5180,8 @@
 		"isVegan": true,
 		"note": "Water-based preparation, lower calories, easily digestible",
 		"description": "Simple oats cooked with water until smooth and creamy, basic preparation without added fats",
-		"glycemicIndex": 58
+		"glycemicIndex": 58,
+		"id": "oats_porridge"
 	},
 	"overnight_oats": {
 		"itemName": "Overnight Oats",
@@ -5043,7 +5211,8 @@
 		"isVegan": false,
 		"note": "No-cook method, retains maximum nutrients, convenient meal prep",
 		"description": "Raw oats soaked overnight in milk or yogurt with fruits and nuts, no cooking required preparation",
-		"glycemicIndex": 45
+		"glycemicIndex": 45,
+		"id": "overnight_oats"
 	},
 	"oats_kheer": {
 		"itemName": "Oats Kheer",
@@ -5073,7 +5242,8 @@
 		"isVegan": false,
 		"note": "Healthier version of traditional kheer, high in sugar, festival dessert",
 		"description": "Indian dessert made with oats cooked in milk with jaggery or sugar and flavored with cardamom and nuts",
-		"glycemicIndex": 62
+		"glycemicIndex": 62,
+		"id": "oats_kheer"
 	},
 	"oats_smoothie": {
 		"itemName": "Oats Smoothie",
@@ -5103,7 +5273,8 @@
 		"isVegan": false,
 		"note": "Blended with fruits, easy to digest, good for on-the-go breakfast",
 		"description": "Blended drink made with oats, milk, fruits, and sometimes nuts, smooth texture and nutritious",
-		"glycemicIndex": 52
+		"glycemicIndex": 52,
+		"id": "oats_smoothie"
 	},
 	"oats_idli": {
 		"itemName": "Oats Idli",
@@ -5133,7 +5304,8 @@
 		"isVegan": true,
 		"note": "Healthier version of traditional idli, higher in fiber, fermented food",
 		"description": "Steamed cakes made from oats and lentil batter, healthy alternative to rice idli with added fiber",
-		"glycemicIndex": 45
+		"glycemicIndex": 45,
+		"id": "oats_idli"
 	},
 	"oats_dosa": {
 		"itemName": "Oats Dosa",
@@ -5163,6 +5335,7 @@
 		"isVegan": true,
 		"note": "Nutritious alternative to rice dosa, higher protein and fiber content",
 		"description": "Crispy pancake made from oats and lentil batter, fermented South Indian preparation with added nutrition",
-		"glycemicIndex": 48
+		"glycemicIndex": 48,
+		"id": "oats_dosa"
 	}
 }

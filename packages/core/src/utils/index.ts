@@ -1,6 +1,6 @@
 import Fuse from "fuse.js";
 
-import { type FoodItem, foodItems } from "../data";
+import { type FoodItem, foodData, foodItems } from "../data";
 
 export interface SearchResult {
 	score: number;
@@ -17,4 +17,11 @@ export const searchFood = (query: string): SearchResult[] => {
 		keys: ["itemName", "searchKeys"]
 	});
 	return fuse.search(query) as SearchResult[];
+};
+
+export const getFoodItem = (itemId: string): FoodItem | undefined => {
+	if (foodData[itemId]) {
+		return foodData[itemId] as FoodItem;
+	}
+	return undefined;
 };
