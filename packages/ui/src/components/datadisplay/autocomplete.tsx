@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { Check } from "lucide-react";
 
 import { debounce } from "@/lib/utils";
 
 import { Input } from "../dataentry/input";
-import { Skeleton } from "../general/skeleton";
+import { Skeleton } from "../feedback/skeleton";
 
 interface Item {
 	label: string;
@@ -13,15 +13,19 @@ interface Item {
 
 interface AutoCompleteProps {
 	searchValue: string;
-	selectedValue: string;
+	selectedValue?: string;
 	onSearchChange: (value: string) => void;
-	onSelectValue: (value: string) => void;
+	onSelectValue?: (value: string) => void;
 	items?: Item[];
 	itemsRenderer?: (items: Item[]) => React.ReactNode;
 	isLoading?: boolean;
 	emptyMessage?: string;
 	placeholder?: string;
 	debounceTime?: number;
+	className?: string;
+	forwardedRef?: React.Ref<{
+		focus: () => void;
+	}>;
 }
 
 export const AutoComplete: React.FC<AutoCompleteProps> = ({
@@ -34,7 +38,9 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 	isLoading = false,
 	emptyMessage = "No results found.",
 	placeholder = "Search...",
-	debounceTime = 350
+	debounceTime = 350,
+	className = "",
+	forwardedRef
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [internalSearchValue, setInternalSearchValue] = useState(searchValue);
@@ -49,10 +55,14 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 		[]
 	);
 
+	useImperativeHandle(forwardedRef, () => ({
+		focus() {
+			inputRef.current?.focus();
+		}
+	}));
+
 	const handleInputChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
-			console.log("on handleInputChange", e.target.value);
-			inputRef.current?.focus();
 			setInternalSearchValue(e.target.value);
 			debouncedSearch(e.target.value);
 		},
@@ -61,18 +71,19 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 
 	const handleSelectItem = useCallback(
 		(value: string) => {
-			onSelectValue(value);
+			onSelectValue?.(value);
 			setIsOpen(false);
 		},
 		[onSelectValue]
 	);
 
 	return (
-		<div className="relative">
+		<div className={`relative ${className}`}>
 			<Input
 				value={internalSearchValue}
 				onChange={handleInputChange}
 				placeholder={placeholder}
+				ref={inputRef}
 				onFocus={() => setIsOpen(true)}
 				onBlur={() => setTimeout(() => setIsOpen(false), 100)}
 			/>
@@ -84,7 +95,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 						isLoading={isLoading}
 						emptyMessage={emptyMessage}
 						handleSelectItem={handleSelectItem}
-						selectedValue={selectedValue}
+						selectedValue={selectedValue ?? ""}
 					/>
 				</div>
 			)}

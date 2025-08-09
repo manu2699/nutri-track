@@ -1,8 +1,10 @@
 import "./styles/index.css";
 
+export * from "./components/datadisplay/autocomplete";
 // Data display
 export * from "./components/datadisplay/badge";
 export * from "./components/datadisplay/carousel";
+export * from "./components/datadisplay/popover";
 // Data Entry / Inputs
 export * from "./components/dataentry/checkbox";
 export * from "./components/dataentry/input";
