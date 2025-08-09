@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
 	plugins: [
 		devServer({
-			entry: "src/index.tsx"
+			entry: "src/visualize/index.tsx"
 		})
 	],
 	server: {
