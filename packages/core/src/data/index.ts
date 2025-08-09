@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import foods from "./foods.db.json";
+import frequents from "./frequents.json";
 
 export interface Nutrients {
 	totalFats: number | null;
@@ -42,14 +42,16 @@ export interface RegionMealTypes {
 }
 
 export interface FrequentFoods {
-	[region: string]: RegionMealTypes;
+	[region: string]:
+		| RegionMealTypes
+		| {
+				Indian_Regional: string[];
+				International: string[];
+		  };
 }
 
-const foodsDbFile = join(process.cwd(), "src/data/foods.db.json");
-const frequentsFile = join(process.cwd(), "src/data/frequents.json");
-
-export const foodData: Record<string, FoodItem> = JSON.parse(readFileSync(foodsDbFile, "utf8"));
+export const foodData: Record<string, FoodItem> = foods;
 export const foodItemsKeys: string[] = Object.keys(foodData);
 export const foodItems: FoodItem[] = Object.values(foodData);
 
-export const frequentFoods: FrequentFoods = JSON.parse(readFileSync(frequentsFile, "utf8"));
+export const frequentFoods: FrequentFoods = frequents;
