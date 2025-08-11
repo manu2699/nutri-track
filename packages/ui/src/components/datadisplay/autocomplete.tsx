@@ -3,21 +3,22 @@ import { Check } from "lucide-react";
 
 import { debounce } from "@/lib/utils";
 
-import { Input } from "../dataentry/input";
 import { Skeleton } from "../feedback/skeleton";
+import { SearchInput } from "../general/search";
 
 interface Item {
 	label: string;
 	value: string;
+	item?: any; // Optional, can be used to pass the full item object
 }
 
 interface AutoCompleteProps {
 	searchValue: string;
 	selectedValue?: string;
 	onSearchChange: (value: string) => void;
-	onSelectValue?: (value: string) => void;
+	onSelectValue?: (value: string, item?: any) => void;
 	items?: Item[];
-	itemsRenderer?: (items: Item[]) => React.ReactNode;
+	itemRenderer?: (item: Item) => React.ReactNode;
 	isLoading?: boolean;
 	emptyMessage?: string;
 	placeholder?: string;
@@ -34,7 +35,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 	onSearchChange,
 	onSelectValue,
 	items = [],
-	itemsRenderer,
+	itemRenderer,
 	isLoading = false,
 	emptyMessage = "No results found.",
 	placeholder = "Search...",
@@ -62,28 +63,36 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 	}));
 
 	const handleInputChange = useCallback(
-		(e: React.ChangeEvent<HTMLInputElement>) => {
-			setInternalSearchValue(e.target.value);
-			debouncedSearch(e.target.value);
+		(value: string) => {
+			setInternalSearchValue(value);
+			debouncedSearch(value);
 		},
 		[debouncedSearch]
 	);
 
 	const handleSelectItem = useCallback(
-		(value: string) => {
-			onSelectValue?.(value);
+		(value: string, item?: any) => {
+			onSelectValue?.(value, item);
 			setIsOpen(false);
+			inputRef.current?.blur();
 		},
 		[onSelectValue]
 	);
 
+	const handleClear = useCallback(() => {
+		setInternalSearchValue("");
+		onSearchChange("");
+		inputRef.current?.focus();
+	}, [onSearchChange]);
+
 	return (
 		<div className={`relative ${className}`}>
-			<Input
+			<SearchInput
 				value={internalSearchValue}
-				onChange={handleInputChange}
 				placeholder={placeholder}
-				ref={inputRef}
+				onChange={handleInputChange}
+				onClear={handleClear}
+				searchRef={inputRef}
 				onFocus={() => setIsOpen(true)}
 				onBlur={() => setTimeout(() => setIsOpen(false), 100)}
 			/>
@@ -91,7 +100,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 				<div className="absolute z-10 w-full p-2 bg-white border border-gray-200 rounded-md shadow-lg mt-1">
 					<AutoCompleteItemsList
 						items={items}
-						itemsRenderer={itemsRenderer}
+						itemRenderer={itemRenderer}
 						isLoading={isLoading}
 						emptyMessage={emptyMessage}
 						handleSelectItem={handleSelectItem}
@@ -105,15 +114,15 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 
 interface AutoCompleteItemsListProps {
 	items: Item[];
-	itemsRenderer?: (items: Item[]) => React.ReactNode;
+	itemRenderer?: (item: Item) => React.ReactNode;
 	isLoading: boolean;
 	emptyMessage: string;
-	handleSelectItem: (value: string) => void;
+	handleSelectItem: (value: string, item?: any) => void;
 	selectedValue: string;
 }
 
 const AutoCompleteItemsList: React.FC<AutoCompleteItemsListProps> = React.memo(
-	({ items, itemsRenderer, isLoading, emptyMessage, handleSelectItem, selectedValue }) => {
+	({ items, itemRenderer, isLoading, emptyMessage, handleSelectItem, selectedValue }) => {
 		if (isLoading) {
 			return (
 				<div className="p-2">
@@ -128,10 +137,6 @@ const AutoCompleteItemsList: React.FC<AutoCompleteItemsListProps> = React.memo(
 			return <div className="p-2 text-sm text-gray-500">{emptyMessage}</div>;
 		}
 
-		if (itemsRenderer) {
-			return itemsRenderer(items);
-		}
-
 		return (
 			<ul className="max-h-60 overflow-y-auto">
 				{items.map((item) => (
@@ -139,12 +144,24 @@ const AutoCompleteItemsList: React.FC<AutoCompleteItemsListProps> = React.memo(
 					<li
 						key={item.value}
 						className="p-1 cursor-pointer hover:bg-gray-100"
-						onClick={() => handleSelectItem(item.value)}
+						// Prevent input blur
+						onMouseDown={(e) => {
+							e.preventDefault();
+							handleSelectItem(item.value, item.item);
+						}}
+						onClick={(e) => {
+							e.preventDefault();
+							handleSelectItem(item.value, item.item);
+						}}
 					>
-						<div className="flex items-center justify-between">
-							{item.value === selectedValue && <Check className="h-4 w-4 mr-2" />}
-							<span>{item.label}</span>
-						</div>
+						{itemRenderer ? (
+							itemRenderer(item)
+						) : (
+							<div className="flex items-center gap-1 justify-between">
+								<span>{item.label}</span>
+								{item.value === selectedValue && <Check className="h-4 w-4" />}
+							</div>
+						)}
 					</li>
 				))}
 			</ul>

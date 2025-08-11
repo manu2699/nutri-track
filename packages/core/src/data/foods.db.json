@@ -157,7 +157,7 @@
 		"nutrients": {
 			"totalFats": 12.5,
 			"saturatedFats": 3.8,
-			"unSaturatedFats": null,
+			"unSaturatedFats": 0.1,
 			"sugar": 1.5,
 			"carbs": 48,
 			"proteins": 8.2,
@@ -1213,7 +1213,7 @@
 		"calorieMeasurement": "1piece",
 		"nutrients": {
 			"totalFats": 0.4,
-			"saturatedFats": null,
+			"saturatedFats": 0.4,
 			"unSaturatedFats": null,
 			"sugar": 0.4,
 			"carbs": 22,

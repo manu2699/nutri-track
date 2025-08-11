@@ -72,9 +72,9 @@ export function Editor({ initialFoodsObj = {} }: EditorProps) {
 	const [rows, setRows] = useState<[string, FoodItem][]>([]);
 	const [editing, setEditing] = useState<string | null>(null);
 	const [search, setSearch] = useState("");
-	const [modified, setModified] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [saving, setSaving] = useState(false);
+	const [edits] = useState(new Set());
 
 	useEffect(() => {
 		const foodData = window.__NUTRI_DATA__ || initialFoodsObj;
@@ -122,15 +122,15 @@ export function Editor({ initialFoodsObj = {} }: EditorProps) {
 				return [k, { ...f, [field]: value }];
 			})
 		);
-		setModified(true);
+		edits.add(key);
 	}
 
 	// Actions Event delegation
 	function handleActionClick(event: Event) {
 		const target = event.target as HTMLButtonElement;
 		const { dataset } = target;
+		console.log("data set ", dataset, target.id);
 		const { action, key } = dataset;
-
 		if (!action || !key) return;
 
 		switch (action) {
@@ -149,7 +149,7 @@ export function Editor({ initialFoodsObj = {} }: EditorProps) {
 	function remove(key: string) {
 		if (!confirm(`Are you sure you want to delete "${key}"?`)) return;
 		setRows((prev) => prev.filter(([k]) => k !== key));
-		setModified(true);
+		edits.delete(key);
 		if (editing === key) setEditing(null);
 	}
 
@@ -177,13 +177,19 @@ export function Editor({ initialFoodsObj = {} }: EditorProps) {
 
 		setRows((prev) => [...prev, [trimmedKey, newFood]]);
 		setEditing(trimmedKey);
-		setModified(true);
 	}
 
 	async function save() {
 		setSaving(true);
 		try {
-			const obj = Object.fromEntries(rows);
+			const editedRows = rows.filter(([key]) => edits.has(key));
+			const obj = Object.fromEntries(editedRows);
+			console.log("Saving data:", {
+				obj,
+				editedRows,
+				edits: Array.from(edits)
+			});
+
 			const response = await fetch(window.location.pathname, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
@@ -194,7 +200,7 @@ export function Editor({ initialFoodsObj = {} }: EditorProps) {
 
 			if (result.ok) {
 				alert("Saved successfully!");
-				setModified(false);
+				edits.clear();
 				window.location.reload();
 			} else {
 				alert(`Error saving: ${result.error || "Unknown error"}`);
@@ -204,6 +210,18 @@ export function Editor({ initialFoodsObj = {} }: EditorProps) {
 		} finally {
 			setSaving(false);
 		}
+	}
+
+	function handleDiscard(key: string) {
+		// Discard changes made on rows for specific keys
+		setRows((prev) =>
+			prev.map(([k, f]) => {
+				if (k !== key) return [k, f];
+				return [k, { ...f, ...initialFoodsObj[k] }];
+			})
+		);
+		edits.delete(key);
+		setEditing(null);
 	}
 
 	function formatNutrientName(key: string): string {
@@ -250,7 +268,7 @@ export function Editor({ initialFoodsObj = {} }: EditorProps) {
 							<button
 								type="button"
 								onClick={add}
-								className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors font-medium text-sm"
+								className="inline-flex items-center gap-2 px-4 py-2 bg-gray-400 text-white rounded-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors font-medium text-sm"
 								aria-label="Add new entry"
 							>
 								<AddIcon />
@@ -258,10 +276,10 @@ export function Editor({ initialFoodsObj = {} }: EditorProps) {
 							</button>
 							<button
 								type="button"
-								disabled={!modified || saving}
+								disabled={!edits.size || saving}
 								onClick={save}
 								className={`inline-flex items-center gap-2 px-4 py-2 rounded-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 text-sm ${
-									modified && !saving
+									edits.size && !saving
 										? "bg-green-600 text-white hover:bg-green-700 focus:ring-green-500"
 										: "bg-gray-400 text-white cursor-not-allowed"
 								}`}
@@ -277,19 +295,15 @@ export function Editor({ initialFoodsObj = {} }: EditorProps) {
 				{/* Stats */}
 				<div className="px-4 flex justify-between items-center text-sm text-gray-600">
 					<span>Total items: {filtered.length}</span>
-					{modified && <span className="text-orange-600 font-medium">! Unsaved changes</span>}
+					{edits.size > 0 && <span className="text-orange-600 font-medium">! Unsaved changes</span>}
 				</div>
 			</div>
 
 			{/* Scrollable Table Container */}
 			<div className="overflow-auto bg-white">
 				<div className="min-w-max">
-					<table
-						className="w-full border-collapse"
-						onChange={handleFormChange}
-						onClick={handleActionClick}
-						onKeyDown={handleActionClick}
-					>
+					{/** biome-ignore lint/a11y/useKeyWithClickEvents: -- */}
+					<table className="w-full border-collapse" onChange={handleFormChange} onClick={handleActionClick}>
 						<thead className="bg-gray-50 sticky top-0 z-20">
 							<tr>
 								<th className="w-48 p-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-200">
@@ -419,38 +433,56 @@ export function Editor({ initialFoodsObj = {} }: EditorProps) {
 										<td className="p-1 px-3 w-[150px] sticky right-0 bg-white border-l border-gray-200 z-10">
 											<div className="flex gap-2">
 												{isEditing ? (
-													<button
-														type="button"
-														className="inline-flex items-center gap-1 px-2 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-1 focus:ring-green-500 text-xs font-medium transition-colors"
-														aria-label={`Save changes for ${key}`}
-														data-action="done"
-														data-key={key}
-													>
-														<CheckIcon />
-														Done
-													</button>
+													<>
+														<button
+															type="button"
+															className="inline-flex items-center gap-1 p-2 text-green-600 rounded-full hover:bg-green-100 text-xs"
+															aria-label={`Save changes for ${key}`}
+															data-action="done"
+															data-key={key}
+															id={`done_btn`}
+															onClick={() => setEditing(null)}
+														>
+															<CheckIcon />
+														</button>
+														<button
+															type="button"
+															className="inline-flex items-center gap-1 p-2 text-red-500 rounded-full hover:bg-red-100 text-xs"
+															aria-label={`Cancel changes for ${key}`}
+															data-action="cancel"
+															data-key={key}
+															id={`cancel_btn`}
+															onClick={() => handleDiscard(key)}
+														>
+															<CrossIcon />
+														</button>
+													</>
 												) : (
-													<button
-														type="button"
-														className="inline-flex items-center gap-1 px-2 py-1 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-500 text-xs font-medium transition-colors"
-														aria-label={`Edit ${key}`}
-														data-action="edit"
-														data-key={key}
-													>
-														<EditIcon />
-														Edit
-													</button>
+													<>
+														<button
+															type="button"
+															className="inline-flex items-center gap-1 p-2 text-blue-500 rounded-full hover:bg-blue-100 text-xs"
+															aria-label={`Edit ${key}`}
+															data-action="edit"
+															data-key={key}
+															id={`edit_btn`}
+															onClick={() => setEditing(key)}
+														>
+															<EditIcon />
+														</button>
+														<button
+															type="button"
+															className="inline-flex items-center gap-1 p-2 text-red-500 rounded-full hover:bg-red-100 text-xs"
+															aria-label={`Delete ${key}`}
+															data-action="delete"
+															data-key={key}
+															id={`delete_btn`}
+															onClick={() => remove(key)}
+														>
+															<TrashIcon />
+														</button>
+													</>
 												)}
-												<button
-													type="button"
-													className="inline-flex items-center gap-1 px-2 py-1 bg-amber-200 text-amber-800 rounded-md hover:bg-amber-300 focus:outline-none focus:ring-1 focus:ring-red-500 text-xs font-medium transition-colors"
-													aria-label={`Delete ${key}`}
-													data-action="delete"
-													data-key={key}
-												>
-													<TrashIcon />
-													Delete
-												</button>
 											</div>
 										</td>
 									</tr>
@@ -543,6 +575,13 @@ const EditIcon = () => (
 const CheckIcon = () => (
 	<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 		<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+	</svg>
+);
+
+const CrossIcon = () => (
+	<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+		<path d="M18 6 6 18" />
+		<path d="m6 6 12 12" />
 	</svg>
 );
 

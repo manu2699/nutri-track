@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
 
 import fs from "node:fs";
-import { resolve } from "node:path";
+import { join, resolve } from "node:path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -23,8 +23,8 @@ export default defineConfig({
 		https:
 			process.env.NODE_ENV === "development"
 				? {
-						key: fs.readFileSync("./keys/localhost-key.pem"),
-						cert: fs.readFileSync("./keys/localhost-cert.pem")
+						key: fs.readFileSync(join(__dirname, "./keys/localhost-key.pem")),
+						cert: fs.readFileSync(join(__dirname, "./keys/localhost-cert.pem"))
 					}
 				: undefined
 	},

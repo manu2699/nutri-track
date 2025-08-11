@@ -43,11 +43,11 @@ h5,
 h6,
 .heading {
 	font-weight: 600;
-	font-family: var(--font-mono);
+	font-family: var(--font-sans);
 }
 
 .subHeading {
-	font-family: var(--font-sans);
+	font-family: var(--font-mono);
 }
 
 #root {

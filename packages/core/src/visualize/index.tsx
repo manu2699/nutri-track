@@ -3,7 +3,7 @@ import { Hono } from "hono";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-const DATA_FILE = join(process.cwd(), "data/foods.db.json");
+const DATA_FILE = join(process.cwd(), "src/data/foods.db.json");
 
 const app = new Hono();
 
@@ -22,7 +22,7 @@ app.get("/", (c) => {
 						__html: `window.__NUTRI_DATA__ = ${JSON.stringify(data)};`
 					}}
 				/>
-				<script type="module" src="/src/client.tsx" />
+				<script type="module" src="/src/visualize/client.tsx" />
 			</head>
 			<body>
 				<div id="root" />
@@ -33,9 +33,10 @@ app.get("/", (c) => {
 
 // File save/modify
 app.post("/", async (c) => {
-	const data = await c.req.json();
+	const updates = await c.req.json();
+	const data = JSON.parse(readFileSync(DATA_FILE, "utf8"));
 	try {
-		writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+		writeFileSync(DATA_FILE, JSON.stringify({ ...data, ...updates }, null, 2));
 		return c.json({ ok: true });
 	} catch {
 		return c.json({ ok: false, error: "Could not write file." });
