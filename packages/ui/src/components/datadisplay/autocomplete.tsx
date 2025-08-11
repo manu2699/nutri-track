@@ -24,6 +24,7 @@ interface AutoCompleteProps {
 	placeholder?: string;
 	debounceTime?: number;
 	className?: string;
+	onClear?: () => void;
 	forwardedRef?: React.Ref<{
 		focus: () => void;
 	}>;
@@ -41,6 +42,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 	placeholder = "Search...",
 	debounceTime = 350,
 	className = "",
+	onClear,
 	forwardedRef
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -83,7 +85,8 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 		setInternalSearchValue("");
 		onSearchChange("");
 		inputRef.current?.focus();
-	}, [onSearchChange]);
+		onClear?.();
+	}, [onSearchChange, onClear]);
 
 	return (
 		<div className={`relative ${className}`}>

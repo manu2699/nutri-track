@@ -1,11 +1,28 @@
-import { useRef, useState } from "react";
-import { Check, X } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
+import { X } from "lucide-react";
+import { motion } from "motion/react";
 
-import { type FoodItem, type SearchResult, searchFood } from "@nutri-track/core";
-import { AutoComplete, BADGE_VARIANTS, Badge, Input } from "@nutri-track/ui";
+import {
+	calculateIntakeFacts,
+	type FoodItem,
+	getMeasurementInfo,
+	type SearchResult,
+	searchFood
+} from "@nutri-track/core";
+import {
+	AutoComplete,
+	BADGE_VARIANTS,
+	Badge,
+	BUTTON_SIZES,
+	BUTTON_VARIANTS,
+	Button,
+	debounce,
+	Input
+} from "@nutri-track/ui";
 
 import { FoodCard } from "@/components/foodCard";
-import { UserHeader } from "@/components/userHeader";
+import { NutriFactCard } from "@/components/nutriFactCard";
+// import { UserHeader } from "@/components/userHeader";
 import { useDataStore } from "@/data/store";
 import { getMealType } from "@/utils";
 
@@ -23,6 +40,7 @@ export const HomePage = () => {
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [selectedItem, setSelectedItem] = useState<FoodItem | null>(null);
+	const [consumedInfo, setConsumedInfo] = useState<FoodItem | null>(null);
 
 	const handleSearchChange = (value: string) => {
 		setIsLoading(true);
@@ -33,8 +51,26 @@ export const HomePage = () => {
 
 	const handleSelectItem = (_: string, item: FoodItem) => {
 		setSelectedItem(item as FoodItem);
+		setEaten(getMeasurementInfo(item.calorieMeasurement).quantity);
 		setSearchedFood(item.itemName);
 	};
+
+	const debounceCalculateIntakeFacts = useCallback(
+		debounce((item: FoodItem, value: number) => {
+			setConsumedInfo(() => calculateIntakeFacts(item, value));
+		}, 300),
+		[]
+	);
+
+	const handleChangeEaten = useCallback(
+		(value: number) => {
+			setEaten(value);
+			if (selectedItem && `${value}`.length > 1 && value) {
+				debounceCalculateIntakeFacts(selectedItem, value);
+			}
+		},
+		[selectedItem, debounceCalculateIntakeFacts]
+	);
 
 	const handleSelectFrequentFood = (value: string) => {
 		setSearchedFood(value);
@@ -42,20 +78,42 @@ export const HomePage = () => {
 		autocompleteRef.current?.focus();
 	};
 
+	const handleClear = () => {
+		setSelectedItem(null);
+		setSearchedFood("");
+		setEaten(0);
+		setConsumedInfo(null);
+	};
+
 	if (!currentUser) {
 		return null;
 	}
 
+	const handleAddToTrack = (foodItem: FoodItem) => {
+		console.log("handleAddToTrack :: ", foodItem);
+	};
+
 	return (
-		<div className="page flex flex-col !p-0">
-			<UserHeader name={currentUser.name} id={currentUser.id} />
-			<div className="flex flex-col p-4">
-				<div className="flex flex-col justify-center items-center gap-5">
-					<h2 className="text-xl text-center font-bold text-secondary-foreground mt-3">Had your {mealType}?</h2>
+		<motion.div
+			initial={{ opacity: 0, y: 10 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ duration: 0.5 }}
+			className="page flex flex-col p-2 py-4 gap-2"
+		>
+			{!selectedItem?.itemName ? (
+				<motion.div
+					initial={{ opacity: 0, y: 10 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.5 }}
+					className="flex flex-col items-center justify-center h-full gap-6 -mt-10"
+				>
+					<p className="text-lg font-bold text-secondary-foreground text-center">
+						Hey {currentUser.name}, <br></br>did you had your {mealType}?
+					</p>
 					<AutoComplete
 						searchValue={searchedFood}
 						onSearchChange={handleSearchChange}
-						selectedValue={selectedItem?.itemName}
+						selectedValue={selectedItem?.itemName || ""}
 						onSelectValue={handleSelectItem}
 						isLoading={isLoading}
 						emptyMessage="No Items found..."
@@ -64,53 +122,57 @@ export const HomePage = () => {
 							label: result.item.itemName,
 							value: result.item.itemName
 						}))}
-						className="w-[90%] max-w-md"
+						className="w-full max-w-full"
 						forwardedRef={autocompleteRef}
+						onClear={handleClear}
 						itemRenderer={(item) => <FoodCard key={item.value} foodItem={item.item} />}
 					/>
 
 					{!searchedFood && !selectedItem ? (
-						<div className="flex items-center flex-wrap gap-3">
+						<motion.div
+							initial={{ opacity: 0, y: 10 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.5, delay: 0.2 }}
+							className="flex items-center flex-wrap gap-3"
+						>
 							{frequentFoods.map((food) => (
 								<Badge key={food} onClick={() => handleSelectFrequentFood(food)} variant={BADGE_VARIANTS.SECONDARY}>
 									{food}
 								</Badge>
 							))}
-						</div>
+						</motion.div>
 					) : null}
-
-					{selectedItem && (
-						<div className="flex flex-col w-[90%] bg-gray-50 px-4 py-2  rounded-md">
-							<p className="font-semibold mb-1">
-								{selectedItem.itemName} Breakdown for {selectedItem.calorieMeasurement}
-							</p>
-							<p className="text-sm">
-								Calories: {selectedItem.calories}{" "}
-								<span className="text-xs">kcal/{selectedItem.calorieMeasurement}</span>
-							</p>
-							<p className="text-sm">Carbs: {selectedItem.nutrients.carbs}g</p>
-							<p className="text-sm">Protein: {selectedItem.nutrients.proteins}g</p>
-							<p className="text-sm">Fats: {selectedItem.nutrients.totalFats}g</p>
-							<p className="text-sm">Fiber: {selectedItem.nutrients.fiber}g</p>
-
-							<p className="text-md mt-2">How much {selectedItem.itemName} did you eat?</p>
-							<div className="grid grid-cols-[1fr_auto] items-center gap-2">
-								<Input
-									value={eaten}
-									onChange={(e) => setEaten(parseInt(e.target.value) || 0)}
-									placeholder={`Enter amount of ${selectedItem.itemName} eaten`}
-									className="w-full max-w-md bg-transparent"
-									suffix={selectedItem.calorieMeasurement}
-								/>
-								<div className="flex items-center justify-center gap-2">
-									<Check className="size-5 bg-primary text-white rounded-full p-1" />
-									<X className="size-5 bg-gray-400 text-white rounded-full p-1" />
-								</div>
-							</div>
-						</div>
-					)}
-				</div>
-			</div>
-		</div>
+				</motion.div>
+			) : (
+				<motion.div
+					initial={{ opacity: 0, y: 10 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.5 }}
+					className="flex flex-col py-1 h-full gap-2"
+				>
+					<p className="px-2 text-md mt-1">How much {selectedItem.itemName} did you had?</p>
+					<div className="px-1 grid grid-cols-[1fr_auto] items-center gap-2">
+						<Input
+							value={eaten}
+							type="number"
+							onChange={(e) => handleChangeEaten(parseInt(e.target.value) || 0)}
+							placeholder={`Enter amount of ${selectedItem.itemName} eaten`}
+							className="w-[80%] min-w-[150px] bg-transparent"
+							suffix={getMeasurementInfo(selectedItem.calorieMeasurement).unit}
+						/>
+						<Button variant={BUTTON_VARIANTS.OUTLINE} size={BUTTON_SIZES.SMALL} onClick={handleClear}>
+							<X className="size-5 bg-gray-400 text-white rounded-full p-1" />
+							Clear
+						</Button>
+					</div>
+					<NutriFactCard
+						foodItem={consumedInfo || selectedItem}
+						consumedQuantity={`${eaten} ${getMeasurementInfo(selectedItem.calorieMeasurement).unit}`}
+						showAction={true}
+						onActionClick={handleAddToTrack}
+					/>
+				</motion.div>
+			)}
+		</motion.div>
 	);
 };

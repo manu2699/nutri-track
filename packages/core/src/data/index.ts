@@ -24,14 +24,14 @@ export interface FoodItem {
 	id: string;
 	calories: number;
 	calorieMeasurement: string;
-	nutrients: Nutrients;
+	nutrients: Nutrients | Record<keyof Nutrients, number> | null;
 	taste: string;
 	region: string[];
 	mealType: string[];
 	isVeg: boolean;
 	isVegan: boolean;
-	note: string;
 	description: string;
+	note?: string;
 	searchKeys?: string[];
 }
 
@@ -56,3 +56,21 @@ export const foodItemsKeys: string[] = Object.keys(foodData);
 export const foodItems: FoodItem[] = Object.values(foodData);
 
 export const frequentFoods: FrequentFoods = frequents;
+
+export const standardNutrientsMeasurementMap: Record<keyof Nutrients, string> = {
+	totalFats: "g",
+	saturatedFats: "g",
+	unSaturatedFats: "g",
+	sugar: "g",
+	fiber: "g",
+	carbs: "g",
+	proteins: "g",
+	iron: "mg",
+	calcium: "mg",
+	sodium: "mg",
+	potassium: "mg",
+	magnesium: "mg",
+	vitaminA: "mg",
+	vitaminC: "mg",
+	vitaminD: "mg"
+};
