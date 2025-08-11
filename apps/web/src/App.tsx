@@ -19,16 +19,23 @@ function App() {
 	const currentUser = useDataStore((s) => s.currentUser);
 	// const isInitialized = useDataStore((s) => s.isInitialized);
 	const initialize = useDataStore((s) => s.initialize);
+	const isInitialized = useDataStore((s) => s.isInitialized);
 
 	useEffect(() => {
 		initialize();
 	}, [initialize]);
 
 	useEffect(() => {
-		if (currentUser) {
+		if (currentUser?.name && isInitialized) {
 			navigate("/home");
+		} else if (!currentUser?.name && isInitialized) {
+			navigate("/onboard");
 		}
-	}, [currentUser, navigate]);
+	}, [currentUser, navigate, isInitialized]);
+
+	if (!isInitialized) {
+		return <LoadingFallback />;
+	}
 
 	return (
 		<Suspense fallback={<LoadingFallback />}>

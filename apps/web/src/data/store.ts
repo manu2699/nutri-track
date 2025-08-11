@@ -14,9 +14,10 @@ type State = {
 type Action = {
 	initialize: () => Promise<void>;
 	setCurrentUser: (user: UserInterface) => void;
+	clearDb?: () => Promise<void>;
 };
 
-export const useDataStore = create<State & Action>((set) => ({
+export const useDataStore = create<State & Action>((set, get) => ({
 	isInitialized: false,
 	currentUser: null,
 	initialize: async () => {
@@ -37,10 +38,25 @@ export const useDataStore = create<State & Action>((set) => ({
 			userController,
 			isInitialized: true
 		});
+		// await get().clearDb();
 	},
 	setCurrentUser: (user: UserInterface) => {
 		set({
 			currentUser: user
 		});
+	},
+	// Only for dev purposes
+	clearDb: async () => {
+		if (!import.meta.env.DEV) {
+			return;
+		}
+		const userController = get().userController;
+		if (userController) {
+			await userController.deleteAllUsers();
+		}
+		const trackingController = get().trackingController;
+		if (trackingController) {
+			await trackingController.deleteAllTrackings();
+		}
 	}
 }));

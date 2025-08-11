@@ -132,4 +132,31 @@ export class TrackingController {
 
 		return result.result as TrackingDataInterface[];
 	}
+
+	async deleteTracking(userId: number, time: string) {
+		if (!this.db.promiser || !this.db.dbId) {
+			throw new Error("Database not initialized");
+		}
+
+		await this.db.promiser("exec", {
+			dbId: this.db.dbId,
+			sql: "DELETE FROM trackings WHERE user_id = ? AND time LIKE ?",
+			bind: [userId, `${time}%`]
+		});
+	}
+
+	async deleteAllTrackings() {
+		if (!import.meta.env.DEV) {
+			return;
+		}
+
+		if (!this.db.promiser || !this.db.dbId) {
+			throw new Error("Database not initialized");
+		}
+
+		await this.db.promiser("exec", {
+			dbId: this.db.dbId,
+			sql: "DELETE FROM trackings"
+		});
+	}
 }

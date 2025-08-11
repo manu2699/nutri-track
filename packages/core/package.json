@@ -3,12 +3,41 @@
 	"version": "1.0.0",
 	"description": "Nutri Track Core",
 	"type": "module",
-	"main": "src/index.ts",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"require": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		},
+		"./data": {
+			"import": "./dist/data/index.js",
+			"require": "./dist/data/index.js",
+			"types": "./dist/data/index.d.ts"
+		},
+		"./utils": {
+			"import": "./dist/utils/index.js",
+			"require": "./dist/utils/index.js",
+			"types": "./dist/utils/index.d.ts"
+		},
+		"./data/foods.db.json": "./src/data/foods.db.json",
+		"./data/frequents.json": "./src/data/frequents.json"
+	},
+	"files": [
+		"dist",
+		"src/data/foods.db.json",
+		"src/data/frequents.json"
+	],
+
 	"scripts": {
-		"dev": "vite"
+		"dev": "vite",
+		"build": "tsc --project tsconfig.build.json"
 	},
 	"dependencies": {
 		"@hono/node-server": "1.18.0",
+		"fuse.js": "^7.1.0",
 		"hono": "4.8.10"
 	},
 	"devDependencies": {

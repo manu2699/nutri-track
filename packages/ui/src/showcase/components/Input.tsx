@@ -1,19 +1,48 @@
-import { Input } from "@/components/dataentry/input";
+import { INPUT_SIZES, Input } from "@/components/dataentry/input";
 
 export default function InputShowcase() {
 	return (
 		<div className="flex w-60 flex-col gap-4">
 			<div>
-				<h3 className="mb-2 text-lg font-medium">Text Input</h3>
-				<Input type="text" placeholder="Enter text..." onChange={(e) => console.log("Text input:", e.target.value)} />
+				<h3 className="mb-2 text-lg font-medium">Default Input</h3>
+				<Input
+					size={INPUT_SIZES.DEFAULT}
+					type="text"
+					placeholder="Enter text..."
+					onChange={(e) => console.log("Text input:", e.target.value)}
+				/>
 			</div>
 
 			<div>
 				<h3 className="mb-2 text-lg font-medium">Number Input</h3>
 				<Input
+					size={INPUT_SIZES.DEFAULT}
 					type="number"
 					placeholder="Enter number..."
+					suffix={<span>gm</span>}
 					onChange={(e) => console.log("Number input:", e.target.value)}
+				/>
+			</div>
+
+			<div>
+				<h3 className="mb-2 text-lg font-medium">Small Input</h3>
+				<Input
+					size={INPUT_SIZES.SMALL}
+					type="text"
+					placeholder="Enter text..."
+					suffix={<span>ft</span>}
+					onChange={(e) => console.log("Text input:", e.target.value)}
+				/>
+			</div>
+
+			<div>
+				<h3 className="mb-2 text-lg font-medium">Large Input</h3>
+				<Input
+					size={INPUT_SIZES.LARGE}
+					type="text"
+					placeholder="Enter text..."
+					suffix={<span>gm</span>}
+					onChange={(e) => console.log("Text input:", e.target.value)}
 				/>
 			</div>
 

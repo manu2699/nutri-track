@@ -43,11 +43,11 @@ h5,
 h6,
 .heading {
 	font-weight: 600;
-	font-family: var(--font-mono);
+	font-family: var(--font-sans);
 }
 
 .subHeading {
-	font-family: var(--font-sans);
+	font-family: var(--font-mono);
 }
 
 #root {
@@ -61,6 +61,7 @@ h6,
 	min-height: 100%;
 	width: 100%;
 	margin: 0 auto;
+	height: 100%;
 
 	/* Tablet (768px and up) */
 	@media (min-width: 768px) {

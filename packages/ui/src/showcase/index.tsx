@@ -4,6 +4,7 @@ import { Button } from "../components/general/button";
 
 // Component registry - maps component names to their lazy-loaded showcase components
 const componentRegistry = {
+	AutoComplete: lazy(() => import("./components/AutoComplete")),
 	Button: lazy(() => import("./components/Button")),
 	Badge: lazy(() => import("./components/Badge")),
 	Drawer: lazy(() => import("./components/Drawer")),
@@ -64,8 +65,6 @@ export default function ComponentShowcase() {
 			window.removeEventListener("popstate", handlePopState);
 		};
 	}, []);
-
-	const SelectedShowcase = componentRegistry[selectedComponent];
 
 	return (
 		<div className="flex h-screen bg-background">
