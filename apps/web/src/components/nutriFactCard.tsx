@@ -19,15 +19,17 @@ export const NutriFactCard = ({
 	foodItem,
 	consumedQuantity,
 	showAction,
-	onActionClick
+	onActionClick,
+	className
 }: {
 	foodItem: FoodItem;
 	consumedQuantity?: string;
 	showAction?: boolean;
 	onActionClick?: (foodItem: FoodItem) => void;
+	className?: string;
 }) => {
 	return (
-		<Card className="py-4 gap-4">
+		<Card className={`py-4 gap-4 ${className}`}>
 			<CardHeader className="pb-2 font-bold border-0 border-b-4 border-primary">
 				{foodItem.itemName}'s Nutri Facts {consumedQuantity && `for ${consumedQuantity}`}
 			</CardHeader>

@@ -86,7 +86,6 @@ export const calculateIntakeFacts = (foodItem: FoodItem, quantity: number) => {
 		Object.entries(foodItem.nutrients as Record<keyof Nutrients, number | null>).forEach(
 			([key, value]: [string, number | null]) => {
 				if (value) {
-					console.log("key :: ", key, value);
 					result.nutrients[key as keyof Nutrients] = calculateIntakeValuePer100(quantity, value as number);
 				}
 			}
@@ -103,3 +102,5 @@ export const calculateIntakeFacts = (foodItem: FoodItem, quantity: number) => {
 	}
 	return result;
 };
+
+export * from "./vitals";

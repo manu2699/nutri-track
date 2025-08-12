@@ -1,7 +1,8 @@
 import "./styles/index.css";
 
+// Data display Components
+export * from "./components/datadisplay/accordion";
 export * from "./components/datadisplay/autocomplete";
-// Data display
 export * from "./components/datadisplay/badge";
 export * from "./components/datadisplay/carousel";
 export * from "./components/datadisplay/popover";

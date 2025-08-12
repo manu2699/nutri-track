@@ -1,4 +1,4 @@
-import type { MealType } from "@/types";
+import { frequentFoods, getFoodItem, type MealType } from "@nutri-track/core";
 
 export const getMealType = (date: Date): MealType => {
 	const hour = date.getHours();
@@ -24,4 +24,19 @@ export const getMealType = (date: Date): MealType => {
 	}
 
 	return "snacks";
+};
+
+export const getFrequentFoods = (region: string, mealType: MealType): string[] => {
+	let frequeuntFoodIds = [];
+	if (!Object.hasOwn(frequentFoods, region)) {
+		return [];
+	}
+	if (mealType === "late-night") {
+		mealType = "dinner";
+	}
+	frequeuntFoodIds = frequentFoods[region][mealType];
+	if (mealType === "brunch") {
+		frequeuntFoodIds = [...frequentFoods[region].breakfast, ...frequentFoods[region].lunch];
+	}
+	return frequeuntFoodIds.map((id: string) => getFoodItem(id)?.itemName || "");
 };

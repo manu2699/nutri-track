@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
+import { ACTIVITY_LEVELS, regions } from "@nutri-track/core";
 import { Button, Input, RadioGroup, RadioGroupItem } from "@nutri-track/ui";
 
 import type { UserInterface } from "@/data/database/users";
@@ -23,7 +24,7 @@ const formFields = [
 		placeholder: "28",
 		type: "number",
 		required: true,
-		hint: "Your age helps us provide age-appropriate nutritional advice."
+		hint: "Your age helps us to calculate your daily calorie needs, bmi, and other nutritional factors."
 	},
 	{
 		id: "gender",
@@ -59,6 +60,28 @@ const formFields = [
 		type: "number",
 		required: true,
 		hint: "Your height, along with weight, helps us determine your Body Mass Index (BMI) & Basal Metabolic Rate (BMR)."
+	},
+	{
+		id: "activity",
+		label: "How active are you?",
+		type: "radio",
+		options: [
+			{ label: "Sedentary", value: ACTIVITY_LEVELS.SEDENTARY },
+			{ label: "Lightly Active", value: ACTIVITY_LEVELS.LIGHTLY_ACTIVE },
+			{ label: "Moerately Active", value: ACTIVITY_LEVELS.MODERATELY_ACTIVE },
+			{ label: "Active", value: ACTIVITY_LEVELS.ACTIVE },
+			{ label: "Very Active / Athlete", value: ACTIVITY_LEVELS.VERY_ACTIVE }
+		],
+		required: false,
+		hint: "Your activity level helps us provide your daily calorie & protein needs."
+	},
+	{
+		id: "region",
+		label: "What region do you live in?",
+		type: "select",
+		options: regions.map((region) => ({ label: region, value: region })),
+		required: true,
+		hint: "We'll provide you some frequent recommendations based on your region for quick access."
 	}
 ];
 
