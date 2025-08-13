@@ -30,11 +30,6 @@ body {
 	color: hsl(var(--foreground));
 }
 
-/* Remove default button styles since we're using the UI package */
-button {
-	all: unset;
-}
-
 h1,
 h2,
 h3,

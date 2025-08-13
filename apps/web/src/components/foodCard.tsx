@@ -1,3 +1,4 @@
+import { Show } from "control-flow-react";
 import { Flame } from "lucide-react";
 
 import type { FoodItem } from "@nutri-track/core";
@@ -47,6 +48,61 @@ export const FoodCard = ({
 					</span>
 				</div>
 			</span>
+		</div>
+	);
+};
+
+export const FoodVitals = ({
+	fats,
+	carbs,
+	proteins,
+	calories,
+	className
+}: {
+	proteins: number | undefined | null;
+	fats?: number | undefined | null;
+	carbs?: number | undefined | null;
+	calories?: number | undefined | null;
+	className?: string;
+}) => {
+	return (
+		<div className={`flex items-center flex-grow-0 flex-shrink-0 basis-16 justify-around gap-3 ${className}`}>
+			<Show when={calories}>
+				<div className="min-w-16 p-2 text-xs text-center rounded-md border border-secondary">
+					Calories
+					<p className="text-base">
+						{calories}
+						<span className="text-sm text-gray-500 ml-1">kcal</span>
+					</p>
+				</div>
+			</Show>
+			<Show when={proteins}>
+				<div className="min-w-16 p-2 text-xs text-center rounded-md border border-secondary">
+					Protein
+					<p className="text-base">
+						{proteins}
+						<span className="text-sm text-gray-500 ml-1">g</span>
+					</p>
+				</div>
+			</Show>
+			<Show when={carbs}>
+				<div className="min-w-16 p-2 text-xs text-center rounded-md border border-secondary">
+					Carbs
+					<p className="text-base">
+						{carbs}
+						<span className="text-sm text-gray-500 ml-1">g</span>
+					</p>
+				</div>
+			</Show>
+			<Show when={fats}>
+				<div className="min-w-16 p-2 text-xs text-center rounded-md border border-secondary">
+					Fat
+					<p className="text-base">
+						{fats}
+						<span className="text-sm text-gray-500 ml-1">g</span>
+					</p>
+				</div>
+			</Show>
 		</div>
 	);
 };

@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from "react";
-import { X } from "lucide-react";
+import { Show } from "control-flow-react";
+import { ListChecks, Trash } from "lucide-react";
 import { motion } from "motion/react";
 
 import {
@@ -27,7 +28,7 @@ import {
 	Input
 } from "@nutri-track/ui";
 
-import { FoodCard } from "@/components/foodCard";
+import { FoodCard, FoodVitals } from "@/components/foodCard";
 import { NutriFactCard } from "@/components/nutriFactCard";
 // import { UserHeader } from "@/components/userHeader";
 import { useDataStore } from "@/data/store";
@@ -45,10 +46,9 @@ export const HomePage = () => {
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 
-	const [eatenInputs, setEatenInputs] = useState([0]);
+	const [eatenInputs, setEatenInputs] = useState<number[]>([]);
 	const [selectedItems, setSelectedItems] = useState<FoodItem[]>([]);
 	const [consumedInfo, setConsumedInfo] = useState<FoodItem[]>([]);
-	const [detailedItem, setDetailedItem] = useState<FoodItem | null>(null);
 
 	const handleSearchChange = (value: string) => {
 		setIsLoading(true);
@@ -91,20 +91,22 @@ export const HomePage = () => {
 		setSearchedFood("");
 	};
 
-	const handleRemoveItem = (itemId: string) => {
+	const handleRemoveItem = (itemId: string, index: number) => {
 		const updatedItems = selectedItems.filter((item) => item.id !== itemId);
+		const updatedConsumed = consumedInfo.filter((_, i) => i !== index);
+		const updatedEatenInputs = eatenInputs.filter((_, i) => i !== index);
 		setSelectedItems(updatedItems);
-		// setEaten(getMeasurementInfo(updatedItems[updatedItems.length - 1].calorieMeasurement).quantity);
-		// setSearchedFood(updatedItems[updatedItems.length - 1].itemName);
+		setEatenInputs(updatedEatenInputs);
+		setConsumedInfo(updatedConsumed);
 	};
 
 	if (!currentUser) {
 		return null;
 	}
 
-	const handleAddToTrack = (foodItem: FoodItem) => {
-		console.log("handleAddToTrack :: ", foodItem);
-	};
+	// const handleAddToTrack = (foodItem: FoodItem) => {
+	// 	console.log("handleAddToTrack :: ", foodItem);
+	// };
 
 	return (
 		<motion.div
@@ -120,7 +122,7 @@ export const HomePage = () => {
 				className="flex flex-col items-center justify-center h-full gap-3 -mt-10"
 			>
 				<p className="text-lg font-bold text-secondary-foreground text-center">
-					Hey {currentUser.name}, <br></br>did you had your {mealType}?
+					Hey {currentUser.name}, <br></br>Had your {mealType}?
 				</p>
 				<AutoComplete
 					searchValue={searchedFood}
@@ -144,16 +146,14 @@ export const HomePage = () => {
 					initial={{ opacity: 0, y: 10 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.5, delay: 0.2 }}
-					className="flex items-center flex-wrap gap-3"
+					className="flex items-center flex-wrap gap-3 mb-4"
 				>
 					{frequentFoods.map((food) => (
-						<>
-							{food ? (
-								<Badge key={food} onClick={() => handleSelectFrequentFood(food)} variant={BADGE_VARIANTS.SECONDARY}>
-									{food}
-								</Badge>
-							) : null}
-						</>
+						<Show when={food} key={food}>
+							<Badge key={food} onClick={() => handleSelectFrequentFood(food)} variant={BADGE_VARIANTS.SECONDARY}>
+								{food}
+							</Badge>
+						</Show>
 					))}
 				</motion.div>
 				{selectedItems.length > 0 && (
@@ -166,51 +166,42 @@ export const HomePage = () => {
 						{selectedItems.map((item, index) => (
 							<AccordionItem key={item.id} value={item.id}>
 								<AccordionTrigger>{item.itemName}</AccordionTrigger>
-								<AccordionContent className="flex flex-col gap-3">
-									<p className="px-2 text-md">How much {item.itemName} did you had?</p>
-									<div className="px-1 grid grid-cols-[1fr_auto] items-center gap-2">
+								<AccordionContent className="flex flex-col items-center gap-2 self-center">
+									{/*<p className="px-2 text-md">How much did you had?</p>*/}
+									<div className="px-1 w-[70%] flex items-center gap-4">
 										<Input
 											value={eatenInputs[index]}
 											type="number"
 											onChange={(e) => handleChangeEaten(parseInt(e.target.value) || 0, index)}
-											placeholder={`Enter amount of ${item.itemName} eaten`}
+											placeholder={`How much did you had?`}
 											className="w-[80%] min-w-[150px] bg-transparent"
 											suffix={getMeasurementInfo(item.calorieMeasurement).unit}
 										/>
 										<Button
 											variant={BUTTON_VARIANTS.OUTLINE}
 											size={BUTTON_SIZES.SMALL}
-											onClick={() => handleRemoveItem(item.id)}
+											onClick={() => handleRemoveItem(item.id, index)}
+											className="!p-2 rounded-full"
 										>
-											<X className="size-5 bg-gray-400 text-white rounded-full p-1" />
-											Remove
+											<Trash className="size-4 !text-destructive" />
 										</Button>
 									</div>
-									<div className="grid grid-cols-3 justify-around gap-6 w-3/4 self-center">
-										{consumedInfo[index]?.nutrients?.proteins && (
-											<div className="p-2 text-xs text-center rounded-md bg-gray-50 border border-secondary">
-												Protein <p className="text-base">{consumedInfo[index].nutrients.proteins}g</p>
-											</div>
-										)}
-										{consumedInfo[index]?.nutrients?.carbs && (
-											<div className="p-2 text-xs text-center rounded-md bg-gray-50 border border-secondary">
-												Carbs <p className="text-base">{consumedInfo[index].nutrients.carbs}g</p>
-											</div>
-										)}
-										{consumedInfo[index]?.nutrients?.totalFats && (
-											<div className="p-2 text-xs text-center rounded-md bg-gray-50 border border-secondary">
-												Fat <p className="text-base">{consumedInfo[index].nutrients.totalFats}g</p>
-											</div>
-										)}
-									</div>
+									{/* Vital stats */}
+									<FoodVitals
+										calories={consumedInfo[index].calories}
+										fats={consumedInfo[index]?.nutrients?.proteins}
+										carbs={consumedInfo[index]?.nutrients?.carbs}
+										proteins={consumedInfo[index]?.nutrients?.proteins}
+									/>
+									{/* Full Stats */}
 									<Drawer>
 										<DrawerTrigger asChild>
 											<Button
-												variant={BUTTON_VARIANTS.SECONDARY}
+												variant={BUTTON_VARIANTS.OUTLINE}
 												size={BUTTON_SIZES.SMALL}
-												className="self-end justify-self-end"
-												onClick={() => setDetailedItem(consumedInfo[index])}
+												className="border-2 !border-primary text-primary bg-accent"
 											>
+												<ListChecks className="size-4" />
 												View Detailed Info
 											</Button>
 										</DrawerTrigger>
@@ -225,6 +216,33 @@ export const HomePage = () => {
 								</AccordionContent>
 							</AccordionItem>
 						))}
+					</Accordion>
+				)}
+				{consumedInfo.length > 0 && (
+					<Accordion
+						type="single"
+						className="w-full border-4 bg-accent border-double px-2 rounded-md"
+						defaultValue={"total-consumed"}
+					>
+						<AccordionItem value="total-consumed">
+							<AccordionTrigger>Total Consumed</AccordionTrigger>
+							<AccordionContent className="flex flex-col items-center gap-2">
+								<FoodVitals
+									fats={consumedInfo.reduce((acc, item) => acc + (item.nutrients?.totalFats || 0), 0)}
+									carbs={consumedInfo.reduce((acc, item) => acc + (item.nutrients?.carbs || 0), 0)}
+									proteins={consumedInfo.reduce((acc, item) => acc + (item.nutrients?.proteins || 0), 0)}
+									calories={consumedInfo.reduce((acc, item) => acc + (item.calories || 0), 0)}
+								/>
+								<Button
+									variant={BUTTON_VARIANTS.SECONDARY}
+									size={BUTTON_SIZES.SMALL}
+									// className="border-2 !border-primary text-primary bg-accent"
+								>
+									<ListChecks className="size-4" />
+									Add to Trackings
+								</Button>
+							</AccordionContent>
+						</AccordionItem>
 					</Accordion>
 				)}
 			</motion.div>

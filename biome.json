@@ -9,7 +9,7 @@
 		"lineEnding": "lf"
 	},
 	"files": {
-		"experimentalScannerIgnores": ["node_modules/**", "dist/**", "assets/**"]
+		"experimentalScannerIgnores": ["node_modules/**", "dist/**", "assets/**", "**.db.json", "**.db.json"]
 	},
 	"javascript": {
 		"formatter": {
