@@ -1,3 +1,5 @@
+import type { FoodItem, MealType } from "@nutri-track/core";
+
 import type { NutriTrackDB } from ".";
 
 export const trackingTableSchema = `CREATE TABLE IF NOT EXISTS trackings (
@@ -5,17 +7,15 @@ id INTEGER PRIMARY KEY AUTOINCREMENT,
 user_id INTEGER NOT NULL,
 time DATETIME DEFAULT CURRENT_TIMESTAMP,
 calories REAL DEFAULT 0,
+scale TEXT DEFAULT 'gm',
 protein REAL DEFAULT 0,
 carbohydrates REAL DEFAULT 0,
 fat REAL DEFAULT 0,
 fiber REAL DEFAULT 0,
-sodium REAL DEFAULT 0,
 sugar REAL DEFAULT 0,
-vitamin_c REAL DEFAULT 0,
-vitamin_d REAL DEFAULT 0,
-calcium REAL DEFAULT 0,
-iron REAL DEFAULT 0,
+food_id TEXT DEFAULT NULL,
 water_intake REAL DEFAULT 0,
+meal_type TEXT DEFAULT 'breakfast',
 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 FOREIGN KEY (user_id) REFERENCES users (id),
@@ -25,20 +25,18 @@ UNIQUE(user_id, time)
 export interface TrackingDataInterface {
 	id: number;
 	user_id: number;
+	food_id: string;
 	time: string;
 	calories: number;
+	scale: string;
 	protein: number;
 	carbohydrates: number;
 	fat?: number;
 	fiber?: number;
-	sodium?: number;
 	sugar?: number;
-	vitamin_c?: number;
-	vitamin_d?: number;
-	calcium?: number;
-	iron?: number;
 	water_intake?: number;
 	created_at: string;
+	meal_type: string;
 }
 
 export class TrackingController {
@@ -46,27 +44,26 @@ export class TrackingController {
 	constructor(db: NutriTrackDB) {
 		this.db = db;
 	}
-	async addTracking(userId: number, nutritionData: TrackingDataInterface) {
+	async addTracking(userId: number, foodItem: FoodItem, mealType: MealType) {
 		if (!this.db.promiser || !this.db.dbId) {
 			throw new Error("Database not initialized");
 		}
 
-		const fields = ["user_id"];
-		const placeholders = ["?"];
-		const values = [userId];
+		const fields = ["user_id", "food_id"];
+		const values: (number | string)[] = [userId, foodItem.id];
 
-		Object.entries(nutritionData).forEach(([key, value]) => {
+		const serializedData = serializeFoodToTracking(foodItem, mealType);
+		Object.entries(serializedData).forEach(([key, value]) => {
 			if (value !== undefined && value !== null) {
 				fields.push(key);
-				placeholders.push("?");
-				values.push(value);
+				values.push(value as number | string);
 			}
 		});
 
 		await this.db.promiser("exec", {
 			dbId: this.db.dbId,
-			sql: `INSERT OR REPLACE INTO trackings (${fields.join(", ")}) 
-                VALUES (${placeholders.join(", ")})`,
+			sql: `INSERT OR REPLACE INTO trackings (${fields.join(", ")})
+                VALUES (${Array(fields.length).fill("?").join(", ")})`,
 			bind: values
 		});
 	}
@@ -92,7 +89,7 @@ export class TrackingController {
 
 		await this.db.promiser("exec", {
 			dbId: this.db.dbId,
-			sql: `UPDATE trackings SET ${updates.join(", ")} 
+			sql: `UPDATE trackings SET ${updates.join(", ")}
                 WHERE user_id = ? AND time = ?`,
 			bind: values
 		});
@@ -100,19 +97,24 @@ export class TrackingController {
 		return true;
 	}
 
-	async getTracking(userId: number, time: string) {
+	async getTracking(userId: number, time?: string) {
 		if (!this.db.promiser || !this.db.dbId) {
 			throw new Error("Database not initialized");
 		}
 
-		const result = await this.db.promiser("exec", {
+		const { result } = await this.db.promiser("exec", {
 			dbId: this.db.dbId,
-			sql: "SELECT * FROM trackings WHERE user_id = ? AND time LIKE ?",
-			bind: [userId, `${time}%`],
-			returnValue: "resultRows"
+			sql: "SELECT * FROM trackings WHERE user_id = ?",
+			bind: [userId],
+			// sql: "SELECT * FROM trackings WHERE user_id = ? AND time LIKE ?",
+			// bind: [userId, `${time}%`],
+			returnValue: "resultRows",
+			rowMode: "object"
 		});
 
-		return result.result.length > 0 ? (result.result[0] as TrackingDataInterface) : null;
+		console.log("NTDB :: get trackings ", result);
+
+		return result.resultRows.length > 0 ? (result.resultRows as TrackingDataInterface[]) : null;
 	}
 
 	async getTrackingHistory(userId: number, limit = 30) {
@@ -122,9 +124,9 @@ export class TrackingController {
 
 		const result = await this.db.promiser("exec", {
 			dbId: this.db.dbId,
-			sql: `SELECT * FROM trackings 
-                WHERE user_id = ? 
-                ORDER BY time DESC 
+			sql: `SELECT * FROM trackings
+                WHERE user_id = ?
+                ORDER BY time DESC
                 LIMIT ?`,
 			bind: [userId, limit],
 			returnValue: "resultRows"
@@ -159,4 +161,33 @@ export class TrackingController {
 			sql: "DELETE FROM trackings"
 		});
 	}
+
+	async dropTable() {
+		if (!this.db.promiser || !this.db.dbId) {
+			throw new Error("Database not initialized");
+		}
+
+		await this.db.promiser("exec", {
+			dbId: this.db.dbId,
+			sql: "DROP TABLE trackings"
+		});
+	}
+}
+
+// TrackingSerializer extends TrackingDataInterface and omits user id
+interface TrackingSerializer extends Omit<TrackingDataInterface, "user_id" | "time" | "id" | "created_at"> {}
+
+export function serializeFoodToTracking(food: FoodItem, mealType: MealType): TrackingSerializer {
+	return {
+		calories: food.calories,
+		scale: food.calorieMeasurement,
+		protein: food.nutrients?.proteins ?? 0,
+		carbohydrates: food.nutrients?.carbs ?? 0,
+		fat: food.nutrients?.totalFats ?? 0,
+		fiber: food.nutrients?.fiber ?? 0,
+		sugar: food.nutrients?.sugar ?? 0,
+		food_id: food.id,
+		water_intake: 0,
+		meal_type: mealType
+	};
 }

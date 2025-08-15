@@ -85,6 +85,7 @@ const formFields = [
 	}
 ];
 
+// TODO; Add Select renderer
 export const OnBoardFromPage = () => {
 	const navigate = useNavigate();
 
@@ -107,7 +108,8 @@ export const OnBoardFromPage = () => {
 	};
 
 	const canGoNext = useMemo(
-		() => formFields[currentStep].required && Boolean(formData[formFields[currentStep].id as keyof typeof formData]),
+		() =>
+			formFields[currentStep].required ? Boolean(formData[formFields[currentStep].id as keyof typeof formData]) : true,
 		[currentStep, formData]
 	);
 

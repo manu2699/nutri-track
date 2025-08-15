@@ -10,8 +10,9 @@ weight REAL NOT NULL,
 height REAL NOT NULL,
 body_fat REAL,
 body_type TEXT,
-bmi REAL,
-bmr REAL,
+bmi REAL DEFAULT 0,
+bmr REAL DEFAULT 0,
+fat_percentage INTEGER DEFAULT 10,
 activity_level TEXT,
 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -27,6 +28,7 @@ export interface UserInterface {
 	height: number;
 	bmi?: number;
 	bmr?: number;
+	fat_percentage?: number;
 	activity_level?: "sedentary" | "lightly_active" | "moderately_active" | "very_active" | "extra_active";
 	created_at: string;
 	updated_at: string;
@@ -52,7 +54,7 @@ export class UserController {
 
 		await this.db.promiser("exec", {
 			dbId: this.db.dbId,
-			sql: `INSERT INTO users (name, age, email, gender, weight, height, bmi, bmr, activity_level) 
+			sql: `INSERT INTO users (name, age, email, gender, weight, height, bmi, bmr, activity_level)
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 			bind: [name, age, email, gender, weight, height, bmi, bmr, activity_level]
 		});
@@ -174,6 +176,17 @@ export class UserController {
 		await this.db.promiser("exec", {
 			dbId: this.db.dbId,
 			sql: "DELETE FROM sqlite_sequence WHERE name = 'users'"
+		});
+	}
+
+	async dropTable() {
+		if (!this.db.promiser || !this.db.dbId) {
+			throw new Error("Database not initialized");
+		}
+
+		await this.db.promiser("exec", {
+			dbId: this.db.dbId,
+			sql: "DROP TABLE users"
 		});
 	}
 }

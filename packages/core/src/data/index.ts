@@ -35,15 +35,9 @@ export interface FoodItem {
 	searchKeys?: string[];
 }
 
-export type MealType =
-	| "breakfast"
-	| "brunch"
-	| "lunch"
-	| "dinner"
-	| "snacks"
-	| "pre-workout"
-	| "post-workout"
-	| "late-night";
+export type StandardMealType = "breakfast" | "lunch" | "dinner" | "snacks";
+
+export type MealType = StandardMealType | "pre-workout" | "post-workout" | "late-night";
 
 export interface RegionMealTypes {
 	breakfast: string[];
@@ -79,6 +73,13 @@ export const standardNutrientsMeasurementMap: Record<keyof Nutrients, string> = 
 	vitaminA: "mg",
 	vitaminC: "mg",
 	vitaminD: "mg"
+};
+
+export const standardMealTypesMap: Record<StandardMealType, string> = {
+	breakfast: "Breakfast",
+	lunch: "Lunch",
+	dinner: "Dinner",
+	snacks: "Snacks"
 };
 
 export const FOODS_NOT_IN_DB = [

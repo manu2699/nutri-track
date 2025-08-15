@@ -1,5 +1,5 @@
 import { Show } from "control-flow-react";
-import { Flame } from "lucide-react";
+import { Bean, Droplets, Flame, Wheat } from "lucide-react";
 
 import type { FoodItem } from "@nutri-track/core";
 // import { BUTTON_SIZES, BUTTON_VARIANTS, Button, useAccessibleClick } from "@nutri-track/ui";
@@ -69,7 +69,10 @@ export const FoodVitals = ({
 		<div className={`flex items-center flex-grow-0 flex-shrink-0 basis-16 justify-around gap-3 ${className}`}>
 			<Show when={calories}>
 				<div className="min-w-16 p-2 text-xs text-center rounded-md border border-secondary">
-					Calories
+					<span className="flex items-center gap-1">
+						<Flame className="size-4" />
+						Calories
+					</span>
 					<p className="text-base">
 						{calories}
 						<span className="text-sm text-gray-500 ml-1">kcal</span>
@@ -78,27 +81,36 @@ export const FoodVitals = ({
 			</Show>
 			<Show when={proteins}>
 				<div className="min-w-16 p-2 text-xs text-center rounded-md border border-secondary">
-					Protein
+					<span className="flex items-center gap-1">
+						<Bean className="size-4" />
+						Protein
+					</span>
 					<p className="text-base">
-						{proteins}
+						{typeof proteins === "number" ? parseFloat(`${proteins}`).toFixed(1) : "-"}
 						<span className="text-sm text-gray-500 ml-1">g</span>
 					</p>
 				</div>
 			</Show>
 			<Show when={carbs}>
 				<div className="min-w-16 p-2 text-xs text-center rounded-md border border-secondary">
-					Carbs
+					<span className="flex items-center gap-1">
+						<Wheat className="size-4" />
+						Carbs
+					</span>
 					<p className="text-base">
-						{carbs}
+						{typeof carbs === "number" ? parseFloat(`${carbs}`).toFixed(1) : "-"}
 						<span className="text-sm text-gray-500 ml-1">g</span>
 					</p>
 				</div>
 			</Show>
 			<Show when={fats}>
 				<div className="min-w-16 p-2 text-xs text-center rounded-md border border-secondary">
-					Fat
+					<span className="flex items-center gap-1">
+						<Droplets className="size-4" />
+						Fat
+					</span>
 					<p className="text-base">
-						{fats}
+						{typeof fats === "number" ? parseFloat(`${fats}`).toFixed(1) : "-"}
 						<span className="text-sm text-gray-500 ml-1">g</span>
 					</p>
 				</div>

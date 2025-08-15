@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+import type { FoodItem, MealType } from "@nutri-track/core";
+
 import { NutriTrackDB, TrackingController, UserController } from "./database";
 import type { UserInterface } from "./database/users";
 
@@ -9,17 +11,21 @@ type State = {
 	userController?: UserController;
 	isInitialized: boolean;
 	currentUser: UserInterface | null;
+	todaysTrackings: FoodItem[] | null;
 };
 
 type Action = {
 	initialize: () => Promise<void>;
 	setCurrentUser: (user: UserInterface) => void;
 	clearDb?: () => Promise<void>;
+	getTrackingsForToday: () => Promise<void>;
+	addTracking: (tracking: FoodItem, mealType: MealType) => Promise<void>;
 };
 
 export const useDataStore = create<State & Action>((set, get) => ({
 	isInitialized: false,
 	currentUser: null,
+	todaysTrackings: [],
 	initialize: async () => {
 		const dbRef = new NutriTrackDB();
 		await dbRef.initialize();
@@ -45,6 +51,21 @@ export const useDataStore = create<State & Action>((set, get) => ({
 			currentUser: user
 		});
 	},
+	getTrackingsForToday: async () => {
+		const trackingController = get().trackingController;
+		const user = get().currentUser;
+		if (trackingController && user?.id) {
+			const trackings = await trackingController.getTracking(user.id);
+			console.log("Today's Trackings: ", trackings);
+		}
+	},
+	addTracking: async (tracking: FoodItem, mealType: MealType) => {
+		const trackingController = get().trackingController;
+		const user = get().currentUser;
+		if (trackingController && user?.id) {
+			await trackingController.addTracking(user.id, tracking, mealType);
+		}
+	},
 	// Only for dev purposes
 	clearDb: async () => {
 		if (!import.meta.env.DEV) {
@@ -52,11 +73,11 @@ export const useDataStore = create<State & Action>((set, get) => ({
 		}
 		const userController = get().userController;
 		if (userController) {
-			await userController.deleteAllUsers();
+			await userController.dropTable();
 		}
 		const trackingController = get().trackingController;
 		if (trackingController) {
-			await trackingController.deleteAllTrackings();
+			await trackingController.dropTable();
 		}
 	}
 }));
