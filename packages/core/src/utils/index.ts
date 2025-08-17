@@ -29,11 +29,11 @@ export const searchFood = (query: string): SearchResult[] => {
  * @param itemId - Unique identifier for the food item
  * @returns FoodItem if found, otherwise undefined
  */
-export const getFoodItem = (itemId: string): FoodItem | undefined => {
+export const getFoodItem = (itemId: string): FoodItem | null => {
 	if (foodData[itemId]) {
 		return foodData[itemId] as FoodItem;
 	}
-	return undefined;
+	return null;
 };
 
 export * from "./calcs";

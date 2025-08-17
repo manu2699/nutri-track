@@ -37,7 +37,27 @@ export interface FoodItem {
 
 export type StandardMealType = "breakfast" | "lunch" | "dinner" | "snacks";
 
-export type MealType = StandardMealType | "pre-workout" | "post-workout" | "late-night";
+export type MealType = StandardMealType | "pre-workout" | "post-workout" | "late-night" | "brunch";
+export enum MealTypeEnums {
+	breakfast = "breakfast",
+	lunch = "lunch",
+	dinner = "dinner",
+	snacks = "snacks",
+	brunch = "brunch",
+	"pre-workout" = "pre-workout",
+	"post-workout" = "post-workout",
+	"late-night" = "late-night"
+}
+export enum MealTypeLabelEnums {
+	breakfast = "Breakfast",
+	lunch = "Lunch",
+	dinner = "Dinner",
+	snacks = "Snacks",
+	brunch = "Brunch",
+	"pre-workout" = "Pre Workout",
+	"post-workout" = "Post Workout",
+	"late-night" = "Late Night"
+}
 
 export interface RegionMealTypes {
 	breakfast: string[];
@@ -73,13 +93,6 @@ export const standardNutrientsMeasurementMap: Record<keyof Nutrients, string> = 
 	vitaminA: "mg",
 	vitaminC: "mg",
 	vitaminD: "mg"
-};
-
-export const standardMealTypesMap: Record<StandardMealType, string> = {
-	breakfast: "Breakfast",
-	lunch: "Lunch",
-	dinner: "Dinner",
-	snacks: "Snacks"
 };
 
 export const FOODS_NOT_IN_DB = [

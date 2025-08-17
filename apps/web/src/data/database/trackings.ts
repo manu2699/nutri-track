@@ -7,7 +7,8 @@ id INTEGER PRIMARY KEY AUTOINCREMENT,
 user_id INTEGER NOT NULL,
 time DATETIME DEFAULT CURRENT_TIMESTAMP,
 calories REAL DEFAULT 0,
-scale TEXT DEFAULT 'gm',
+consumed INTEGER DEFAULT 0,
+scale TEXT,
 protein REAL DEFAULT 0,
 carbohydrates REAL DEFAULT 0,
 fat REAL DEFAULT 0,
@@ -28,6 +29,7 @@ export interface TrackingDataInterface {
 	food_id: string;
 	time: string;
 	calories: number;
+	consumed: number;
 	scale: string;
 	protein: number;
 	carbohydrates: number;
@@ -44,7 +46,7 @@ export class TrackingController {
 	constructor(db: NutriTrackDB) {
 		this.db = db;
 	}
-	async addTracking(userId: number, foodItem: FoodItem, mealType: MealType) {
+	async addTracking(userId: number, foodItem: FoodItem, consumed: number, mealType: MealType) {
 		if (!this.db.promiser || !this.db.dbId) {
 			throw new Error("Database not initialized");
 		}
@@ -52,7 +54,7 @@ export class TrackingController {
 		const fields = ["user_id", "food_id"];
 		const values: (number | string)[] = [userId, foodItem.id];
 
-		const serializedData = serializeFoodToTracking(foodItem, mealType);
+		const serializedData = serializeFoodToTracking(foodItem, consumed, mealType);
 		Object.entries(serializedData).forEach(([key, value]) => {
 			if (value !== undefined && value !== null) {
 				fields.push(key);
@@ -104,10 +106,8 @@ export class TrackingController {
 
 		const { result } = await this.db.promiser("exec", {
 			dbId: this.db.dbId,
-			sql: "SELECT * FROM trackings WHERE user_id = ?",
-			bind: [userId],
-			// sql: "SELECT * FROM trackings WHERE user_id = ? AND time LIKE ?",
-			// bind: [userId, `${time}%`],
+			sql: "SELECT * FROM trackings WHERE user_id = ? AND time LIKE ?",
+			bind: [userId, `${time}%`],
 			returnValue: "resultRows",
 			rowMode: "object"
 		});
@@ -177,10 +177,11 @@ export class TrackingController {
 // TrackingSerializer extends TrackingDataInterface and omits user id
 interface TrackingSerializer extends Omit<TrackingDataInterface, "user_id" | "time" | "id" | "created_at"> {}
 
-export function serializeFoodToTracking(food: FoodItem, mealType: MealType): TrackingSerializer {
+export function serializeFoodToTracking(food: FoodItem, consumed: number, mealType: MealType): TrackingSerializer {
 	return {
 		calories: food.calories,
 		scale: food.calorieMeasurement,
+		consumed,
 		protein: food.nutrients?.proteins ?? 0,
 		carbohydrates: food.nutrients?.carbs ?? 0,
 		fat: food.nutrients?.totalFats ?? 0,

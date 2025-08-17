@@ -118,3 +118,60 @@ export const FoodVitals = ({
 		</div>
 	);
 };
+
+export const MinimalVitals = ({
+	fats,
+	carbs,
+	proteins,
+	calories,
+	className
+}: {
+	proteins: number | undefined | null;
+	fats?: number | undefined | null;
+	carbs?: number | undefined | null;
+	calories?: number | undefined | null;
+	className?: string;
+}) => (
+	<div className={`flex items-center justify-around gap-3 ${className}`}>
+		<MinimalCalorieRender calories={calories} />
+		<MinimalProteinRender proteins={proteins} />
+		<MinimalCarbRender carbs={carbs} />
+		<MinimalFatRender fats={fats} />
+	</div>
+);
+
+export const MinimalCalorieRender = ({ calories }: { calories?: number | undefined | null }) =>
+	calories ? (
+		<div className={`min-w-16 text-sm flex items-center gap-[4px]`}>
+			<Flame className="size-3" />
+			<p>{typeof calories === "number" ? parseFloat(`${calories}`).toFixed(1) : "-"}</p>
+			<span className="text-gray-500">kcal</span>
+		</div>
+	) : null;
+
+export const MinimalProteinRender = ({ proteins }: { proteins?: number | undefined | null }) =>
+	proteins ? (
+		<div className={`min-w-16 text-sm flex items-center gap-[4px]`}>
+			<Bean className="size-3" />
+			<p>{typeof proteins === "number" ? parseFloat(`${proteins}`).toFixed(1) : "-"}</p>
+			<span className=" text-gray-500">g</span>
+		</div>
+	) : null;
+
+export const MinimalCarbRender = ({ carbs }: { carbs?: number | undefined | null }) =>
+	carbs ? (
+		<div className={`min-w-16 text-sm flex items-center gap-[4px]`}>
+			<Wheat className="size-3" />
+			<p>{typeof carbs === "number" ? parseFloat(`${carbs}`).toFixed(1) : "-"}</p>
+			<span className=" text-gray-500">g</span>
+		</div>
+	) : null;
+
+export const MinimalFatRender = ({ fats }: { fats?: number | undefined | null }) =>
+	fats ? (
+		<div className={`min-w-16 text-sm flex items-center gap-[4px]`}>
+			<Droplets className="size-3" />
+			<p>{typeof fats === "number" ? parseFloat(`${fats}`).toFixed(1) : "-"}</p>
+			<span className=" text-gray-500">g</span>
+		</div>
+	) : null;

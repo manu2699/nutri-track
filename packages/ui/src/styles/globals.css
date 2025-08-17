@@ -57,14 +57,16 @@
 		--font-serif: Artifika, ui-serif, serif;
 		--font-mono: Limelight, ui-serif, serif;
 		--radius: 0.4rem;
-		--shadow-2xs: 2px 3px 5px 0px hsl(28 13% 20% / 0.06);
-		--shadow-xs: 2px 3px 5px 0px hsl(28 13% 20% / 0.06);
-		--shadow-sm: 2px 3px 5px 0px hsl(28 13% 20% / 0.12), 2px 1px 2px -1px hsl(28 13% 20% / 0.12);
-		--shadow: 2px 3px 5px 0px hsl(28 13% 20% / 0.12), 2px 1px 2px -1px hsl(28 13% 20% / 0.12);
-		--shadow-md: 2px 3px 5px 0px hsl(28 13% 20% / 0.12), 2px 2px 4px -1px hsl(28 13% 20% / 0.12);
-		--shadow-lg: 2px 3px 5px 0px hsl(28 13% 20% / 0.12), 2px 4px 6px -1px hsl(28 13% 20% / 0.12);
-		--shadow-xl: 2px 3px 5px 0px hsl(28 13% 20% / 0.12), 2px 8px 10px -1px hsl(28 13% 20% / 0.12);
-		--shadow-2xl: 2px 3px 5px 0px hsl(28 13% 20% / 0.3);
+
+		--shadow-2xs: -4.5px -4.5px 6px 0.5px hsl(28 13% 20% / 0.03);
+		--shadow-xs: -4.5px -4.5px 6px 0.5px hsl(28 13% 20% / 0.03);
+		--shadow-sm: -4.5px -4.5px 6px 0.5px hsl(28 13% 20% / 0.06), -4.5px 1px 2px -0.5px hsl(28 13% 20% / 0.06);
+		--shadow: -4.5px -4.5px 6px 0.5px hsl(28 13% 20% / 0.06), -4.5px 1px 2px -0.5px hsl(28 13% 20% / 0.06);
+		--shadow-md: -4.5px -4.5px 6px 0.5px hsl(28 13% 20% / 0.06), -4.5px 2px 4px -0.5px hsl(28 13% 20% / 0.06);
+		--shadow-lg: -4.5px -4.5px 6px 0.5px hsl(28 13% 20% / 0.06), -4.5px 4px 6px -0.5px hsl(28 13% 20% / 0.06);
+		--shadow-xl: -4.5px -4.5px 6px 0.5px hsl(28 13% 20% / 0.06), -4.5px 8px 10px -0.5px hsl(28 13% 20% / 0.06);
+		--shadow-2xl: -4.5px -4.5px 6px 0.5px hsl(28 13% 20% / 0.15);
+
 		--tracking-normal: 0em;
 		--spacing: 0.25rem;
 	}

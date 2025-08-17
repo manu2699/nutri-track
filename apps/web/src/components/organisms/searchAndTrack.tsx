@@ -109,8 +109,9 @@ export const SearchAndAddFood = ({ currentUser, mealType }: { currentUser: UserI
 	}
 
 	const handleAddToTrack = async () => {
-		for (let i = 0; i < consumedInfo.length; i++) {
-			await useDataStore.getState().addTracking(consumedInfo[i], mealType);
+		let idx = 0;
+		for (const consumed of consumedInfo) {
+			await useDataStore.getState().addTracking(consumed, eatenInputs[idx++], mealType);
 		}
 
 		useDataStore.getState().getTrackingsForToday();

@@ -4,10 +4,30 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
 import { ACTIVITY_LEVELS, regions } from "@nutri-track/core";
-import { Button, Input, RadioGroup, RadioGroupItem } from "@nutri-track/ui";
+import {
+	Button,
+	Input,
+	RadioGroup,
+	RadioGroupItem,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue
+} from "@nutri-track/ui";
 
 import type { UserInterface } from "@/data/database/users";
 import { useDataStore } from "@/data/store";
+
+type FormField = {
+	id: string;
+	label: string;
+	placeholder?: string;
+	type: string;
+	options?: { label: string; value: string }[];
+	required: boolean;
+	hint?: string;
+};
 
 const formFields = [
 	{
@@ -81,11 +101,11 @@ const formFields = [
 		type: "select",
 		options: regions.map((region) => ({ label: region, value: region })),
 		required: true,
+		placeholder: "Select your region",
 		hint: "We'll provide you some frequent recommendations based on your region for quick access."
 	}
 ];
 
-// TODO; Add Select renderer
 export const OnBoardFromPage = () => {
 	const navigate = useNavigate();
 
@@ -99,12 +119,8 @@ export const OnBoardFromPage = () => {
 		height: ""
 	});
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setFormData({ ...formData, [e.target.id]: e.target.value });
-	};
-
-	const handleRadioChange = (id: string, val: string) => {
-		setFormData({ ...formData, [id]: val });
+	const handleChange = (id: string, value: string | number | boolean) => {
+		setFormData({ ...formData, [id]: value });
 	};
 
 	const canGoNext = useMemo(
@@ -151,29 +167,7 @@ export const OnBoardFromPage = () => {
 							<label htmlFor={field.id} className="font-semibold">
 								{field.label}
 							</label>
-							{field.type === "radio" ? (
-								<RadioGroup
-									value={formData[field.id as keyof typeof formData]}
-									onValueChange={(val: string) => handleRadioChange(field.id, val)}
-								>
-									{field.options?.map((option) => (
-										<div className="flex items-center space-x-2" key={option.value}>
-											<RadioGroupItem key={option.value} value={option.value} />
-											<label htmlFor={option.value}>{option.label}</label>
-										</div>
-									))}
-								</RadioGroup>
-							) : (
-								<Input
-									id={field.id}
-									type={field.type}
-									placeholder={field.placeholder}
-									value={formData[field.id as keyof typeof formData]}
-									onChange={handleChange}
-									required={field.required}
-									className="w-full max-w-md"
-								/>
-							)}
+							<FieldRenderer field={field} formData={formData} onChange={(id, value) => handleChange(id, value)} />
 							{field.hint && <p className="text-sm text-gray-500">{field.hint}</p>}
 						</div>
 					))}
@@ -181,6 +175,70 @@ export const OnBoardFromPage = () => {
 			</div>
 		</div>
 	);
+};
+
+const FieldRenderer = ({
+	field,
+	formData,
+	onChange
+}: {
+	field: FormField;
+	formData: Record<string, string>;
+	onChange: (id: string, value: string | boolean | number) => void;
+}) => {
+	switch (field.type) {
+		case "radio": {
+			return (
+				<RadioGroup
+					value={formData[field.id as keyof typeof formData]}
+					onValueChange={(val: string) => onChange(field.id, val)}
+				>
+					{field.options?.map((option) => (
+						<div className="flex items-center space-x-2" key={option.value}>
+							<RadioGroupItem key={option.value} value={option.value} />
+							<label htmlFor={option.value}>{option.label}</label>
+						</div>
+					))}
+				</RadioGroup>
+			);
+		}
+		case "select": {
+			return (
+				<Select
+					value={formData[field.id as keyof typeof formData]}
+					onValueChange={(val: string) => onChange(field.id, val)}
+				>
+					<SelectTrigger className="w-full">
+						<SelectValue placeholder={field.placeholder} />
+					</SelectTrigger>
+					<SelectContent>
+						{field.options?.map((option) => (
+							<SelectItem key={option.value} value={option.value}>
+								{option.label}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+			);
+		}
+		case "text":
+		case "number":
+		case "email":
+		case "password":
+		case "date": {
+			return (
+				<Input
+					id={field.id}
+					type={field.type}
+					placeholder={field.placeholder}
+					value={formData[field.id as keyof typeof formData]}
+					onChange={(e) => onChange(field.id, e.target.value)}
+					required={field.required}
+					className="w-full max-w-md"
+				/>
+			);
+		}
+	}
 };
 
 type StepperFormProps = {

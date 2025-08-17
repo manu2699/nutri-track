@@ -40,3 +40,15 @@ export const getFrequentFoods = (region: string, mealType: MealType): string[] =
 	}
 	return frequeuntFoodIds.map((id: string) => getFoodItem(id)?.itemName || "");
 };
+
+export const getSQLiteDateFormat = (date: Date): string => {
+	const month = (date.getMonth() + 1).toString().padStart(2, "0");
+	const day = date.getDate().toString().padStart(2, "0");
+	return `${date.getFullYear()}-${month}-${day}`;
+};
+
+export const getSQLiteDateTimeFormat = (date: Date): string => {
+	const formattedDate = getSQLiteDateFormat(date);
+	const formattedTime = `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date.getSeconds().toString().padStart(2, "0")}`;
+	return `${formattedDate} ${formattedTime}`;
+};
