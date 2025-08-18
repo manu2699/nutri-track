@@ -29,7 +29,8 @@ const calculateIntakeValuePer100 = (consumedValue: number, per100Values: number)
  * @param perUnitValues - Nutritional value per unit
  * @returns Calculated intake value
  */
-const calculateIntakeValuePerUnit = (consumedValue: number, perUnitValues: number) => consumedValue * perUnitValues;
+const calculateIntakeValuePerUnit = (consumedValue: number, perUnitValues: number) =>
+	Math.floor(consumedValue * perUnitValues);
 
 /**
  * Calculates the intake facts for a food item based on the consumed quantity.

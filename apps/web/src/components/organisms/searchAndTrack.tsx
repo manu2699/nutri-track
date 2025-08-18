@@ -32,11 +32,25 @@ import {
 import { FoodCard, FoodVitals } from "@/components/foodCard";
 import { NutriFactCard } from "@/components/nutriFactCard";
 import type { UserInterface } from "@/data/database/users";
-// import { UserHeader } from "@/components/userHeader";
-import { useDataStore } from "@/data/store";
 import { getFrequentFoods } from "@/utils";
 
-export const SearchAndAddFood = ({ currentUser, mealType }: { currentUser: UserInterface; mealType: MealType }) => {
+export type SaveParams = {
+	consumedInfo: FoodItem[];
+	eatenInputs: number[];
+	mealType: MealType;
+};
+
+export const SearchAndAddFood = ({
+	currentUser,
+	mealType,
+	onDiscard,
+	onSave
+}: {
+	currentUser: UserInterface;
+	mealType: MealType;
+	onDiscard: () => void;
+	onSave: ({ consumedInfo, eatenInputs, mealType }: SaveParams) => void;
+}) => {
 	const [frequentFoods] = useState<string[]>(getFrequentFoods("India/TamilNadu", mealType));
 	const [searchedFood, setSearchedFood] = useState("");
 	const autocompleteRef = useRef<{
@@ -104,18 +118,17 @@ export const SearchAndAddFood = ({ currentUser, mealType }: { currentUser: UserI
 		}
 	};
 
+	const handleAddToTrack = () => {
+		onSave({
+			consumedInfo,
+			eatenInputs,
+			mealType
+		});
+	};
+
 	if (!currentUser) {
 		return null;
 	}
-
-	const handleAddToTrack = async () => {
-		let idx = 0;
-		for (const consumed of consumedInfo) {
-			await useDataStore.getState().addTracking(consumed, eatenInputs[idx++], mealType);
-		}
-
-		useDataStore.getState().getTrackingsForToday();
-	};
 
 	return (
 		<div className="flex flex-col justify-between h-full">
@@ -221,7 +234,11 @@ export const SearchAndAddFood = ({ currentUser, mealType }: { currentUser: UserI
 				</div>
 			</div>
 			<div className="mt-2">
-				<Accordion type="single" className="w-full border bg-accent px-2 rounded-md" defaultValue={"total-consumed"}>
+				<Accordion
+					type="single"
+					className="w-full border bg-transparent px-2 rounded-md"
+					defaultValue={"total-consumed"}
+				>
 					<AccordionItem value="total-consumed">
 						<AccordionTrigger>Total Consumed</AccordionTrigger>
 						<AccordionContent className="flex flex-col items-center gap-2">
@@ -232,7 +249,7 @@ export const SearchAndAddFood = ({ currentUser, mealType }: { currentUser: UserI
 								calories={consumedInfo.reduce((acc, item) => acc + (item.calories || 0), 0)}
 							/>
 							<div className="self-end w-max flex align-center gap-2">
-								<Button size={BUTTON_SIZES.SMALL} variant={BUTTON_VARIANTS.SECONDARY}>
+								<Button size={BUTTON_SIZES.SMALL} variant={BUTTON_VARIANTS.OUTLINE} onClick={onDiscard}>
 									<X className="size-4" />
 									Discard
 								</Button>

@@ -10,7 +10,7 @@ calories REAL DEFAULT 0,
 consumed INTEGER DEFAULT 0,
 scale TEXT,
 protein REAL DEFAULT 0,
-carbohydrates REAL DEFAULT 0,
+carbs REAL DEFAULT 0,
 fat REAL DEFAULT 0,
 fiber REAL DEFAULT 0,
 sugar REAL DEFAULT 0,
@@ -20,7 +20,7 @@ meal_type TEXT DEFAULT 'breakfast',
 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 FOREIGN KEY (user_id) REFERENCES users (id),
-UNIQUE(user_id, time)
+UNIQUE(user_id, time, food_id)
 )`;
 
 export interface TrackingDataInterface {
@@ -32,7 +32,7 @@ export interface TrackingDataInterface {
 	consumed: number;
 	scale: string;
 	protein: number;
-	carbohydrates: number;
+	carbs: number;
 	fat?: number;
 	fiber?: number;
 	sugar?: number;
@@ -46,7 +46,17 @@ export class TrackingController {
 	constructor(db: NutriTrackDB) {
 		this.db = db;
 	}
-	async addTracking(userId: number, foodItem: FoodItem, consumed: number, mealType: MealType) {
+	async addTracking({
+		userId,
+		foodItem,
+		consumed,
+		mealType
+	}: {
+		userId: number;
+		foodItem: FoodItem;
+		consumed: number;
+		mealType: MealType;
+	}) {
 		if (!this.db.promiser || !this.db.dbId) {
 			throw new Error("Database not initialized");
 		}
@@ -62,15 +72,25 @@ export class TrackingController {
 			}
 		});
 
-		await this.db.promiser("exec", {
+		return await this.db.promiser("exec", {
 			dbId: this.db.dbId,
-			sql: `INSERT OR REPLACE INTO trackings (${fields.join(", ")})
+			sql: `INSERT INTO trackings (${fields.join(", ")})
                 VALUES (${Array(fields.length).fill("?").join(", ")})`,
 			bind: values
 		});
 	}
 
-	async updateTracking(userId: number, nutritionData: TrackingDataInterface) {
+	async updateTracking({
+		trackingId,
+		userId,
+		foodItem,
+		consumed
+	}: {
+		trackingId: number;
+		userId: number;
+		foodItem: FoodItem;
+		consumed: number;
+	}) {
 		if (!this.db.promiser || !this.db.dbId) {
 			throw new Error("Database not initialized");
 		}
@@ -78,7 +98,8 @@ export class TrackingController {
 		const updates: string[] = [];
 		const values = [];
 
-		Object.entries(nutritionData).forEach(([key, value]) => {
+		const serializedData = serializeTrackingUpdate(foodItem, consumed);
+		Object.entries(serializedData).forEach(([key, value]) => {
 			if (value !== undefined) {
 				updates.push(`${key} = ?`);
 				values.push(value);
@@ -88,15 +109,14 @@ export class TrackingController {
 		if (updates.length === 0) return false;
 
 		values.push(userId);
+		values.push(trackingId);
 
-		await this.db.promiser("exec", {
+		return await this.db.promiser("exec", {
 			dbId: this.db.dbId,
 			sql: `UPDATE trackings SET ${updates.join(", ")}
-                WHERE user_id = ? AND time = ?`,
+                WHERE user_id = ? AND id = ?`,
 			bind: values
 		});
-
-		return true;
 	}
 
 	async getTracking(userId: number, time?: string) {
@@ -135,15 +155,15 @@ export class TrackingController {
 		return result.result as TrackingDataInterface[];
 	}
 
-	async deleteTracking(userId: number, time: string) {
+	async deleteTracking(userId: number, id: number) {
 		if (!this.db.promiser || !this.db.dbId) {
 			throw new Error("Database not initialized");
 		}
 
 		await this.db.promiser("exec", {
 			dbId: this.db.dbId,
-			sql: "DELETE FROM trackings WHERE user_id = ? AND time LIKE ?",
-			bind: [userId, `${time}%`]
+			sql: "DELETE FROM trackings WHERE user_id = ? AND id = ?",
+			bind: [userId, id]
 		});
 	}
 
@@ -183,12 +203,27 @@ export function serializeFoodToTracking(food: FoodItem, consumed: number, mealTy
 		scale: food.calorieMeasurement,
 		consumed,
 		protein: food.nutrients?.proteins ?? 0,
-		carbohydrates: food.nutrients?.carbs ?? 0,
+		carbs: food.nutrients?.carbs ?? 0,
 		fat: food.nutrients?.totalFats ?? 0,
 		fiber: food.nutrients?.fiber ?? 0,
 		sugar: food.nutrients?.sugar ?? 0,
 		food_id: food.id,
 		water_intake: 0,
 		meal_type: mealType
+	};
+}
+
+interface TrackingUpdateInterface
+	extends Pick<TrackingSerializer, "calories" | "consumed" | "protein" | "carbs" | "fat" | "fiber" | "sugar"> {}
+
+export function serializeTrackingUpdate(food: FoodItem, consumed: number): TrackingUpdateInterface {
+	return {
+		calories: food.calories,
+		consumed,
+		protein: food.nutrients?.proteins ?? 0,
+		carbs: food.nutrients?.carbs ?? 0,
+		fat: food.nutrients?.totalFats ?? 0,
+		fiber: food.nutrients?.fiber ?? 0,
+		sugar: food.nutrients?.sugar ?? 0
 	};
 }
