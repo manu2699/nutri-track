@@ -21,12 +21,12 @@ export const WelcomePage = () => {
 
 	return (
 		<div className="page flex flex-col justify-between items-center">
-			<h1 className="text-4xl font-bold text-primary mt-16">NUTRI - TRACK</h1>
+			<h1 className="text-4xl subHeading font-bold text-primary mt-16">NUTRI - TRACK</h1>
 			<div className="flex flex-col items-center">
 				<Meal />
-				<p className="subHeading text-base text-secondary">Track your nutrients with ease.</p>
+				<p className="text-base text-secondary">Track your nutrients with ease.</p>
 			</div>
-			<Button className="w-max self-end heading text-base mb-6 mr-4" onClick={() => navigate("/onboard")}>
+			<Button className="w-max self-end heading text-sm mb-6 mr-4" onClick={() => navigate("/onboard")}>
 				Get Started
 				<motion.div
 					animate={{
@@ -34,7 +34,7 @@ export const WelcomePage = () => {
 						transition: { duration: 2, repeat: Infinity, ease: "easeInOut" }
 					}}
 				>
-					<ArrowBigRight />
+					<ArrowBigRight className="size-5" />
 				</motion.div>
 			</Button>
 		</div>

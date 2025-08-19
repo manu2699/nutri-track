@@ -11,17 +11,23 @@ import {
 	BUTTON_SIZES,
 	BUTTON_VARIANTS,
 	Button,
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
 	Drawer,
 	DrawerContent,
 	DrawerTrigger
 } from "@nutri-track/ui";
 
+import { CircularProgress } from "@/components/circularProgress";
 import { MinimalCalorieRender, MinimalVitals } from "@/components/foodCard";
+import { Navigation } from "@/components/navigation";
 import { type SaveParams, SearchAndAddFood } from "@/components/organisms/searchAndTrack";
 import { TrackingDetails, type UpdateParams } from "@/components/organisms/trackingDetails";
 import { useDataStore } from "@/data/store";
 import type { TrackingResults } from "@/types";
-import { getMealType } from "@/utils";
+import { getDisplayTime, getMealType } from "@/utils";
 
 const mealTypesList = {
 	[MealTypeLabelEnums.breakfast]: {
@@ -49,7 +55,7 @@ const mealTypesList = {
 export const HomePage = () => {
 	const currentUser = useDataStore((s) => s.currentUser);
 	const trackings = useDataStore((s) => s.todaysTrackings);
-	const consumedCalories = useDataStore((s) => s.consumedCalories);
+	const consumedCalories = useDataStore((s) => s.consumedCalories || 1);
 
 	const [mealType] = useState(getMealType(new Date()));
 	const [editOpenedFor, setEditOpenedFor] = useState(-1);
@@ -103,17 +109,55 @@ export const HomePage = () => {
 			initial={{ opacity: 0, y: 10 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.5 }}
-			className="page flex flex-col p-2 py-4 gap-2"
+			className="page flex flex-col p-2 !py-4 gap-2 !h-full"
 		>
+			<div>
+				<p className="font-bold">{currentUser.name}</p>
+				<p>{getDisplayTime(new Date())}</p>
+			</div>
+
+			<div className="flex align-center p-2 gap-5 justify-center pt-10">
+				<Card>
+					<CardHeader className="p-2">
+						<CardTitle className="text-center text-sm">Calories Consumed</CardTitle>
+					</CardHeader>
+					<CardContent className="flex justify-center">
+						<CircularProgress
+							percentage={((consumedCalories.total || 1) / (currentUser.bmr || 2000)) * 100}
+							centerText={
+								<p className="text-center text-xs">
+									{consumedCalories.total} kcal <br />
+									off <br /> {currentUser.bmr} kcal
+								</p>
+							}
+						/>
+					</CardContent>
+				</Card>
+				<Card>
+					<CardHeader className="p-2">
+						<CardTitle className="text-center text-sm">Calories Consumed</CardTitle>
+					</CardHeader>
+					<CardContent className="flex justify-center">
+						<CircularProgress
+							percentage={((consumedCalories.total || 1) / (currentUser.bmr || 2000)) * 100}
+							centerText={
+								<p className="text-center text-xs">
+									{consumedCalories.total} kcal <br />
+									off <br /> {currentUser.bmr} kcal
+								</p>
+							}
+						/>
+					</CardContent>
+				</Card>
+			</div>
+
 			<motion.div
 				initial={{ opacity: 0, y: 10 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5 }}
-				className="flex flex-col items-center justify-center h-full gap-3 -mt-10"
+				className="flex flex-col items-center justify-self-center justify-center h-max gap-2"
 			>
-				<p className="text-lg font-bold text-secondary-foreground text-center">
-					Hey {currentUser.name}, <br></br>Had your {mealType}?
-				</p>
+				<p>Todays Trackings</p>
 				<Accordion type="single" collapsible className="w-full px-2 rounded-md shadow-md" defaultValue={mealType}>
 					{Object.entries(mealTypesList).map(([key, value]) => (
 						<AccordionItem key={key} value={key}>
@@ -157,7 +201,7 @@ export const HomePage = () => {
 													</Button>
 												</div>
 											</DrawerTrigger>
-											<DrawerContent className="!h-max !max-h-[90%]">
+											<DrawerContent className="h-[80vh]">
 												<TrackingDetails
 													consumed={tracking.consumed}
 													consumedScale={tracking.scale}
@@ -176,7 +220,7 @@ export const HomePage = () => {
 											Add
 										</Button>
 									</DrawerTrigger>
-									<DrawerContent className="h-full p-3">
+									<DrawerContent className="h-[80vh] p-3">
 										<SearchAndAddFood
 											currentUser={currentUser}
 											mealType={value.type}
@@ -190,6 +234,9 @@ export const HomePage = () => {
 					))}
 				</Accordion>
 			</motion.div>
+			<div className="mt-auto">
+				<Navigation />
+			</div>
 		</motion.div>
 	);
 };

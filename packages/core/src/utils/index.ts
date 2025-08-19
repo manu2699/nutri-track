@@ -36,5 +36,14 @@ export const getFoodItem = (itemId: string): FoodItem | null => {
 	return null;
 };
 
+export type ActivityLevelTypes = "Sedentary" | "Lightly Active" | "Moderately Active" | "Active" | "Very Active";
+export enum ActivityLevelEnum {
+	Sedentary = "Sedentary",
+	LightlyActive = "Lightly Active",
+	ModeratelyActive = "Moderately Active",
+	Active = "Active",
+	VeryActive = "Very Active"
+}
+
 export * from "./calcs";
 export * from "./vitals";

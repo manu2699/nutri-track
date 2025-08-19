@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
-import { ACTIVITY_LEVELS, regions } from "@nutri-track/core";
+import { ActivityLevelEnum, calculateBMI, calculateBodyFateBasedOnBMI, regions } from "@nutri-track/core";
 import {
 	Button,
 	Input,
@@ -82,18 +82,34 @@ const formFields = [
 		hint: "Your height, along with weight, helps us determine your Body Mass Index (BMI) & Basal Metabolic Rate (BMR)."
 	},
 	{
-		id: "activity",
+		id: "activityLevel",
 		label: "How active are you?",
 		type: "radio",
 		options: [
-			{ label: "Sedentary", value: ACTIVITY_LEVELS.SEDENTARY },
-			{ label: "Lightly Active", value: ACTIVITY_LEVELS.LIGHTLY_ACTIVE },
-			{ label: "Moerately Active", value: ACTIVITY_LEVELS.MODERATELY_ACTIVE },
-			{ label: "Active", value: ACTIVITY_LEVELS.ACTIVE },
-			{ label: "Very Active / Athlete", value: ACTIVITY_LEVELS.VERY_ACTIVE }
+			{ label: "Sedentary", value: ActivityLevelEnum.Sedentary },
+			{ label: "Lightly Active", value: ActivityLevelEnum.LightlyActive },
+			{ label: "Moderately Active", value: ActivityLevelEnum.ModeratelyActive },
+			{ label: "Active", value: ActivityLevelEnum.Active },
+			{ label: "Very Active / Athlete", value: ActivityLevelEnum.VeryActive }
 		],
 		required: false,
 		hint: "Your activity level helps us provide your daily calorie & protein needs."
+	},
+	{
+		id: "bmi",
+		label: "What is your Body Mass Index (BMI)?",
+		placeholder: "25",
+		type: "number",
+		required: true,
+		hint: "Your BMI is crucial for calculating your caloric and macronutrient needs. We have calculated approximate BMI using weight & height you have provided. If you know your BMI, please correct it here."
+	},
+	{
+		id: "bodyFat",
+		label: "What is your body fat in Kg?",
+		placeholder: "20",
+		type: "number",
+		required: true,
+		hint: "Your body fat(kg) is crucial for calculating your caloric and macronutrient needs. We have calculated approximate body fat percentage using BMI you have provided. If you know your body fat percentage, please correct it here."
 	},
 	{
 		id: "region",
@@ -112,15 +128,42 @@ export const OnBoardFromPage = () => {
 	const [currentStep, setCurrentStep] = useState(0);
 	const [formData, setFormData] = useState({
 		name: "",
-		age: "",
+		age: 0,
 		gender: "",
 		email: "",
-		weight: "",
-		height: ""
+		weight: 0,
+		height: 0,
+		bodyFat: 0,
+		region: "",
+		bmi: 0,
+		activityLevel: ActivityLevelEnum.Sedentary
 	});
 
 	const handleChange = (id: string, value: string | number | boolean) => {
+		const formField = formFields.find((field) => field.id === id);
+		if (formField?.type === "number") {
+			value = Number(value);
+		}
 		setFormData({ ...formData, [id]: value });
+		postCalculations(id, value);
+	};
+
+	const postCalculations = (id: string, value: string | number | boolean) => {
+		if (id === "height") {
+			setFormData((prev) => ({
+				...prev,
+				bmi: calculateBMI(prev.weight, Number(value)),
+				bodyFat: calculateBodyFateBasedOnBMI(calculateBMI(prev.weight, Number(value)), Number(prev.age), prev.gender)
+			}));
+			return;
+		}
+		if (id === "bmi") {
+			setFormData((prev) => ({
+				...prev,
+				bodyFat: calculateBodyFateBasedOnBMI(Number(value), Number(prev.age), prev.gender)
+			}));
+			return;
+		}
 	};
 
 	const canGoNext = useMemo(
@@ -143,7 +186,10 @@ export const OnBoardFromPage = () => {
 				email: formData.email,
 				gender: formData.gender,
 				weight: Number(formData.weight),
-				height: Number(formData.height)
+				height: Number(formData.height),
+				body_fat: Number(formData.bodyFat),
+				bmi: Number(formData.bmi),
+				activity_level: formData.activityLevel
 			} as UserInterface)
 			.then((user) => {
 				useDataStore.getState().setCurrentUser(user);
@@ -183,16 +229,13 @@ const FieldRenderer = ({
 	onChange
 }: {
 	field: FormField;
-	formData: Record<string, string>;
+	formData: Record<string, string | number | boolean>;
 	onChange: (id: string, value: string | boolean | number) => void;
 }) => {
 	switch (field.type) {
 		case "radio": {
 			return (
-				<RadioGroup
-					value={formData[field.id as keyof typeof formData]}
-					onValueChange={(val: string) => onChange(field.id, val)}
-				>
+				<RadioGroup value={formData[field.id] as string} onValueChange={(val: string) => onChange(field.id, val)}>
 					{field.options?.map((option) => (
 						<div className="flex items-center space-x-2" key={option.value}>
 							<RadioGroupItem key={option.value} value={option.value} />
@@ -204,14 +247,11 @@ const FieldRenderer = ({
 		}
 		case "select": {
 			return (
-				<Select
-					value={formData[field.id as keyof typeof formData]}
-					onValueChange={(val: string) => onChange(field.id, val)}
-				>
+				<Select value={formData[field.id] as string} onValueChange={(val: string) => onChange(field.id, val)}>
 					<SelectTrigger className="w-full">
 						<SelectValue placeholder={field.placeholder} />
 					</SelectTrigger>
-					<SelectContent>
+					<SelectContent className="max-h-52">
 						{field.options?.map((option) => (
 							<SelectItem key={option.value} value={option.value}>
 								{option.label}
@@ -231,7 +271,7 @@ const FieldRenderer = ({
 					id={field.id}
 					type={field.type}
 					placeholder={field.placeholder}
-					value={formData[field.id as keyof typeof formData]}
+					value={formData[field.id] as number | string}
 					onChange={(e) => onChange(field.id, e.target.value)}
 					required={field.required}
 					className="w-full max-w-md"

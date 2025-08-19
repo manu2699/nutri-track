@@ -18,6 +18,7 @@ export * from "./components/feedback/skeleton";
 export * from "./components/general/button";
 export * from "./components/general/card";
 export * from "./components/general/drawer";
+export * from "./components/general/navigation";
 export * from "./components/general/search";
 export * from "./components/general/seperator";
 export * from "./components/general/tabs";
