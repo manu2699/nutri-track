@@ -1,3 +1,10 @@
+import {
+	type ActivityLevelTypes,
+	calculateBMR,
+	calculateLeanBodyMass,
+	calculateProteinRequired
+} from "@nutri-track/core";
+
 import type { NutriTrackDB } from ".";
 
 export const userTableSchema = `CREATE TABLE IF NOT EXISTS users (
@@ -8,11 +15,12 @@ email TEXT NOT NULL,
 gender TEXT CHECK(gender IN ('male', 'female')) NOT NULL,
 weight REAL NOT NULL,
 height REAL NOT NULL,
-body_fat REAL,
 body_type TEXT,
-bmi REAL,
-bmr REAL,
+bmi REAL DEFAULT 0,
+bmr REAL DEFAULT 0,
+body_fat INTEGER DEFAULT 0,
 activity_level TEXT,
+protein_required REAL DEFAULT 0,
 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )`;
@@ -27,7 +35,8 @@ export interface UserInterface {
 	height: number;
 	bmi?: number;
 	bmr?: number;
-	activity_level?: "sedentary" | "lightly_active" | "moderately_active" | "very_active" | "extra_active";
+	body_fat?: number;
+	activity_level: ActivityLevelTypes;
 	created_at: string;
 	updated_at: string;
 }
@@ -44,17 +53,20 @@ export class UserController {
 			throw new Error("Database not initialized");
 		}
 
-		const { name, age, email, gender, weight, height, activity_level } = userData;
-
-		// TODO: Calculate BMI and BMR
-		const bmi = 0;
-		const bmr = 0;
+		const { name, age, email, gender, weight, height, activity_level, body_fat, bmi } = userData;
+		let bmr = 0;
+		let proteinRequired = 0;
+		if (body_fat) {
+			const leanBodyMass = calculateLeanBodyMass(weight, body_fat);
+			bmr = calculateBMR(leanBodyMass);
+			proteinRequired = calculateProteinRequired(leanBodyMass, activity_level || "sedentary");
+		}
 
 		await this.db.promiser("exec", {
 			dbId: this.db.dbId,
-			sql: `INSERT INTO users (name, age, email, gender, weight, height, bmi, bmr, activity_level) 
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-			bind: [name, age, email, gender, weight, height, bmi, bmr, activity_level]
+			sql: `INSERT INTO users (name, age, email, gender, weight, height, bmi, bmr, activity_level, body_fat, protein_required)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+			bind: [name, age, email, gender, weight, height, bmi, bmr, activity_level, body_fat, proteinRequired]
 		});
 
 		const { result } = await this.db.promiser("exec", {
@@ -174,6 +186,17 @@ export class UserController {
 		await this.db.promiser("exec", {
 			dbId: this.db.dbId,
 			sql: "DELETE FROM sqlite_sequence WHERE name = 'users'"
+		});
+	}
+
+	async dropTable() {
+		if (!this.db.promiser || !this.db.dbId) {
+			throw new Error("Database not initialized");
+		}
+
+		await this.db.promiser("exec", {
+			dbId: this.db.dbId,
+			sql: "DROP TABLE users"
 		});
 	}
 }

@@ -1,178 +1,242 @@
-import { useCallback, useRef, useState } from "react";
-import { X } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { ChevronRight, Cookie, MoonStar, Plus, Sun, Sunrise } from "lucide-react";
 import { motion } from "motion/react";
 
+import { MealTypeEnums, MealTypeLabelEnums } from "@nutri-track/core";
 import {
-	calculateIntakeFacts,
-	type FoodItem,
-	getMeasurementInfo,
-	type SearchResult,
-	searchFood
-} from "@nutri-track/core";
-import {
-	AutoComplete,
-	BADGE_VARIANTS,
-	Badge,
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
 	BUTTON_SIZES,
 	BUTTON_VARIANTS,
 	Button,
-	debounce,
-	Input
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+	Drawer,
+	DrawerContent,
+	DrawerTrigger
 } from "@nutri-track/ui";
 
-import { FoodCard } from "@/components/foodCard";
-import { NutriFactCard } from "@/components/nutriFactCard";
-// import { UserHeader } from "@/components/userHeader";
+import { CircularProgress } from "@/components/circularProgress";
+import { MinimalCalorieRender, MinimalVitals } from "@/components/foodCard";
+import { Navigation } from "@/components/navigation";
+import { type SaveParams, SearchAndAddFood } from "@/components/organisms/searchAndTrack";
+import { TrackingDetails, type UpdateParams } from "@/components/organisms/trackingDetails";
 import { useDataStore } from "@/data/store";
-import { getMealType } from "@/utils";
+import type { TrackingResults } from "@/types";
+import { getDisplayTime, getMealType } from "@/utils";
 
-const frequentFoods = ["Pancakes", "Eggs", "Oatmeal", "Chicken", "Beef", "Fish", "Vegetables", "Fruits"];
+const mealTypesList = {
+	[MealTypeLabelEnums.breakfast]: {
+		name: MealTypeLabelEnums.breakfast,
+		type: MealTypeEnums.breakfast,
+		icon: Sunrise
+	},
+	[MealTypeLabelEnums.lunch]: {
+		name: MealTypeLabelEnums.lunch,
+		type: MealTypeEnums.lunch,
+		icon: Sun
+	},
+	[MealTypeLabelEnums.snacks]: {
+		name: MealTypeLabelEnums.snacks,
+		type: MealTypeEnums.snacks,
+		icon: Cookie
+	},
+	[MealTypeLabelEnums.dinner]: {
+		name: MealTypeLabelEnums.dinner,
+		type: MealTypeEnums.dinner,
+		icon: MoonStar
+	}
+};
 
 export const HomePage = () => {
 	const currentUser = useDataStore((s) => s.currentUser);
-	const [eaten, setEaten] = useState(0);
-	const [searchedFood, setSearchedFood] = useState("");
-	const autocompleteRef = useRef<{
-		focus: () => void;
-	}>(null);
+	const trackings = useDataStore((s) => s.todaysTrackings);
+	const consumedCalories = useDataStore((s) => s.consumedCalories || 1);
 
 	const [mealType] = useState(getMealType(new Date()));
-	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [selectedItem, setSelectedItem] = useState<FoodItem | null>(null);
-	const [consumedInfo, setConsumedInfo] = useState<FoodItem | null>(null);
+	const [editOpenedFor, setEditOpenedFor] = useState(-1);
+	const [isNewEntryOpened, setIsNewEntryOpened] = useState(false);
 
-	const handleSearchChange = (value: string) => {
-		setIsLoading(true);
-		const results = searchFood(value);
-		setSearchResults(results as SearchResult[]);
-		setIsLoading(false);
-	};
+	const fetchData = useCallback(() => {
+		useDataStore.getState().getTrackingsForToday();
+	}, []);
 
-	const handleSelectItem = (_: string, item: FoodItem) => {
-		setSelectedItem(item as FoodItem);
-		setEaten(getMeasurementInfo(item.calorieMeasurement).quantity);
-		setSearchedFood(item.itemName);
-	};
+	useEffect(() => {
+		fetchData();
+	}, [fetchData]);
 
-	const debounceCalculateIntakeFacts = useCallback(
-		debounce((item: FoodItem, value: number) => {
-			setConsumedInfo(() => calculateIntakeFacts(item, value));
-		}, 300),
-		[]
-	);
-
-	const handleChangeEaten = useCallback(
-		(value: number) => {
-			setEaten(value);
-			if (selectedItem && `${value}`.length > 1 && value) {
-				debounceCalculateIntakeFacts(selectedItem, value);
-			}
+	const handleSave = useCallback(
+		async ({ consumedInfo, eatenInputs, mealType }: SaveParams) => {
+			await Promise.all(
+				consumedInfo.map((consumed, index) =>
+					useDataStore.getState().addTracking(consumed, eatenInputs[index], mealType)
+				)
+			);
+			fetchData();
+			setIsNewEntryOpened(false);
 		},
-		[selectedItem, debounceCalculateIntakeFacts]
+		[fetchData]
 	);
 
-	const handleSelectFrequentFood = (value: string) => {
-		setSearchedFood(value);
-		handleSearchChange(value);
-		autocompleteRef.current?.focus();
-	};
+	const handleDelete = useCallback(
+		async (tracking: TrackingResults) => {
+			await useDataStore.getState().deleteTracking(tracking.id);
+			setEditOpenedFor(-1);
+			fetchData();
+		},
+		[fetchData]
+	);
 
-	const handleClear = () => {
-		setSelectedItem(null);
-		setSearchedFood("");
-		setEaten(0);
-		setConsumedInfo(null);
-	};
+	const handleUpdate = useCallback(
+		async ({ consumedInfo, eatenInput, trackingData }: UpdateParams) => {
+			await useDataStore.getState().updateTracking(trackingData.id, consumedInfo, eatenInput);
+			fetchData();
+			setEditOpenedFor(-1);
+		},
+		[fetchData]
+	);
 
 	if (!currentUser) {
 		return null;
 	}
-
-	const handleAddToTrack = (foodItem: FoodItem) => {
-		console.log("handleAddToTrack :: ", foodItem);
-	};
 
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 10 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.5 }}
-			className="page flex flex-col p-2 py-4 gap-2"
+			className="page flex flex-col p-2 !py-4 gap-2 !h-full"
 		>
-			{!selectedItem?.itemName ? (
-				<motion.div
-					initial={{ opacity: 0, y: 10 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.5 }}
-					className="flex flex-col items-center justify-center h-full gap-6 -mt-10"
-				>
-					<p className="text-lg font-bold text-secondary-foreground text-center">
-						Hey {currentUser.name}, <br></br>did you had your {mealType}?
-					</p>
-					<AutoComplete
-						searchValue={searchedFood}
-						onSearchChange={handleSearchChange}
-						selectedValue={selectedItem?.itemName || ""}
-						onSelectValue={handleSelectItem}
-						isLoading={isLoading}
-						emptyMessage="No Items found..."
-						items={searchResults.map((result) => ({
-							item: result.item,
-							label: result.item.itemName,
-							value: result.item.itemName
-						}))}
-						className="w-full max-w-full"
-						forwardedRef={autocompleteRef}
-						onClear={handleClear}
-						itemRenderer={(item) => <FoodCard key={item.value} foodItem={item.item} />}
-					/>
+			<div>
+				<p className="font-bold">{currentUser.name}</p>
+				<p>{getDisplayTime(new Date())}</p>
+			</div>
 
-					{!searchedFood && !selectedItem ? (
-						<motion.div
-							initial={{ opacity: 0, y: 10 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.5, delay: 0.2 }}
-							className="flex items-center flex-wrap gap-3"
-						>
-							{frequentFoods.map((food) => (
-								<Badge key={food} onClick={() => handleSelectFrequentFood(food)} variant={BADGE_VARIANTS.SECONDARY}>
-									{food}
-								</Badge>
-							))}
-						</motion.div>
-					) : null}
-				</motion.div>
-			) : (
-				<motion.div
-					initial={{ opacity: 0, y: 10 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.5 }}
-					className="flex flex-col py-1 h-full gap-2"
-				>
-					<p className="px-2 text-md mt-1">How much {selectedItem.itemName} did you had?</p>
-					<div className="px-1 grid grid-cols-[1fr_auto] items-center gap-2">
-						<Input
-							value={eaten}
-							type="number"
-							onChange={(e) => handleChangeEaten(parseInt(e.target.value) || 0)}
-							placeholder={`Enter amount of ${selectedItem.itemName} eaten`}
-							className="w-[80%] min-w-[150px] bg-transparent"
-							suffix={getMeasurementInfo(selectedItem.calorieMeasurement).unit}
+			<div className="flex align-center p-2 gap-5 justify-center pt-10">
+				<Card>
+					<CardHeader className="p-2">
+						<CardTitle className="text-center text-sm">Calories Consumed</CardTitle>
+					</CardHeader>
+					<CardContent className="flex justify-center">
+						<CircularProgress
+							percentage={((consumedCalories.total || 1) / (currentUser.bmr || 2000)) * 100}
+							centerText={
+								<p className="text-center text-xs">
+									{consumedCalories.total} kcal <br />
+									off <br /> {currentUser.bmr} kcal
+								</p>
+							}
 						/>
-						<Button variant={BUTTON_VARIANTS.OUTLINE} size={BUTTON_SIZES.SMALL} onClick={handleClear}>
-							<X className="size-5 bg-gray-400 text-white rounded-full p-1" />
-							Clear
-						</Button>
-					</div>
-					<NutriFactCard
-						foodItem={consumedInfo || selectedItem}
-						consumedQuantity={`${eaten} ${getMeasurementInfo(selectedItem.calorieMeasurement).unit}`}
-						showAction={true}
-						onActionClick={handleAddToTrack}
-					/>
-				</motion.div>
-			)}
+					</CardContent>
+				</Card>
+				<Card>
+					<CardHeader className="p-2">
+						<CardTitle className="text-center text-sm">Calories Consumed</CardTitle>
+					</CardHeader>
+					<CardContent className="flex justify-center">
+						<CircularProgress
+							percentage={((consumedCalories.total || 1) / (currentUser.bmr || 2000)) * 100}
+							centerText={
+								<p className="text-center text-xs">
+									{consumedCalories.total} kcal <br />
+									off <br /> {currentUser.bmr} kcal
+								</p>
+							}
+						/>
+					</CardContent>
+				</Card>
+			</div>
+
+			<motion.div
+				initial={{ opacity: 0, y: 10 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.5 }}
+				className="flex flex-col items-center justify-self-center justify-center h-max gap-2"
+			>
+				<p>Todays Trackings</p>
+				<Accordion type="single" collapsible className="w-full px-2 rounded-md shadow-md" defaultValue={mealType}>
+					{Object.entries(mealTypesList).map(([key, value]) => (
+						<AccordionItem key={key} value={key}>
+							<AccordionTrigger className="flex items-center justify-between">
+								<div className="flex items-center justify-between w-full">
+									<div className="flex items-center gap-4">
+										{value.icon && <value.icon className="size-4 primary-bg" />}
+										{value.name}
+									</div>
+									<MinimalCalorieRender calories={consumedCalories[value.type]} />
+								</div>
+							</AccordionTrigger>
+							<AccordionContent className="flex flex-col items-center gap-2 w-full">
+								{trackings?.[value.type]?.length > 0 &&
+									trackings?.[value.type]?.map((tracking) => (
+										<Drawer
+											key={tracking.id}
+											open={editOpenedFor === tracking.id}
+											onOpenChange={(isOpen) => setEditOpenedFor(isOpen ? tracking.id : -1)}
+										>
+											<DrawerTrigger asChild>
+												<div className="flex w-full justify-between items-center gap-5 border-b-[0.5px] border-b-primary">
+													<div className="px-2 py-1 flex flex-col justify-between w-full gap-1 ">
+														<div className="flex items-center justify-between w-full">
+															<p>{tracking.foodDetails?.itemName}</p>
+															<MinimalCalorieRender calories={tracking.calories} />
+														</div>
+														<MinimalVitals
+															className="flex !items-start !justify-normal gap-1"
+															proteins={tracking.protein}
+															fats={tracking.fat}
+															carbs={tracking.carbs}
+														/>
+													</div>
+													<Button
+														variant={BUTTON_VARIANTS.SECONDARY}
+														size={BUTTON_SIZES.SMALL}
+														className="rounded-full !p-2"
+													>
+														<ChevronRight className="size-4" />
+													</Button>
+												</div>
+											</DrawerTrigger>
+											<DrawerContent className="h-[80vh]">
+												<TrackingDetails
+													consumed={tracking.consumed}
+													consumedScale={tracking.scale}
+													trackingData={tracking}
+													foodDetails={tracking.foodDetails}
+													onUpdate={handleUpdate}
+													onDelete={() => handleDelete(tracking)}
+												/>
+											</DrawerContent>
+										</Drawer>
+									))}
+								<Drawer open={isNewEntryOpened} onOpenChange={setIsNewEntryOpened}>
+									<DrawerTrigger asChild>
+										<Button size={BUTTON_SIZES.SMALL} className="self-end mt-2">
+											<Plus className="size-4" />
+											Add
+										</Button>
+									</DrawerTrigger>
+									<DrawerContent className="h-[80vh] p-3">
+										<SearchAndAddFood
+											currentUser={currentUser}
+											mealType={value.type}
+											onSave={handleSave}
+											onDiscard={() => setIsNewEntryOpened(false)}
+										/>
+									</DrawerContent>
+								</Drawer>
+							</AccordionContent>
+						</AccordionItem>
+					))}
+				</Accordion>
+			</motion.div>
+			<div className="mt-auto">
+				<Navigation />
+			</div>
 		</motion.div>
 	);
 };

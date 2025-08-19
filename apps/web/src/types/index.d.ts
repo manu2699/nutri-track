@@ -1,3 +1,7 @@
-type MealType = "breakfast" | "brunch" | "lunch" | "dinner" | "snacks" | "pre-workout" | "post-workout" | "late-night";
+import type { FoodItem } from "@nutri-track/core";
 
-export type { MealType };
+import type { TrackingDataInterface } from "@/data/database/trackings";
+
+export interface TrackingResults extends TrackingDataInterface {
+	foodDetails: FoodItem | null;
+}

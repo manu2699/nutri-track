@@ -1,7 +1,8 @@
 import "./styles/index.css";
 
+// Data display Components
+export * from "./components/datadisplay/accordion";
 export * from "./components/datadisplay/autocomplete";
-// Data display
 export * from "./components/datadisplay/badge";
 export * from "./components/datadisplay/carousel";
 export * from "./components/datadisplay/popover";
@@ -17,6 +18,7 @@ export * from "./components/feedback/skeleton";
 export * from "./components/general/button";
 export * from "./components/general/card";
 export * from "./components/general/drawer";
+export * from "./components/general/navigation";
 export * from "./components/general/search";
 export * from "./components/general/seperator";
 export * from "./components/general/tabs";

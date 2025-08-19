@@ -72,20 +72,10 @@ const AutoCompleteShowcase: React.FC = () => {
 					isLoading={isLoading}
 					selectedValue={selectedValue}
 					placeholder="Search with custom display..."
-					itemsRenderer={(items) => (
-						<ul className="max-h-60 overflow-y-auto">
-							{items.map((item) => (
-								// biome-ignore lint/a11y/useKeyWithClickEvents: --
-								<li
-									key={item.value}
-									className="p-2 cursor-pointer hover:bg-blue-100"
-									onClick={() => handleSelectValue(item.value)}
-								>
-									<span className="font-medium">{item.label}</span> -{" "}
-									<span className="text-gray-500">{item.value}</span>
-								</li>
-							))}
-						</ul>
+					itemRenderer={(item) => (
+						<div className="p-2 cursor-pointer hover:bg-blue-100">
+							<span className="font-medium">{item.label}</span> - <span className="text-gray-500">{item.value}</span>
+						</div>
 					)}
 				/>
 			</div>

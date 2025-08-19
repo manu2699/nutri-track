@@ -19,21 +19,26 @@ export const NutriFactCard = ({
 	foodItem,
 	consumedQuantity,
 	showAction,
-	onActionClick
+	onActionClick,
+	description = foodItem.description,
+	className
 }: {
 	foodItem: FoodItem;
 	consumedQuantity?: string;
 	showAction?: boolean;
 	onActionClick?: (foodItem: FoodItem) => void;
+	description?: string | React.ReactNode;
+	className?: string;
 }) => {
 	return (
-		<Card className="py-4 gap-4">
-			<CardHeader className="pb-2 font-bold border-0 border-b-4 border-primary">
-				{foodItem.itemName}'s Nutri Facts {consumedQuantity && `for ${consumedQuantity}`}
+		<Card className={`py-2 gap-4 ${className}`}>
+			<CardHeader className="pb-2 font-bold border-0 border-b-4 text-md border-secondary">
+				{foodItem.itemName}
+				{consumedQuantity && ` Nutri Facts for ${consumedQuantity}`}
 			</CardHeader>
-			<CardDescription className="px-6">{foodItem.description}</CardDescription>
+			<CardDescription className="px-6">{description}</CardDescription>
 			<CardContent className={"text-sm"}>
-				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-primary">
+				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-secondary">
 					<span>Energy</span>
 					<span className="font-bold text-md">
 						{!consumedQuantity
@@ -41,25 +46,25 @@ export const NutriFactCard = ({
 							: `${foodItem.calories} kcal for ${consumedQuantity}`}
 					</span>
 				</div>
-				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-primary">
+				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-secondary">
 					<span>Protein</span>
 					<span className="font-bold text-md">
 						{foodItem.nutrients?.proteins} {standardNutrientsMeasurementMap.proteins}
 					</span>
 				</div>
-				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-primary">
+				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-secondary">
 					<span>Fiber</span>
 					<span className="font-bold text-md">
 						{foodItem.nutrients?.fiber} {standardNutrientsMeasurementMap.fiber}
 					</span>
 				</div>
-				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-primary">
+				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-secondary">
 					<span>Carbohydrates</span>
 					<span className="font-bold text-md">
 						{foodItem.nutrients?.carbs} {standardNutrientsMeasurementMap.carbs}
 					</span>
 				</div>
-				<div className="flex flex-col mb-2 pb-1 border-0 border-b-2 border-primary">
+				<div className="flex flex-col mb-2 pb-1 border-0 border-b-2 border-secondary">
 					<div className="flex justify-between">
 						<span>Total Fats</span>
 						<span className="font-bold text-md">
@@ -83,32 +88,32 @@ export const NutriFactCard = ({
 						)}
 					</div>
 				</div>
-				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-primary">
+				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-secondary">
 					<span>Sugar</span>
 					<span className="font-bold text-md">
 						{foodItem.nutrients?.sugar} {standardNutrientsMeasurementMap.sugar}
 					</span>
 				</div>
-				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-primary">
+				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-secondary">
 					<span>Calcium</span>
 					<span className="font-bold text-md">
 						{foodItem.nutrients?.calcium} {standardNutrientsMeasurementMap.calcium}
 					</span>
 				</div>
-				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-primary">
+				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-secondary">
 					<span>Iron</span>
 					<span className="font-bold text-md">
 						{foodItem.nutrients?.iron} {standardNutrientsMeasurementMap.iron}
 					</span>
 				</div>
-				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-primary">
+				<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-secondary">
 					<span>Potassium</span>
 					<span className="font-bold text-md">
 						{foodItem.nutrients?.potassium} {standardNutrientsMeasurementMap.potassium}
 					</span>
 				</div>
 				{foodItem.nutrients?.vitaminA && (
-					<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-primary">
+					<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-secondary">
 						<span>Vitamin A</span>
 						<span className="font-bold text-md">
 							{foodItem.nutrients.vitaminA} {standardNutrientsMeasurementMap.vitaminA}
@@ -116,7 +121,7 @@ export const NutriFactCard = ({
 					</div>
 				)}
 				{foodItem.nutrients?.vitaminC && (
-					<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-primary">
+					<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-secondary">
 						<span>Vitamin C</span>
 						<span className="font-bold text-md">
 							{foodItem.nutrients.vitaminC} {standardNutrientsMeasurementMap.vitaminC}
@@ -124,7 +129,7 @@ export const NutriFactCard = ({
 					</div>
 				)}
 				{foodItem.nutrients?.vitaminC && (
-					<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-primary">
+					<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-secondary">
 						<span>Vitamin C</span>
 						<span className="font-bold text-md">
 							{foodItem.nutrients.vitaminC} {standardNutrientsMeasurementMap.vitaminC}
@@ -132,7 +137,7 @@ export const NutriFactCard = ({
 					</div>
 				)}
 				{foodItem.nutrients?.vitaminD && (
-					<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-primary">
+					<div className="flex justify-between mb-2 pb-1 border-0 border-b-2 border-secondary">
 						<span>Vitamin D</span>
 						<span className="font-bold text-md">
 							{foodItem.nutrients.vitaminD} {standardNutrientsMeasurementMap.vitaminD}
@@ -152,7 +157,7 @@ export const NutriFactCard = ({
 					</CardAction>
 				)}
 			</CardContent>
-			<CardFooter className="!py-1">
+			<CardFooter className="!pt-[2px]">
 				<span className="text-sm text-gray-600 text-end">
 					All Nutritional Facts are approximate it may vary depending on the quantitfy, ingredients, and cooking
 					methods.

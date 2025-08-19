@@ -10,9 +10,10 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"@nutri-track/ui": "workspace:*",
 		"@nutri-track/core": "workspace:*",
+		"@nutri-track/ui": "workspace:*",
 		"@sqlite.org/sqlite-wasm": "3.50.3-build1",
+		"control-flow-react": "^1.0.5",
 		"lucide-react": "0.536.0",
 		"motion": "^12.23.12",
 		"react": "19.1.0",

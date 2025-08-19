@@ -1,4 +1,4 @@
-import type { MealType } from "@/types";
+import { frequentFoods, getFoodItem, type MealType } from "@nutri-track/core";
 
 export const getMealType = (date: Date): MealType => {
 	const hour = date.getHours();
@@ -24,4 +24,38 @@ export const getMealType = (date: Date): MealType => {
 	}
 
 	return "snacks";
+};
+
+export const getFrequentFoods = (region: string, mealType: MealType): string[] => {
+	let frequeuntFoodIds = [];
+	if (!Object.hasOwn(frequentFoods, region)) {
+		return [];
+	}
+	if (mealType === "late-night") {
+		mealType = "dinner";
+	}
+	frequeuntFoodIds = frequentFoods[region][mealType];
+	if (mealType === "brunch") {
+		frequeuntFoodIds = [...frequentFoods[region].breakfast, ...frequentFoods[region].lunch];
+	}
+	return frequeuntFoodIds.map((id: string) => getFoodItem(id)?.itemName || "");
+};
+
+export const getSQLiteDateFormat = (date: Date): string => {
+	const month = (date.getMonth() + 1).toString().padStart(2, "0");
+	const day = date.getDate().toString().padStart(2, "0");
+	return `${date.getFullYear()}-${month}-${day}`;
+};
+
+export const getSQLiteDateTimeFormat = (date: Date): string => {
+	const formattedDate = getSQLiteDateFormat(date);
+	const formattedTime = `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date.getSeconds().toString().padStart(2, "0")}`;
+	return `${formattedDate} ${formattedTime}`;
+};
+
+export const getDisplayTime = (date: Date, showTime = false) => {
+	const hours = date.getHours();
+	const minutes = date.getMinutes();
+	const time = `${String(hours % 12).padStart(2, "0")}:${String(minutes).padStart(2, "0")} ${hours >= 12 ? "PM" : "AM"}`;
+	return `${date.toDateString()}${showTime ? ` ${time}` : ""}`;
 };
