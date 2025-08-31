@@ -3,7 +3,6 @@ import {
 	foodItems,
 	foodItemsKeys,
 	getMeasurementInfo,
-	type MealType,
 	MealTypeEnums,
 	regions
 } from "@nutri-track/core";
@@ -47,6 +46,10 @@ export async function loadMockTrackingData(startDate: Date, endDate: Date) {
 		for (let m = 0; m < mealsCount; m++) {
 			const foodIdx = getRandomBetween(0, foodItemsKeys.length - 1);
 			const foodInfo = foodItems[foodIdx];
+
+			// set some random min, hour for unique constraints
+			date.setHours(getRandomBetween(6, 22));
+			date.setMinutes(getRandomBetween(0, 59));
 
 			const mealType = mealTypes[getRandomBetween(0, mealTypes.length - 1)];
 			const { unit } = getMeasurementInfo(foodInfo.calorieMeasurement);

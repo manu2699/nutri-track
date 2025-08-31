@@ -42,7 +42,7 @@ h6,
 }
 
 .subHeading,
-.font-mono {
+.monoFont {
 	font-family: var(--font-mono);
 	letter-spacing: 0.6px;
 }
