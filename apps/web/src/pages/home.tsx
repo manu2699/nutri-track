@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { ChevronRight, Cookie, MoonStar, Plus, Sun, Sunrise } from "lucide-react";
+import { Bean, ChevronRight, Cookie, Droplets, Flame, Leaf, MoonStar, Plus, Sun, Sunrise } from "lucide-react";
 import { motion } from "motion/react";
 
 import { MealTypeEnums, MealTypeLabelEnums } from "@nutri-track/core";
@@ -11,20 +11,16 @@ import {
 	BUTTON_SIZES,
 	BUTTON_VARIANTS,
 	Button,
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
 	Drawer,
 	DrawerContent,
 	DrawerTrigger
 } from "@nutri-track/ui";
 
-import { CircularProgress } from "@/components/circularProgress";
 import { MinimalCalorieRender, MinimalVitals } from "@/components/foodCard";
 import { Navigation } from "@/components/navigation";
 import { type SaveParams, SearchAndAddFood } from "@/components/organisms/searchAndTrack";
 import { TrackingDetails, type UpdateParams } from "@/components/organisms/trackingDetails";
+import { WaveProgressCard } from "@/components/progressCard";
 import { useDataStore } from "@/data/store";
 import type { TrackingResults } from "@/types";
 import { getDisplayTime, getMealType } from "@/utils";
@@ -55,7 +51,7 @@ const mealTypesList = {
 export const HomePage = () => {
 	const currentUser = useDataStore((s) => s.currentUser);
 	const trackings = useDataStore((s) => s.todaysTrackings);
-	const consumedCalories = useDataStore((s) => s.consumedCalories || 1);
+	const consumedStats = useDataStore((s) => s.consumedStats || {});
 
 	const [mealType] = useState(getMealType(new Date()));
 	const [editOpenedFor, setEditOpenedFor] = useState(-1);
@@ -112,52 +108,68 @@ export const HomePage = () => {
 			className="page flex flex-col p-2 !py-4 gap-2 !h-full"
 		>
 			<div>
-				<p className="font-bold">{currentUser.name}</p>
-				<p>{getDisplayTime(new Date())}</p>
+				<p className="font-bold text-sm">{currentUser.name}</p>
+				<p className="text-xs">{getDisplayTime(new Date())}</p>
 			</div>
 
-			<div className="flex align-center p-2 gap-5 justify-center pt-10">
-				<Card>
-					<CardHeader className="p-2">
-						<CardTitle className="text-center text-sm">Calories Consumed</CardTitle>
-					</CardHeader>
-					<CardContent className="flex justify-center">
-						<CircularProgress
-							percentage={((consumedCalories.total || 1) / (currentUser.bmr || 2000)) * 100}
-							centerText={
-								<p className="text-center text-xs">
-									{consumedCalories.total} kcal <br />
-									off <br /> {currentUser.bmr} kcal
-								</p>
-							}
-						/>
-					</CardContent>
-				</Card>
-				<Card>
-					<CardHeader className="p-2">
-						<CardTitle className="text-center text-sm">Calories Consumed</CardTitle>
-					</CardHeader>
-					<CardContent className="flex justify-center">
-						<CircularProgress
-							percentage={((consumedCalories.total || 1) / (currentUser.bmr || 2000)) * 100}
-							centerText={
-								<p className="text-center text-xs">
-									{consumedCalories.total} kcal <br />
-									off <br /> {currentUser.bmr} kcal
-								</p>
-							}
-						/>
-					</CardContent>
-				</Card>
+			<div className="flex align-center p-2 gap-3 justify-center pt-10">
+				<WaveProgressCard
+					percentage={((consumedStats.total?.calories || 1) / (currentUser.bmr || 2000)) * 100}
+					className={"!w-[220px] !h-full"}
+				>
+					<div className="flex flex-col items-center gap-1">
+						<p className="flex items-center gap-1 text-sm font-mono">
+							<Flame className="size-4" />
+							Calories
+						</p>
+						<p className="text-xs">
+							<span className="text-base font-bold">{consumedStats.total?.calories}</span> off{" "}
+							<span className="text-sm mx-1">{currentUser.bmr}</span> kcal
+						</p>
+					</div>
+				</WaveProgressCard>
+				<div className="flex flex-col items-center gap-3">
+					<WaveProgressCard
+						percentage={((consumedStats.total?.protein || 1) / (currentUser.protein_required || 100)) * 100}
+						className={"!w-[100px] !h-[100px]"}
+					>
+						<div className="flex flex-col items-center gap-1">
+							<p className="flex items-center gap-1 text-xs font-mono">
+								<Bean className="size-3" />
+								Proteins
+							</p>
+							<p className="text-xs">
+								<span className="text-sm font-bold">{Math.round(consumedStats.total?.protein)}</span> off{" "}
+								<span className="mx-1">{currentUser.protein_required} gm</span>
+							</p>
+						</div>
+					</WaveProgressCard>
+					<div className="flex flex-col p-2 justify-center gap-1 w-[100px] h-[100px] rounded-xl shadow-md bg-accent">
+						<p className="flex items-center justify-evenly gap-1 text-[12px] text-gray-500">
+							<span className="flex items-center gap-1 font-mono">
+								<Droplets className="size-2" />
+								Fats
+							</span>
+							<span className="font-bold text-xs text-black">{Math.round(consumedStats.total?.fat)} gm</span>
+						</p>
+						<p className="flex items-center justify-evenly gap-1 text-[12px] text-gray-500">
+							<span className="flex items-center gap-1 font-mono">
+								<Leaf className="size-2" />
+								Fiber
+							</span>
+							<span className="font-bold text-xs text-black">{Math.round(consumedStats.total?.fiber)} gm</span>
+						</p>
+					</div>
+				</div>
 			</div>
 
 			<motion.div
 				initial={{ opacity: 0, y: 10 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5 }}
-				className="flex flex-col items-center justify-self-center justify-center h-max gap-2"
+				className="flex flex-col items-center justify-self-center justify-center h-max gap-2 mt-4"
 			>
-				<p>Todays Trackings</p>
+				<p className="self-start subHeading text-gray-500 text-sm">Todays Trackings</p>
 				<Accordion type="single" collapsible className="w-full px-2 rounded-md shadow-md" defaultValue={mealType}>
 					{Object.entries(mealTypesList).map(([key, value]) => (
 						<AccordionItem key={key} value={key}>
@@ -167,7 +179,7 @@ export const HomePage = () => {
 										{value.icon && <value.icon className="size-4 primary-bg" />}
 										{value.name}
 									</div>
-									<MinimalCalorieRender calories={consumedCalories[value.type]} />
+									<MinimalCalorieRender calories={consumedStats[value.type]?.calories} />
 								</div>
 							</AccordionTrigger>
 							<AccordionContent className="flex flex-col items-center gap-2 w-full">
@@ -201,7 +213,7 @@ export const HomePage = () => {
 													</Button>
 												</div>
 											</DrawerTrigger>
-											<DrawerContent className="h-[80vh]">
+											<DrawerContent className="!h-[80vh]">
 												<TrackingDetails
 													consumed={tracking.consumed}
 													consumedScale={tracking.scale}
@@ -220,7 +232,7 @@ export const HomePage = () => {
 											Add
 										</Button>
 									</DrawerTrigger>
-									<DrawerContent className="h-[80vh] p-3">
+									<DrawerContent className="!h-[80vh] p-3">
 										<SearchAndAddFood
 											currentUser={currentUser}
 											mealType={value.type}

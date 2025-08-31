@@ -53,6 +53,7 @@ export function NavItem({ className, label, icon, onClick, isActive = false }: N
 						animate={{ opacity: 1, width: "auto" }}
 						exit={{ opacity: 0, width: "0" }}
 						transition={{ duration: 0.2, ease: "easeInOut" }}
+						className="text-sm font-medium whitespace-nowrap overflow-hidden"
 					>
 						{label}
 					</motion.div>

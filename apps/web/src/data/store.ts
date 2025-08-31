@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { type FoodItem, getFoodItem, type MealType } from "@nutri-track/core";
+import { type FoodItem, getFoodItem, type MealType, MealTypeEnums } from "@nutri-track/core";
 
 import type { TrackingResults } from "@/types";
 import { getSQLiteDateFormat } from "@/utils";
@@ -8,6 +8,7 @@ import { getSQLiteDateFormat } from "@/utils";
 import { NutriTrackDB, TrackingController, UserController } from "./database";
 import type { TrackingDataInterface } from "./database/trackings";
 import type { UserInterface } from "./database/users";
+import { createMockUser, loadMockTrackingData } from "./mock";
 
 type State = {
 	dbRef?: NutriTrackDB;
@@ -16,15 +17,16 @@ type State = {
 	isInitialized: boolean;
 	currentUser: UserInterface | null;
 	todaysTrackings: Record<string, TrackingResults[]>;
-	consumedCalories: Record<string, number>;
+	consumedStats: Record<string, Record<string, number>>;
 };
 
 type Action = {
 	initialize: () => Promise<void>;
 	setCurrentUser: (user: UserInterface) => void;
 	clearDb?: () => Promise<void>;
+	cleanAndLoadMockData?: () => void;
 	getTrackingsForToday: () => Promise<void>;
-	addTracking: (tracking: FoodItem, consumed: number, mealType: MealType) => Promise<void>;
+	addTracking: (tracking: FoodItem, consumed: number, mealType: MealType, date?: Date | undefined) => Promise<void>;
 	deleteTracking: (id: number) => Promise<void>;
 	updateTracking: (trackingId: number, consumedInfo: FoodItem, eatenInput: number) => Promise<void>;
 };
@@ -33,7 +35,7 @@ export const useDataStore = create<State & Action>((set, get) => ({
 	isInitialized: false,
 	currentUser: null,
 	todaysTrackings: {},
-	consumedCalories: {},
+	consumedStats: {},
 	initialize: async () => {
 		const dbRef = new NutriTrackDB();
 		await dbRef.initialize();
@@ -52,7 +54,7 @@ export const useDataStore = create<State & Action>((set, get) => ({
 			userController,
 			isInitialized: true
 		});
-		// await get().clearDb();
+		// get().cleanAndLoadMockData?.();
 	},
 	setCurrentUser: (user: UserInterface) => {
 		set({
@@ -70,8 +72,12 @@ export const useDataStore = create<State & Action>((set, get) => ({
 				(i) => i.meal_type
 			);
 			const result: Record<string, TrackingResults[]> = {};
-			const consumedCalories: Record<string, number> = {
-				total: 0
+			const consumedStats: Record<string, Record<string, number>> = {
+				total: { calories: 0, protein: 0, fat: 0, fiber: 0 },
+				[MealTypeEnums.breakfast]: { calories: 0, protein: 0, fat: 0, fiber: 0 },
+				[MealTypeEnums.lunch]: { calories: 0, protein: 0, fat: 0, fiber: 0 },
+				[MealTypeEnums.snacks]: { calories: 0, protein: 0, fat: 0, fiber: 0 },
+				[MealTypeEnums.dinner]: { calories: 0, protein: 0, fat: 0, fiber: 0 }
 			};
 			for (const [key, value] of Object.entries(grouped)) {
 				if (!value || !value.length) {
@@ -80,30 +86,34 @@ export const useDataStore = create<State & Action>((set, get) => ({
 				if (!result[key]) {
 					result[key] = [];
 				}
-				if (!consumedCalories[key]) {
-					consumedCalories[key] = 0;
-				}
 				value.forEach((tracking) => {
 					result[key].push({
 						...tracking,
 						foodDetails: getFoodItem(tracking.food_id)
 					});
-					consumedCalories[key] += tracking.calories;
-					consumedCalories.total += tracking.calories;
+					consumedStats[key].calories += tracking.calories;
+					consumedStats[key].protein += tracking.protein ?? 0;
+					consumedStats[key].fat += tracking.fat ?? 0;
+					consumedStats[key].fiber += tracking.fiber ?? 0;
+
+					consumedStats.total.calories += tracking.calories;
+					consumedStats.total.protein += tracking.protein ?? 0;
+					consumedStats.total.fat += tracking.fat ?? 0;
+					consumedStats.total.fiber += tracking.fiber ?? 0;
 				});
 			}
 
 			set({
 				todaysTrackings: result,
-				consumedCalories
+				consumedStats
 			});
 		}
 	},
-	addTracking: async (tracking: FoodItem, consumed: number, mealType: MealType) => {
+	addTracking: async (tracking: FoodItem, consumed: number, mealType: MealType, date = undefined) => {
 		const trackingController = get().trackingController;
 		const user = get().currentUser;
 		if (trackingController && user?.id) {
-			await trackingController.addTracking({ userId: user.id, foodItem: tracking, consumed, mealType });
+			await trackingController.addTracking({ userId: user.id, foodItem: tracking, consumed, mealType, date });
 		}
 	},
 	deleteTracking: async (trackingId: number) => {
@@ -132,11 +142,24 @@ export const useDataStore = create<State & Action>((set, get) => ({
 		}
 		const userController = get().userController;
 		if (userController) {
-			await userController.dropTable();
+			await userController.deleteAllUsers();
+			// await userController.dropTable();
 		}
 		const trackingController = get().trackingController;
 		if (trackingController) {
-			await trackingController.dropTable();
+			await trackingController.deleteAllTrackings();
+			// await trackingController.dropTable();
+		}
+	},
+	cleanAndLoadMockData: () => {
+		if (import.meta.env.DEV) {
+			get().clearDb?.();
+			createMockUser().then(() => {
+				const currentDate = new Date();
+				const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+				// let monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+				loadMockTrackingData(monthStart, currentDate);
+			});
 		}
 	}
 }));

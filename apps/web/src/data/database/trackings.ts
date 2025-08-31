@@ -1,5 +1,7 @@
 import type { FoodItem, MealType } from "@nutri-track/core";
 
+import { getSQLiteDateTimeFormat } from "@/utils";
+
 import type { NutriTrackDB } from ".";
 
 export const trackingTableSchema = `CREATE TABLE IF NOT EXISTS trackings (
@@ -50,12 +52,14 @@ export class TrackingController {
 		userId,
 		foodItem,
 		consumed,
-		mealType
+		mealType,
+		date = undefined
 	}: {
 		userId: number;
 		foodItem: FoodItem;
 		consumed: number;
 		mealType: MealType;
+		date?: Date;
 	}) {
 		if (!this.db.promiser || !this.db.dbId) {
 			throw new Error("Database not initialized");
@@ -63,6 +67,11 @@ export class TrackingController {
 
 		const fields = ["user_id", "food_id"];
 		const values: (number | string)[] = [userId, foodItem.id];
+
+		if (date && date instanceof Date) {
+			fields.push("created_at");
+			values.push(getSQLiteDateTimeFormat(date));
+		}
 
 		const serializedData = serializeFoodToTracking(foodItem, consumed, mealType);
 		Object.entries(serializedData).forEach(([key, value]) => {

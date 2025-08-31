@@ -21,6 +21,7 @@ bmr REAL DEFAULT 0,
 body_fat INTEGER DEFAULT 0,
 activity_level TEXT,
 protein_required REAL DEFAULT 0,
+region TEXT,
 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )`;
@@ -37,8 +38,10 @@ export interface UserInterface {
 	bmr?: number;
 	body_fat?: number;
 	activity_level: ActivityLevelTypes;
-	created_at: string;
-	updated_at: string;
+	region: string;
+	protein_required?: number;
+	created_at?: string;
+	updated_at?: string;
 }
 
 export class UserController {
@@ -53,7 +56,7 @@ export class UserController {
 			throw new Error("Database not initialized");
 		}
 
-		const { name, age, email, gender, weight, height, activity_level, body_fat, bmi } = userData;
+		const { name, age, email, gender, weight, height, activity_level, body_fat, bmi, region } = userData;
 		let bmr = 0;
 		let proteinRequired = 0;
 		if (body_fat) {
@@ -64,9 +67,9 @@ export class UserController {
 
 		await this.db.promiser("exec", {
 			dbId: this.db.dbId,
-			sql: `INSERT INTO users (name, age, email, gender, weight, height, bmi, bmr, activity_level, body_fat, protein_required)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-			bind: [name, age, email, gender, weight, height, bmi, bmr, activity_level, body_fat, proteinRequired]
+			sql: `INSERT INTO users (name, age, email, gender, weight, height, bmi, bmr, activity_level, body_fat, protein_required, region)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+			bind: [name, age, email, gender, weight, height, bmi, bmr, activity_level, body_fat, proteinRequired, region]
 		});
 
 		const { result } = await this.db.promiser("exec", {

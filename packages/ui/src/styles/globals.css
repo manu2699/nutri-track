@@ -1,6 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Limelight&family=Oxygen:wght@300;400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Limelight&family=Oxygen:wght@300;400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Artifika&family=Limelight&family=Oxygen:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Limelight&family=Oxygen:wght@300;400;700&display=swap"); */
 
 @layer base {
 	h1 {
@@ -55,7 +56,9 @@
 
 		--font-sans: Libre Baskerville, serif;
 		--font-serif: Artifika, ui-serif, serif;
-		--font-mono: Limelight, ui-serif, serif;
+		--font-mono: Ubuntu Mono, ui-serif, serif;
+		/* --font-mono: Limelight, ui-serif, serif; */
+
 		--radius: 0.4rem;
 
 		--shadow-2xs: -4.5px -4.5px 6px 0.5px hsl(28 13% 20% / 0.03);
@@ -99,7 +102,8 @@
 
 		--font-sans: Libre Baskerville, serif;
 		--font-serif: Artifika, ui-serif, serif;
-		--font-mono: Limelight, ui-serif, serif;
+		--font-mono: Ubuntu Mono, ui-serif, serif;
+		/* --font-lime-light: Limelight, ui-serif, serif; */
 
 		--radius: 0.4rem;
 
