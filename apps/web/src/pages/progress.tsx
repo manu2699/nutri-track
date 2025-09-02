@@ -25,12 +25,14 @@ import {
 import { Navigation } from "@/components/navigation";
 // import type { TrackingDataInterface } from "@/data/database/trackings";
 import { useDataStore } from "@/data/store";
+import type { ProgressTimeFrame } from "@/types";
 import { getMonthName } from "@/utils";
 
 const timeFrameOptions = [
 	{ label: "Month to Date", value: "month-to-date" },
 	{ label: "Past Month", value: "past-month" },
-	{ label: "Past Week", value: "past-week" }
+	{ label: "Past Week", value: "past-week" },
+	{ label: "Custom", value: "custom" }
 ] as const;
 
 export const ProgressPage = () => {
@@ -39,13 +41,25 @@ export const ProgressPage = () => {
 
 	const [selectedDate, setSelectedDate] = useState<string | null>(null);
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [customDateRange, setCustomDateRange] = useState<{ start: Date; end: Date }>({
+		start: new Date(),
+		end: new Date()
+	});
 
 	useEffect(() => {
-		useDataStore.getState().getProgressData(selectedTimeFrame);
-	}, [selectedTimeFrame]);
+		useDataStore.getState().getProgressData(selectedTimeFrame, customDateRange);
+	}, [selectedTimeFrame, customDateRange]);
 
 	const handleTimeFrameChange = (value: string) => {
-		useDataStore.getState().setSelectedTimeFrame(value as "month-to-date" | "past-month" | "past-week");
+		if (value === "custom") {
+			// TODO: Open date range picker and get dates from user
+			// Mock code
+			const currentDate = new Date();
+			const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+			const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+			setCustomDateRange({ start: monthStart, end: monthEnd });
+		}
+		useDataStore.getState().setSelectedTimeFrame(value as ProgressTimeFrame);
 	};
 
 	const selectedDayData = selectedDate ? progressData.find((item) => item.date === selectedDate) : null;
@@ -90,8 +104,9 @@ export const ProgressPage = () => {
 								interval={"equidistantPreserveStart"}
 							/>
 							<YAxis tick={{ fontSize: 11 }} />
-							<Tooltip cursor={{ fill: "rgba(136, 132, 216, 0.1)" }} />
-							<Bar dataKey="total_calories" fill="#8884d8" name="Calories" />
+							<Tooltip content={CustomTooltip} />
+							{/* Bar with shape slightly border radius and having dotted pattern inside it */}
+							<Bar dataKey="total_calories" name="Calories" shape={<CustomDashedBar />} />
 						</BarChart>
 					</ResponsiveContainer>
 				</div>
@@ -155,5 +170,58 @@ export const ProgressPage = () => {
 				</div>
 			</Drawer> */}
 		</div>
+	);
+};
+
+const CustomTooltip = ({ payload }: { payload: any[] }) => {
+	const { date, total_calories: totalCalories } = payload?.[0]?.payload || {};
+	return (
+		<div className="bg-white p-2 rounded shadow text-sm">
+			<p className="text-grey-500 text-xs">{`${getMonthName(new Date(date))} ${new Date(date).getDate()}`}</p>
+			<p className="text-grey-500">{totalCalories} cal</p>
+		</div>
+	);
+};
+
+const CustomDashedBar = (props: any) => {
+	const { x, y, width, height, fill = "hsl(var(--accent))", stroke = "hsl(var(--chart-3))", strokeWidth = 1 } = props;
+
+	const pid = `dashPattern-${x}-${y}-${width}-${height}`;
+
+	const dashColor = "hsl(var(--chart-3))";
+	// space between dashed rows
+	const dashGap = 6;
+	const dashLen = 4;
+	const dashSpace = 6;
+
+	return (
+		<svg x={0} y={0} width={0} height={0} style={{ overflow: "visible" }}>
+			<title>Dashed bar pattern</title>
+			<defs>
+				<pattern
+					id={pid}
+					patternUnits="userSpaceOnUse"
+					width={dashLen + dashSpace}
+					height={dashGap}
+					patternTransform="rotate(45)"
+				>
+					<line
+						x1="0"
+						y1={dashGap / 2}
+						x2={dashLen + dashSpace}
+						y2={dashGap / 2}
+						stroke={dashColor}
+						strokeWidth="1"
+						strokeDasharray={`${dashLen} ${dashSpace}`}
+					/>
+				</pattern>
+			</defs>
+
+			{/* Outer bar body */}
+			<rect x={x} y={y} width={width} height={height} fill={fill} stroke={stroke} strokeWidth={strokeWidth} rx={2} />
+
+			{/* Pattern overlay clipped to the bar */}
+			<rect x={x} y={y} width={width} height={height} fill={`url(#${pid})`} />
+		</svg>
 	);
 };

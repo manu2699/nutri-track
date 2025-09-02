@@ -2,15 +2,13 @@ import { create } from "zustand";
 
 import { type FoodItem, getFoodItem, type MealType, MealTypeEnums } from "@nutri-track/core";
 
-import type { TrackingResults } from "@/types";
+import type { ProgressTimeFrame, TrackingResults } from "@/types";
 import { getSQLiteDateFormat } from "@/utils";
 
 import { NutriTrackDB, TrackingController, UserController } from "./database";
 import type { TrackingDataInterface } from "./database/trackings";
 import type { UserInterface } from "./database/users";
 import { createMockUser, loadMockTrackingData } from "./mock";
-
-type TimeFrame = "month-to-date" | "past-month" | "past-week";
 
 interface ProgressData {
 	date: string;
@@ -30,7 +28,7 @@ type State = {
 	todaysTrackings: Record<string, TrackingResults[]>;
 	consumedStats: Record<string, Record<string, number>>;
 	progressData: ProgressData[];
-	selectedTimeFrame: TimeFrame;
+	selectedTimeFrame: ProgressTimeFrame;
 };
 
 type Action = {
@@ -39,11 +37,11 @@ type Action = {
 	clearDb?: () => Promise<void>;
 	cleanAndLoadMockData?: () => void;
 	getTrackingsForToday: () => Promise<void>;
-	getProgressData: (timeFrame: TimeFrame) => Promise<void>;
 	addTracking: (tracking: FoodItem, consumed: number, mealType: MealType, date: Date | undefined) => Promise<void>;
 	deleteTracking: (id: number) => Promise<void>;
 	updateTracking: (trackingId: number, consumedInfo: FoodItem, eatenInput: number) => Promise<void>;
-	setSelectedTimeFrame: (timeFrame: TimeFrame) => void;
+	getProgressData: (timeFrame: ProgressTimeFrame, customDates?: { start: Date; end: Date }) => Promise<void>;
+	setSelectedTimeFrame: (timeFrame: ProgressTimeFrame) => void;
 };
 
 export const useDataStore = create<State & Action>((set, get) => ({
@@ -52,7 +50,7 @@ export const useDataStore = create<State & Action>((set, get) => ({
 	todaysTrackings: {},
 	consumedStats: {},
 	progressData: [],
-	selectedTimeFrame: "month-to-date" as TimeFrame,
+	selectedTimeFrame: "month-to-date" as ProgressTimeFrame,
 	initialize: async () => {
 		const dbRef = new NutriTrackDB();
 		await dbRef.initialize();
@@ -178,41 +176,46 @@ export const useDataStore = create<State & Action>((set, get) => ({
 		}
 	},
 	cleanAndLoadMockData: () => {
-		if (import.meta.env.DEV) {
-			get().clearDb?.();
-			createMockUser().then(() => {
-				const currentDate = new Date();
-				const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-				// let monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-				loadMockTrackingData(monthStart, currentDate);
-			});
+		if (!import.meta.env.DEV) {
+			return;
 		}
+		get().clearDb?.();
+		createMockUser().then(() => {
+			const currentDate = new Date();
+			const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+			// let monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+			loadMockTrackingData(monthStart, currentDate);
+		});
 	},
-	getProgressData: async (timeFrame: TimeFrame) => {
+	getProgressData: async (timeFrame: ProgressTimeFrame, customDates?: { start: Date; end: Date }) => {
 		const trackingController = get().trackingController;
 		const user = get().currentUser;
 		if (trackingController && user?.id) {
-			const currentDate = new Date();
+			let endDate = new Date();
 			let startDate: Date;
 
 			switch (timeFrame) {
 				case "month-to-date":
-					startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+					startDate = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
 					break;
 				case "past-month":
-					startDate = new Date(currentDate);
+					startDate = new Date(endDate);
 					startDate.setMonth(startDate.getMonth() - 1);
 					break;
 				case "past-week":
-					startDate = new Date(currentDate);
+					startDate = new Date(endDate);
 					startDate.setDate(startDate.getDate() - 7);
+					break;
+				case "custom":
+					startDate = customDates?.start ?? new Date();
+					endDate = customDates?.end ?? new Date();
 					break;
 			}
 
 			const data = await trackingController.getTrackingHistory(
 				user.id,
 				getSQLiteDateFormat(startDate),
-				getSQLiteDateFormat(currentDate)
+				getSQLiteDateFormat(endDate)
 			);
 
 			const processedData = data.map((item) => ({
@@ -222,7 +225,7 @@ export const useDataStore = create<State & Action>((set, get) => ({
 			set({ progressData: processedData });
 		}
 	},
-	setSelectedTimeFrame: (timeFrame: TimeFrame) => {
+	setSelectedTimeFrame: (timeFrame: ProgressTimeFrame) => {
 		set({ selectedTimeFrame: timeFrame });
 	}
 }));
