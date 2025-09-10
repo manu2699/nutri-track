@@ -41,8 +41,10 @@ h6,
 	font-family: var(--font-sans);
 }
 
-.subHeading {
+.subHeading,
+.monoFont {
 	font-family: var(--font-mono);
+	letter-spacing: 0.6px;
 }
 
 #root {

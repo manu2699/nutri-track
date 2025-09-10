@@ -59,3 +59,8 @@ export const getDisplayTime = (date: Date, showTime = false) => {
 	const time = `${String(hours % 12).padStart(2, "0")}:${String(minutes).padStart(2, "0")} ${hours >= 12 ? "PM" : "AM"}`;
 	return `${date.toDateString()}${showTime ? ` ${time}` : ""}`;
 };
+
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+export const getMonthName = (date: Date): string => {
+	return months[date.getMonth()];
+};

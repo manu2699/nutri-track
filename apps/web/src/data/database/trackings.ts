@@ -1,5 +1,7 @@
 import type { FoodItem, MealType } from "@nutri-track/core";
 
+import { getSQLiteDateTimeFormat } from "@/utils";
+
 import type { NutriTrackDB } from ".";
 
 export const trackingTableSchema = `CREATE TABLE IF NOT EXISTS trackings (
@@ -50,19 +52,26 @@ export class TrackingController {
 		userId,
 		foodItem,
 		consumed,
-		mealType
+		mealType,
+		date = undefined
 	}: {
 		userId: number;
 		foodItem: FoodItem;
 		consumed: number;
 		mealType: MealType;
+		date?: Date;
 	}) {
 		if (!this.db.promiser || !this.db.dbId) {
 			throw new Error("Database not initialized");
 		}
 
-		const fields = ["user_id", "food_id"];
-		const values: (number | string)[] = [userId, foodItem.id];
+		const fields = ["user_id"];
+		const values: (number | string)[] = [userId];
+
+		if (date && date instanceof Date) {
+			fields.push("created_at", "time");
+			values.push(getSQLiteDateTimeFormat(date), getSQLiteDateTimeFormat(date));
+		}
 
 		const serializedData = serializeFoodToTracking(foodItem, consumed, mealType);
 		Object.entries(serializedData).forEach(([key, value]) => {
@@ -137,22 +146,48 @@ export class TrackingController {
 		return result.resultRows.length > 0 ? (result.resultRows as TrackingDataInterface[]) : null;
 	}
 
-	async getTrackingHistory(userId: number, limit = 30) {
+	async getTrackingHistory(userId: number, startDate: string, endDate: string) {
 		if (!this.db.promiser || !this.db.dbId) {
 			throw new Error("Database not initialized");
 		}
 
-		const result = await this.db.promiser("exec", {
+		const { result } = await this.db.promiser("exec", {
 			dbId: this.db.dbId,
-			sql: `SELECT * FROM trackings
-                WHERE user_id = ?
-                ORDER BY time DESC
-                LIMIT ?`,
-			bind: [userId, limit],
-			returnValue: "resultRows"
+			sql: `SELECT 
+				strftime('%Y-%m-%d', time) as date,
+				SUM(calories) as total_calories,
+				SUM(protein) as total_protein,
+				SUM(fat) as total_fat,
+				SUM(fiber) as total_fiber,
+				GROUP_CONCAT(json_object(
+					'id', id,
+					'food_id', food_id,
+					'calories', calories,
+					'protein', protein,
+					'fat', fat,
+					'fiber', fiber,
+					'consumed', consumed,
+					'meal_type', meal_type,
+					'time', time
+				)) as daily_trackings
+			FROM trackings
+			WHERE user_id = ? 
+			AND time BETWEEN ? AND ?
+			GROUP BY strftime('%Y-%m-%d', time)
+			ORDER BY date ASC`,
+			bind: [userId, startDate, endDate],
+			returnValue: "resultRows",
+			rowMode: "object"
 		});
 
-		return result.result as TrackingDataInterface[];
+		return result.resultRows as Array<{
+			date: string;
+			total_calories: number;
+			total_protein: number;
+			total_fat: number;
+			total_fiber: number;
+			daily_trackings: string;
+		}>;
 	}
 
 	async deleteTracking(userId: number, id: number) {
