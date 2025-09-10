@@ -14,6 +14,12 @@ import {
 
 // import { getFoodItem } from "@nutri-track/core";
 import {
+	Carousel,
+	CarouselContent,
+	CarouselDots,
+	CarouselItem,
+	CarouselNext,
+	CarouselPrevious,
 	//  Card, Drawer,
 	Select,
 	SelectContent,
@@ -22,6 +28,7 @@ import {
 	SelectValue
 } from "@nutri-track/ui";
 
+import { CustomDashedBar } from "@/components/dashedBar";
 import { Navigation } from "@/components/navigation";
 // import type { TrackingDataInterface } from "@/data/database/trackings";
 import { useDataStore } from "@/data/store";
@@ -82,62 +89,84 @@ export const ProgressPage = () => {
 						</SelectContent>
 					</Select>
 				</div>
-
-				<h3 className="text-sm font-medium mb-4">Calorie Consumption</h3>
-				<div className="h-[300px]">
-					<ResponsiveContainer width="100%" height="100%">
-						<BarChart
-							data={progressData}
-							onClick={(data) => {
-								const payload = (data as { activePayload?: Array<{ payload: { date: string } }> })?.activePayload;
-								if (payload?.[0]) {
-									setSelectedDate(payload[0].payload.date);
-									setIsDrawerOpen(true);
-								}
-							}}
-						>
-							<CartesianGrid strokeDasharray="3 3" />
-							<XAxis
-								dataKey="date"
-								tick={{ fontSize: 9 }}
-								tickFormatter={(value) => `${getMonthName(new Date(value))} ${new Date(value).getDate()}`}
-								interval={"equidistantPreserveStart"}
-							/>
-							<YAxis tick={{ fontSize: 11 }} />
-							<Tooltip content={CustomTooltip} />
-							{/* Bar with shape slightly border radius and having dotted pattern inside it */}
-							<Bar dataKey="total_calories" name="Calories" shape={<CustomDashedBar />} />
-						</BarChart>
-					</ResponsiveContainer>
-				</div>
-
-				<h3 className="text-sm font-medium mb-4">Other Vitals</h3>
-				<div className="h-[300px]">
-					<ResponsiveContainer width="100%" height="100%">
-						<AreaChart data={progressData}>
-							<CartesianGrid strokeDasharray="3 3" />
-							<XAxis
-								dataKey="date"
-								tick={{ fontSize: 9 }}
-								tickFormatter={(value) => `${getMonthName(new Date(value))} ${new Date(value).getDate()}`}
-								interval={"equidistantPreserveStart"}
-							/>
-							<YAxis tick={{ fontSize: 11 }} />
-							<Tooltip />
-							<Legend />
-							<Area
-								type="monotone"
-								dataKey="total_protein"
-								stackId="1"
-								stroke="#8884d8"
-								fill="#8884d8"
-								name="Protein"
-							/>
-							<Area type="monotone" dataKey="total_fat" stackId="1" stroke="#82ca9d" fill="#82ca9d" name="Fat" />
-							<Area type="monotone" dataKey="total_fiber" stackId="1" stroke="#ffc658" fill="#ffc658" name="Fiber" />
-						</AreaChart>
-					</ResponsiveContainer>
-				</div>
+				<Carousel
+					opts={{
+						align: "center",
+						loop: true
+					}}
+					className="w-full"
+				>
+					<CarouselContent>
+						<CarouselItem>
+							<h3 className="text-sm font-medium mb-4">Calorie Consumption</h3>
+							<div className="h-[300px]">
+								<ResponsiveContainer width="100%" height="100%">
+									<BarChart
+										data={progressData}
+										onClick={(data) => {
+											console.log("click  :: ", data, progressData[Number(data.activeIndex)]);
+										}}
+									>
+										<CartesianGrid strokeDasharray="3 3" />
+										<XAxis
+											dataKey="date"
+											tick={{ fontSize: 9 }}
+											tickFormatter={(value) => `${getMonthName(new Date(value))} ${new Date(value).getDate()}`}
+											interval={"equidistantPreserveStart"}
+										/>
+										<YAxis tick={{ fontSize: 11 }} />
+										<Tooltip content={CustomTooltip} />
+										{/* Bar with shape slightly border radius and having dotted pattern inside it */}
+										<Bar dataKey="total_calories" name="Calories" shape={<CustomDashedBar />} />
+									</BarChart>
+								</ResponsiveContainer>
+							</div>
+						</CarouselItem>
+						<CarouselItem>
+							<h3 className="text-sm font-medium mb-4">Other Vitals</h3>
+							<div className="h-[300px]">
+								<ResponsiveContainer width="100%" height="100%">
+									<AreaChart data={progressData}>
+										<CartesianGrid strokeDasharray="3 3" />
+										<XAxis
+											dataKey="date"
+											tick={{ fontSize: 9 }}
+											tickFormatter={(value) => `${getMonthName(new Date(value))} ${new Date(value).getDate()}`}
+											interval={"equidistantPreserveStart"}
+										/>
+										<YAxis tick={{ fontSize: 11 }} />
+										<Tooltip />
+										<Legend />
+										<Area
+											type="monotone"
+											dataKey="total_protein"
+											stackId="1"
+											stroke="#8884d8"
+											fill="#8884d8"
+											name="Protein"
+										/>
+										<Area type="monotone" dataKey="total_fat" stackId="1" stroke="#82ca9d" fill="#82ca9d" name="Fat" />
+										<Area
+											type="monotone"
+											dataKey="total_fiber"
+											stackId="1"
+											stroke="#ffc658"
+											fill="#ffc658"
+											name="Fiber"
+										/>
+									</AreaChart>
+								</ResponsiveContainer>
+							</div>
+						</CarouselItem>
+					</CarouselContent>
+					<div className="mt-2 flex justify-between">
+						<div className="flex gap-2">
+							<CarouselPrevious />
+							<CarouselNext />
+						</div>
+						<CarouselDots />
+					</div>
+				</Carousel>
 			</div>
 
 			<Navigation />
@@ -180,48 +209,5 @@ const CustomTooltip = ({ payload }: { payload: any[] }) => {
 			<p className="text-grey-500 text-xs">{`${getMonthName(new Date(date))} ${new Date(date).getDate()}`}</p>
 			<p className="text-grey-500">{totalCalories} cal</p>
 		</div>
-	);
-};
-
-const CustomDashedBar = (props: any) => {
-	const { x, y, width, height, fill = "hsl(var(--accent))", stroke = "hsl(var(--chart-3))", strokeWidth = 1 } = props;
-
-	const pid = `dashPattern-${x}-${y}-${width}-${height}`;
-
-	const dashColor = "hsl(var(--chart-3))";
-	// space between dashed rows
-	const dashGap = 6;
-	const dashLen = 4;
-	const dashSpace = 6;
-
-	return (
-		<svg x={0} y={0} width={0} height={0} style={{ overflow: "visible" }}>
-			<title>Dashed bar pattern</title>
-			<defs>
-				<pattern
-					id={pid}
-					patternUnits="userSpaceOnUse"
-					width={dashLen + dashSpace}
-					height={dashGap}
-					patternTransform="rotate(45)"
-				>
-					<line
-						x1="0"
-						y1={dashGap / 2}
-						x2={dashLen + dashSpace}
-						y2={dashGap / 2}
-						stroke={dashColor}
-						strokeWidth="1"
-						strokeDasharray={`${dashLen} ${dashSpace}`}
-					/>
-				</pattern>
-			</defs>
-
-			{/* Outer bar body */}
-			<rect x={x} y={y} width={width} height={height} fill={fill} stroke={stroke} strokeWidth={strokeWidth} rx={2} />
-
-			{/* Pattern overlay clipped to the bar */}
-			<rect x={x} y={y} width={width} height={height} fill={`url(#${pid})`} />
-		</svg>
 	);
 };
