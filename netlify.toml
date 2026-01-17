@@ -1,0 +1,20 @@
+[build]
+  base = "."
+  command = "pnpm install && pnpm nx build ui && pnpm nx build web"
+  publish = "apps/web/dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Required for SPA routing (React Router)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Required headers for SQLite WASM (COOP/COEP)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Embedder-Policy = "require-corp"
