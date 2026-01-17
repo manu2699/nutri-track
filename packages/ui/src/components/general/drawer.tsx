@@ -11,8 +11,14 @@ function DrawerTrigger({ ...props }: ComponentProps<typeof DrawerPrimitive.Trigg
 	return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
 }
 
-function DrawerPortal({ ...props }: ComponentProps<typeof DrawerPrimitive.Portal>) {
-	return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />;
+function DrawerPortal({
+	children,
+	...props
+}: ComponentProps<typeof DrawerPrimitive.Portal> & { children?: React.ReactNode }) {
+	const Portal = DrawerPrimitive.Portal as React.ComponentType<
+		ComponentProps<typeof DrawerPrimitive.Portal> & { children?: React.ReactNode }
+	>;
+	return <Portal {...props}>{children}</Portal>;
 }
 
 function DrawerClose({ ...props }: ComponentProps<typeof DrawerPrimitive.Close>) {
@@ -34,7 +40,7 @@ function DrawerOverlay({ className, ...props }: ComponentProps<typeof DrawerPrim
 
 function DrawerContent({ className, children, ...props }: ComponentProps<typeof DrawerPrimitive.Content>) {
 	return (
-		<DrawerPortal data-slot="drawer-portal">
+		<DrawerPortal>
 			<DrawerOverlay />
 			<DrawerPrimitive.Content
 				data-slot="drawer-content"
