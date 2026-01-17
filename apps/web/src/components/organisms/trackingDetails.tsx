@@ -20,6 +20,7 @@ interface TrackingDetailsProps {
 	foodDetails: FoodItem | null;
 	onUpdate: (params: UpdateParams) => void;
 	onDelete: () => void;
+	isEditable?: boolean;
 }
 
 export const TrackingDetails: React.FC<TrackingDetailsProps> = ({
@@ -28,7 +29,8 @@ export const TrackingDetails: React.FC<TrackingDetailsProps> = ({
 	foodDetails,
 	trackingData,
 	onUpdate,
-	onDelete
+	onDelete,
+	isEditable = false
 }) => {
 	const [eatenInput, setEatenInput] = useState<number>(() => consumed);
 	const [consumedInfo, setConsumedInfo] = useState<FoodItem | null>(null);
@@ -68,26 +70,33 @@ export const TrackingDetails: React.FC<TrackingDetailsProps> = ({
 					foodItem={consumedInfo}
 					consumedQuantity={`${eatenInput} ${getMeasurementInfo(consumedInfo.calorieMeasurement).unit}`}
 					description={
-						<>
-							<Input
-								value={eatenInput}
-								type="number"
-								onChange={(e) => handleChangeEaten(parseInt(e.target.value) || 0)}
-								placeholder={`How much did you had?`}
-								className="w-full bg-transparent"
-								suffix={consumedScale}
-							/>
-							<div className="flex justify-end gap-4 my-2">
-								<Button variant={BUTTON_VARIANTS.OUTLINE} size={BUTTON_SIZES.SMALL} onClick={onDelete} className="!p-2">
-									<Trash className="size-4 !text-destructive" />
-									Delete
-								</Button>
-								<Button size={BUTTON_SIZES.SMALL} onClick={handleSave} className="!p-2">
-									<Check className="size-4" />
-									Save
-								</Button>
-							</div>
-						</>
+						isEditable ? (
+							<>
+								<Input
+									value={eatenInput}
+									type="number"
+									onChange={(e) => handleChangeEaten(parseInt(e.target.value) || 0)}
+									placeholder={`How much did you had?`}
+									className="w-full bg-transparent"
+									suffix={consumedScale}
+								/>
+								<div className="flex justify-end gap-4 my-2">
+									<Button
+										variant={BUTTON_VARIANTS.OUTLINE}
+										size={BUTTON_SIZES.SMALL}
+										onClick={onDelete}
+										className="!p-2"
+									>
+										<Trash className="size-4 !text-destructive" />
+										Delete
+									</Button>
+									<Button size={BUTTON_SIZES.SMALL} onClick={handleSave} className="!p-2">
+										<Check className="size-4" />
+										Save
+									</Button>
+								</div>
+							</>
+						) : null
 					}
 				/>
 			)}

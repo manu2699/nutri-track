@@ -6,18 +6,9 @@ import type { ProgressTimeFrame, TrackingResults } from "@/types";
 import { getSQLiteDateFormat } from "@/utils";
 
 import { NutriTrackDB, TrackingController, UserController } from "./database";
-import type { TrackingDataInterface } from "./database/trackings";
+import type { ProgressData, TrackingDataInterface } from "./database/trackings";
 import type { UserInterface } from "./database/users";
 import { createMockUser, loadMockTrackingData } from "./mock";
-
-interface ProgressData {
-	date: string;
-	total_calories: number;
-	total_protein: number;
-	total_fat: number;
-	total_fiber: number;
-	daily_trackings: TrackingDataInterface[];
-}
 
 type State = {
 	dbRef?: NutriTrackDB;
@@ -58,7 +49,7 @@ export const useDataStore = create<State & Action>((set, get) => ({
 		const trackingController = new TrackingController(dbRef);
 		const user = await userController.getUserById(1);
 		if (user) {
-			console.log("User found :: ", user);
+			// console.log("User found :: ", user);
 			set({
 				currentUser: user
 			});

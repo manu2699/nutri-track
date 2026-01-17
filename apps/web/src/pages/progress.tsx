@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Cookie, Flame, MoonStar, Sun, Sunrise } from "lucide-react";
+import { Flame } from "lucide-react";
 import {
 	Area,
 	AreaChart,
@@ -13,12 +13,8 @@ import {
 	YAxis
 } from "recharts";
 
-import { getFoodItem, MealTypeEnums, MealTypeLabelEnums } from "@nutri-track/core";
+import { getFoodItem } from "@nutri-track/core";
 import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
 	BUTTON_VARIANTS,
 	Button,
 	Card,
@@ -37,10 +33,11 @@ import {
 
 import { CustomDashedBar } from "@/components/dashedBar";
 import { MinimalVitals } from "@/components/foodCard";
+import { MealAccordion } from "@/components/MealAccordion";
 import { Navigation } from "@/components/navigation";
-import type { TrackingDataInterface } from "@/data/database/trackings";
+import type { ProgressData, TrackingDataInterface } from "@/data/database/trackings";
 import { useDataStore } from "@/data/store";
-import type { ProgressTimeFrame } from "@/types";
+import type { ProgressTimeFrame, TrackingResults } from "@/types";
 import { getMonthName } from "@/utils";
 
 const timeFrameOptions = [
@@ -50,27 +47,20 @@ const timeFrameOptions = [
 	{ label: "Custom", value: "custom" }
 ] as const;
 
-const mealTypesList = {
-	[MealTypeLabelEnums.breakfast]: {
-		name: MealTypeLabelEnums.breakfast,
-		type: MealTypeEnums.breakfast,
-		icon: Sunrise
-	},
-	[MealTypeLabelEnums.lunch]: {
-		name: MealTypeLabelEnums.lunch,
-		type: MealTypeEnums.lunch,
-		icon: Sun
-	},
-	[MealTypeLabelEnums.snacks]: {
-		name: MealTypeLabelEnums.snacks,
-		type: MealTypeEnums.snacks,
-		icon: Cookie
-	},
-	[MealTypeLabelEnums.dinner]: {
-		name: MealTypeLabelEnums.dinner,
-		type: MealTypeEnums.dinner,
-		icon: MoonStar
-	}
+const transformToTrackingResults = (trackingData: TrackingDataInterface[]): Record<string, TrackingResults[]> => {
+	return trackingData.reduce(
+		(acc, tracking) => {
+			if (!acc[tracking.meal_type]) {
+				acc[tracking.meal_type] = [];
+			}
+			acc[tracking.meal_type].push({
+				...tracking,
+				foodDetails: getFoodItem(tracking.food_id)
+			});
+			return acc;
+		},
+		{} as Record<string, TrackingResults[]>
+	);
 };
 
 export const ProgressPage = () => {
@@ -106,20 +96,7 @@ export const ProgressPage = () => {
 		}
 	};
 
-	const selectedDayData = selectedDate ? progressData.find((item) => item.date === selectedDate) : null;
-
-	// Group trackings by meal type for selected day
-	const groupedTrackings =
-		selectedDayData?.daily_trackings.reduce(
-			(acc, tracking) => {
-				if (!acc[tracking.meal_type]) {
-					acc[tracking.meal_type] = [];
-				}
-				acc[tracking.meal_type].push(tracking);
-				return acc;
-			},
-			{} as Record<string, TrackingDataInterface[]>
-		) || {};
+	const selectedDayData = selectedDate ? progressData.find((item) => item.date === selectedDate) : undefined;
 
 	return (
 		<div className="page flex flex-col p-4 justify-between gap-6">
@@ -219,7 +196,6 @@ export const ProgressPage = () => {
 						<DailyConsumptionDetails
 							selectedDate={selectedDate}
 							selectedDayData={selectedDayData}
-							groupedTrackings={groupedTrackings}
 							onClear={() => setSelectedDate(null)}
 						/>
 					)}
@@ -238,7 +214,7 @@ const EmptyState = () => (
 				<Flame className="size-6 text-primary" />
 			</div>
 			<div>
-				<h3 className="font-medium text-sm">Click on any chart item</h3>
+				<h3 className="font-medium text-sm">Tap on any chart item</h3>
 				<p className="text-xs text-gray-500 mt-1">Select a day from the charts above to see what you consumed</p>
 			</div>
 		</div>
@@ -248,120 +224,41 @@ const EmptyState = () => (
 const DailyConsumptionDetails = ({
 	selectedDate,
 	selectedDayData,
-	groupedTrackings,
 	onClear
 }: {
 	selectedDate: string;
-	selectedDayData: any;
-	groupedTrackings: Record<string, TrackingDataInterface[]>;
+	selectedDayData: ProgressData | undefined;
 	onClear: () => void;
-}) => (
-	<Card className="p-4">
-		<div className="flex items-center justify-between gap-2">
-			<div>
-				<h3 className="font-medium text-sm">
-					Consumed on {getMonthName(new Date(selectedDate))} {new Date(selectedDate).getDate()}
-				</h3>
-				<p className="text-xs text-gray-500">Tap to view details by meal</p>
+}) => {
+	const transformedTrackings = transformToTrackingResults(selectedDayData?.daily_trackings || []);
+
+	return (
+		<Card className="p-3">
+			<div className="flex items-center justify-between gap-2">
+				<div>
+					<h3 className="font-medium text-sm">
+						Consumed on {getMonthName(new Date(selectedDate))} {new Date(selectedDate).getDate()}
+					</h3>
+					<p className="text-xs text-gray-500">Tap to view details by meal</p>
+				</div>
+				<Button onClick={onClear} className="text-xs text-primary hover:underline" variant={BUTTON_VARIANTS.GHOST}>
+					Clear
+				</Button>
 			</div>
-			<Button onClick={onClear} className="text-xs text-primary hover:underline" variant={BUTTON_VARIANTS.GHOST}>
-				Clear
-			</Button>
-		</div>
 
-		{/* Daily summary vitals */}
-		<div className="">
-			<MinimalVitals
-				calories={selectedDayData?.total_calories}
-				proteins={selectedDayData?.total_protein}
-				fats={selectedDayData?.total_fat}
-				className="flex !items-center !justify-center gap-4"
-			/>
-		</div>
+			<div className="">
+				<MinimalVitals
+					calories={selectedDayData?.total_calories}
+					proteins={selectedDayData?.total_protein}
+					fats={selectedDayData?.total_fat}
+					className="flex !items-center !justify-center gap-4"
+				/>
+			</div>
 
-		{/* Meal-wise breakdown */}
-		<Accordion type="single" collapsible className="w-full">
-			{Object.entries(mealTypesList).map(([key, mealTypeInfo]) => {
-				const mealTrackings = groupedTrackings[mealTypeInfo.type] || [];
-				if (mealTrackings.length === 0) return null;
-
-				const mealCalories = mealTrackings.reduce((sum, tracking) => sum + tracking.calories, 0);
-				const mealProtein = mealTrackings.reduce((sum, tracking) => sum + (tracking.protein || 0), 0);
-				const mealFat = mealTrackings.reduce((sum, tracking) => sum + (tracking.fat || 0), 0);
-				// const mealFiber = mealTrackings.reduce((sum, tracking) => sum + (tracking.fiber || 0), 0);
-
-				return (
-					<AccordionItem key={key} value={key} className="border-b border-gray-200">
-						<AccordionTrigger className="hover:no-underline py-3">
-							<div className="flex items-center justify-between w-full">
-								<div className="flex items-center gap-3">
-									<mealTypeInfo.icon className="size-4 text-primary" />
-									<span className="text-sm font-medium">{mealTypeInfo.name}</span>
-									<span className="text-xs text-gray-500">({mealTrackings.length} items)</span>
-								</div>
-								<div className="flex items-center gap-1 text-xs">
-									<Flame className="size-3" />
-									<span className="font-medium">{Math.round(mealCalories)}</span>
-									<span className="text-gray-500">kcal</span>
-								</div>
-							</div>
-						</AccordionTrigger>
-						<AccordionContent className="pb-3">
-							<div className="space-y-2">
-								{/* Meal summary */}
-								<div className="bg-gray-50 rounded-md p-2 mb-2">
-									<MinimalVitals
-										calories={mealCalories}
-										proteins={mealProtein}
-										fats={mealFat}
-										className="flex !items-center !justify-start gap-4 text-xs"
-									/>
-									{/*<div className="flex items-center gap-4 mt-2 text-xs">
-										<div className="flex items-center gap-1">
-											<Leaf className="size-3 text-gray-500" />
-											<span className="text-gray-600">Fiber:</span>
-											<span className="font-medium">{Math.round(mealFiber)}g</span>
-										</div>
-									</div>*/}
-								</div>
-
-								{/* Individual food items */}
-								<div className="space-y-2">
-									{mealTrackings.map((tracking) => {
-										const foodDetails = getFoodItem(tracking.food_id);
-										if (!foodDetails) return null;
-
-										return (
-											<div
-												key={tracking.id}
-												className="flex justify-between items-start p-2 bg-white rounded border border-gray-100"
-											>
-												<div className="flex gap-3 items-center">
-													<span className="text-sm font-medium">{foodDetails.itemName}</span>
-													<span className="text-xs text-gray-500">
-														{tracking.consumed} {tracking.scale}
-													</span>
-												</div>
-												<div className="text-right">
-													<MinimalVitals
-														calories={tracking.calories}
-														proteins={tracking.protein}
-														fats={tracking.fat}
-														className="flex !items-end !justify-end gap-2 text-xs"
-													/>
-												</div>
-											</div>
-										);
-									})}
-								</div>
-							</div>
-						</AccordionContent>
-					</AccordionItem>
-				);
-			})}
-		</Accordion>
-	</Card>
-);
+			<MealAccordion trackings={transformedTrackings} editable={false} showEmptyMeals={false} className="shadow-none" />
+		</Card>
+	);
+};
 
 const CustomTooltip = ({ payload }: { payload: any[] }) => {
 	const { date, total_calories: totalCalories } = payload?.[0]?.payload || {};

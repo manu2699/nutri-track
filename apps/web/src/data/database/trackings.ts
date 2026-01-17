@@ -43,6 +43,15 @@ export interface TrackingDataInterface {
 	meal_type: string;
 }
 
+export interface ProgressData {
+	date: string;
+	total_calories: number;
+	total_protein: number;
+	total_fat: number;
+	total_fiber: number;
+	daily_trackings: TrackingDataInterface[];
+}
+
 export class TrackingController {
 	db: NutriTrackDB;
 	constructor(db: NutriTrackDB) {
@@ -168,7 +177,8 @@ export class TrackingController {
 					'fiber', fiber,
 					'consumed', consumed,
 					'meal_type', meal_type,
-					'time', time
+					'time', time,
+					'scale', scale
 				)) as daily_trackings
 			FROM trackings
 			WHERE user_id = ? 

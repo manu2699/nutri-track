@@ -1,52 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
-import { Bean, ChevronRight, Cookie, Droplets, Flame, Leaf, MoonStar, Plus, Sun, Sunrise } from "lucide-react";
+import { Bean, Droplets, Flame, Leaf } from "lucide-react";
 import { motion } from "motion/react";
 
-import { MealTypeEnums, MealTypeLabelEnums } from "@nutri-track/core";
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-	BUTTON_SIZES,
-	BUTTON_VARIANTS,
-	Button,
-	Drawer,
-	DrawerContent,
-	DrawerTrigger
-} from "@nutri-track/ui";
-
-import { MinimalCalorieRender, MinimalVitals } from "@/components/foodCard";
+import { MealAccordion } from "@/components/MealAccordion";
 import { Navigation } from "@/components/navigation";
-import { type SaveParams, SearchAndAddFood } from "@/components/organisms/searchAndTrack";
-import { TrackingDetails, type UpdateParams } from "@/components/organisms/trackingDetails";
+import type { SaveParams } from "@/components/organisms/searchAndTrack";
+import type { UpdateParams } from "@/components/organisms/trackingDetails";
 import { WaveProgressCard } from "@/components/progressCard";
 import { useDataStore } from "@/data/store";
 import type { TrackingResults } from "@/types";
 import { getDisplayTime, getMealType } from "@/utils";
-
-const mealTypesList = {
-	[MealTypeLabelEnums.breakfast]: {
-		name: MealTypeLabelEnums.breakfast,
-		type: MealTypeEnums.breakfast,
-		icon: Sunrise
-	},
-	[MealTypeLabelEnums.lunch]: {
-		name: MealTypeLabelEnums.lunch,
-		type: MealTypeEnums.lunch,
-		icon: Sun
-	},
-	[MealTypeLabelEnums.snacks]: {
-		name: MealTypeLabelEnums.snacks,
-		type: MealTypeEnums.snacks,
-		icon: Cookie
-	},
-	[MealTypeLabelEnums.dinner]: {
-		name: MealTypeLabelEnums.dinner,
-		type: MealTypeEnums.dinner,
-		icon: MoonStar
-	}
-};
 
 export const HomePage = () => {
 	const currentUser = useDataStore((s) => s.currentUser);
@@ -54,8 +17,6 @@ export const HomePage = () => {
 	const consumedStats = useDataStore((s) => s.consumedStats || {});
 
 	const [mealType] = useState(getMealType(new Date()));
-	const [editOpenedFor, setEditOpenedFor] = useState(-1);
-	const [isNewEntryOpened, setIsNewEntryOpened] = useState(false);
 
 	const fetchData = useCallback(() => {
 		useDataStore.getState().getTrackingsForToday();
@@ -73,7 +34,6 @@ export const HomePage = () => {
 				)
 			);
 			fetchData();
-			setIsNewEntryOpened(false);
 		},
 		[fetchData]
 	);
@@ -81,7 +41,6 @@ export const HomePage = () => {
 	const handleDelete = useCallback(
 		async (tracking: TrackingResults) => {
 			await useDataStore.getState().deleteTracking(tracking.id);
-			setEditOpenedFor(-1);
 			fetchData();
 		},
 		[fetchData]
@@ -91,7 +50,6 @@ export const HomePage = () => {
 		async ({ consumedInfo, eatenInput, trackingData }: UpdateParams) => {
 			await useDataStore.getState().updateTracking(trackingData.id, consumedInfo, eatenInput);
 			fetchData();
-			setEditOpenedFor(-1);
 		},
 		[fetchData]
 	);
@@ -170,81 +128,17 @@ export const HomePage = () => {
 				className="flex flex-col items-center justify-self-center justify-center h-max gap-2 mt-4"
 			>
 				<p className="self-start subHeading text-gray-500 text-sm">Todays Trackings</p>
-				<Accordion type="single" collapsible className="w-full px-2 rounded-md shadow-md" defaultValue={mealType}>
-					{Object.entries(mealTypesList).map(([key, value]) => (
-						<AccordionItem key={key} value={key}>
-							<AccordionTrigger className="flex items-center justify-between">
-								<div className="flex items-center justify-between w-full">
-									<div className="flex items-center gap-4">
-										{value.icon && <value.icon className="size-4 primary-bg" />}
-										{value.name}
-									</div>
-									<MinimalCalorieRender calories={consumedStats[value.type]?.calories} />
-								</div>
-							</AccordionTrigger>
-							<AccordionContent className="flex flex-col items-center gap-2 w-full">
-								{trackings?.[value.type]?.length > 0 &&
-									trackings?.[value.type]?.map((tracking) => (
-										<Drawer
-											key={tracking.id}
-											open={editOpenedFor === tracking.id}
-											onOpenChange={(isOpen) => setEditOpenedFor(isOpen ? tracking.id : -1)}
-										>
-											<DrawerTrigger asChild>
-												<div className="flex w-full justify-between items-center gap-5 border-b-[0.5px] border-b-primary">
-													<div className="px-2 py-1 flex flex-col justify-between w-full gap-1 ">
-														<div className="flex items-center justify-between w-full">
-															<p>{tracking.foodDetails?.itemName}</p>
-															<MinimalCalorieRender calories={tracking.calories} />
-														</div>
-														<MinimalVitals
-															className="flex !items-start !justify-normal gap-1"
-															proteins={tracking.protein}
-															fats={tracking.fat}
-															carbs={tracking.carbs}
-														/>
-													</div>
-													<Button
-														variant={BUTTON_VARIANTS.SECONDARY}
-														size={BUTTON_SIZES.SMALL}
-														className="rounded-full !p-2"
-													>
-														<ChevronRight className="size-4" />
-													</Button>
-												</div>
-											</DrawerTrigger>
-											<DrawerContent className="!h-[80vh]">
-												<TrackingDetails
-													consumed={tracking.consumed}
-													consumedScale={tracking.scale}
-													trackingData={tracking}
-													foodDetails={tracking.foodDetails}
-													onUpdate={handleUpdate}
-													onDelete={() => handleDelete(tracking)}
-												/>
-											</DrawerContent>
-										</Drawer>
-									))}
-								<Drawer open={isNewEntryOpened} onOpenChange={setIsNewEntryOpened}>
-									<DrawerTrigger asChild>
-										<Button size={BUTTON_SIZES.SMALL} className="self-end mt-2">
-											<Plus className="size-4" />
-											Add
-										</Button>
-									</DrawerTrigger>
-									<DrawerContent className="!h-[80vh] p-3">
-										<SearchAndAddFood
-											currentUser={currentUser}
-											mealType={value.type}
-											onSave={handleSave}
-											onDiscard={() => setIsNewEntryOpened(false)}
-										/>
-									</DrawerContent>
-								</Drawer>
-							</AccordionContent>
-						</AccordionItem>
-					))}
-				</Accordion>
+				<MealAccordion
+					trackings={trackings}
+					consumedStats={consumedStats}
+					editable={true}
+					showEmptyMeals={true}
+					defaultExpanded={mealType}
+					currentUser={currentUser}
+					onSave={handleSave}
+					onUpdate={handleUpdate}
+					onDelete={handleDelete}
+				/>
 			</motion.div>
 			<div className="mt-auto">
 				<Navigation />
