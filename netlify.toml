@@ -5,8 +5,6 @@
 
 [build.environment]
   NODE_VERSION = "20"
-  # Skip npm install - we'll use pnpm in the build command
-  NPM_FLAGS = "--prefix=/dev/null"
 
 # Required for SPA routing (React Router)
 [[redirects]]

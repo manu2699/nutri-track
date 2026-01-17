@@ -5,7 +5,6 @@ node_modules/
 dist/
 keys/
 
-pnpm-lock.yaml
 
 .nx/cache
 .nx/workspace-data
