@@ -5,7 +5,16 @@ import svgr from "vite-plugin-svgr";
 import fs from "node:fs";
 import { join, resolve } from "node:path";
 
-// https://vitejs.dev/config/
+const keyPath = join(__dirname, "./keys/localhost-key.pem");
+const certPath = join(__dirname, "./keys/localhost-cert.pem");
+const httpsConfig =
+	fs.existsSync(keyPath) && fs.existsSync(certPath)
+		? {
+				key: fs.readFileSync(keyPath),
+				cert: fs.readFileSync(certPath)
+			}
+		: undefined;
+
 export default defineConfig({
 	plugins: [react(), svgr()],
 	resolve: {
@@ -20,13 +29,7 @@ export default defineConfig({
 			"Cross-Origin-Opener-Policy": "same-origin",
 			"Cross-Origin-Embedder-Policy": "require-corp"
 		},
-		https:
-			process.env.NODE_ENV === "development"
-				? {
-						key: fs.readFileSync(join(__dirname, "./keys/localhost-key.pem")),
-						cert: fs.readFileSync(join(__dirname, "./keys/localhost-cert.pem"))
-					}
-				: undefined
+		...(httpsConfig ? { https: httpsConfig } : {})
 	},
 	optimizeDeps: {
 		exclude: ["@sqlite.org/sqlite-wasm"]
