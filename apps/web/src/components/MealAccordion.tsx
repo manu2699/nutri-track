@@ -15,7 +15,7 @@ import {
 	DrawerTrigger
 } from "@nutri-track/ui";
 
-import { MinimalCalorieRender, MinimalVitals } from "@/components/foodCard";
+import { MinimalVitals } from "@/components/foodCard";
 import { type SaveParams, SearchAndAddFood } from "@/components/organisms/searchAndTrack";
 import { TrackingDetails, type UpdateParams } from "@/components/organisms/trackingDetails";
 import { mealTypesList } from "@/constants/mealTypes";

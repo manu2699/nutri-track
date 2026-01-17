@@ -1,6 +1,6 @@
 [build]
   base = "."
-  command = "pnpm install && pnpm nx build ui && pnpm nx build web"
+  command = "pnpm nx build-deps web && pnpm nx build web"
   publish = "apps/web/dist"
 
 [build.environment]
