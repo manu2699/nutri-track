@@ -12,26 +12,28 @@ export const Navigation = () => {
 	}
 
 	return (
-		<NavBar>
-			<NavBar.Item
-				isActive={location.pathname === "/home"}
-				icon={<House size={20} strokeWidth={2} />}
-				label="Home"
-				onClick={() => handleClick("/home")}
-			/>
-			<NavBar.Item
-				isActive={location.pathname === "/progress"}
-				icon={<ChartNoAxesCombined size={20} strokeWidth={2} />}
-				label="Progress"
-				onClick={() => handleClick("/progress")}
-			/>
+		<div className="navBar">
+			<NavBar>
+				<NavBar.Item
+					isActive={location.pathname === "/home"}
+					icon={<House size={20} strokeWidth={2} />}
+					label="Home"
+					onClick={() => handleClick("/home")}
+				/>
+				<NavBar.Item
+					isActive={location.pathname === "/progress"}
+					icon={<ChartNoAxesCombined size={20} strokeWidth={2} />}
+					label="Progress"
+					onClick={() => handleClick("/progress")}
+				/>
 
-			<NavBar.Item
-				isActive={location.pathname === "/user"}
-				icon={<UserRound size={20} />}
-				label="Profile"
-				onClick={() => handleClick("/user")}
-			/>
-		</NavBar>
+				<NavBar.Item
+					isActive={location.pathname === "/user"}
+					icon={<UserRound size={20} />}
+					label="Profile"
+					onClick={() => handleClick("/user")}
+				/>
+			</NavBar>
+		</div>
 	);
 };
