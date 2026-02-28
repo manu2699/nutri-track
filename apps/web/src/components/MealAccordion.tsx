@@ -221,22 +221,22 @@ const TrackingItem: React.FC<TrackingItemProps> = ({
 	return (
 		<Drawer open={isOpen} onOpenChange={onOpenChange}>
 			<DrawerTrigger asChild>
-				<div className="flex justify-between items-center p-1 px-2 bg-white rounded border border-gray-100">
-					<div className="flex gap-3 items-center">
+				<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-2 bg-white rounded border border-gray-100 gap-2">
+					<div className="flex flex-wrap gap-x-3 gap-y-1 items-baseline">
 						<span className="text-sm font-medium">{tracking.foodDetails?.itemName}</span>
-						<span className="text-xs text-gray-500">
+						<span className="text-xs text-gray-500 whitespace-nowrap">
 							{tracking.consumed} {getMeasurementInfo(tracking.scale).unit}
 						</span>
 					</div>
-					<div className="text-right flex gap-1 items-center">
+					<div className="flex justify-between items-center w-full sm:w-auto">
 						<MinimalVitals
 							calories={tracking.calories}
 							proteins={tracking.protein}
 							fats={tracking.fat}
-							className="flex !items-end !justify-end gap-2 text-xs"
+							className="flex !items-center !justify-start sm:!justify-end gap-3 text-xs flex-wrap"
 						/>
 						{editable && (
-							<Button variant={BUTTON_VARIANTS.GHOST} size={BUTTON_SIZES.SMALL}>
+							<Button variant={BUTTON_VARIANTS.GHOST} size={BUTTON_SIZES.SMALL} className="shrink-0 ml-2">
 								<ChevronRight className="size-4" />
 							</Button>
 						)}

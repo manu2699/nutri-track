@@ -128,21 +128,21 @@ export const OnBoardFromPage = () => {
 	const [currentStep, setCurrentStep] = useState(0);
 	const [formData, setFormData] = useState({
 		name: "",
-		age: 0,
+		age: "" as number | string,
 		gender: "",
 		email: "",
-		weight: 0,
-		height: 0,
-		bodyFat: 0,
+		weight: "" as number | string,
+		height: "" as number | string,
+		bodyFat: "" as number | string,
 		region: "",
-		bmi: 0,
-		activityLevel: ActivityLevelEnum.Sedentary
+		bmi: "" as number | string,
+		activityLevel: ActivityLevelEnum.Sedentary as string
 	});
 
 	const handleChange = (id: string, value: string | number | boolean) => {
 		const formField = formFields.find((field) => field.id === id);
 		if (formField?.type === "number") {
-			value = Number(value);
+			value = value === "" ? "" : Number(value);
 		}
 		setFormData({ ...formData, [id]: value });
 		postCalculations(id, value);
@@ -152,15 +152,19 @@ export const OnBoardFromPage = () => {
 		if (id === "height") {
 			setFormData((prev) => ({
 				...prev,
-				bmi: calculateBMI(prev.weight, Number(value)),
-				bodyFat: calculateBodyFateBasedOnBMI(calculateBMI(prev.weight, Number(value)), Number(prev.age), prev.gender)
+				bmi: calculateBMI(Number(prev.weight) || 0, Number(value) || 0),
+				bodyFat: calculateBodyFateBasedOnBMI(
+					calculateBMI(Number(prev.weight) || 0, Number(value) || 0),
+					Number(prev.age) || 0,
+					prev.gender
+				)
 			}));
 			return;
 		}
 		if (id === "bmi") {
 			setFormData((prev) => ({
 				...prev,
-				bodyFat: calculateBodyFateBasedOnBMI(Number(value), Number(prev.age), prev.gender)
+				bodyFat: calculateBodyFateBasedOnBMI(Number(value) || 0, Number(prev.age) || 0, prev.gender)
 			}));
 			return;
 		}

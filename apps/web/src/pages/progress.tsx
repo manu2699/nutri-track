@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Flame } from "lucide-react";
+import { Flame, Sparkles } from "lucide-react";
 import {
 	Area,
 	AreaChart,
@@ -43,8 +43,7 @@ import { getMonthName } from "@/utils";
 const timeFrameOptions = [
 	{ label: "Month to Date", value: "month-to-date" },
 	{ label: "Past Month", value: "past-month" },
-	{ label: "Past Week", value: "past-week" },
-	{ label: "Custom", value: "custom" }
+	{ label: "Past Week", value: "past-week" }
 ] as const;
 
 const transformToTrackingResults = (trackingData: TrackingDataInterface[]): Record<string, TrackingResults[]> => {
@@ -99,8 +98,8 @@ export const ProgressPage = () => {
 	const selectedDayData = selectedDate ? progressData.find((item) => item.date === selectedDate) : undefined;
 
 	return (
-		<div className="page flex flex-col p-4 justify-between gap-6">
-			<div className="space-y-6">
+		<div className="page flex flex-col p-4 gap-6 min-h-screen">
+			<div className="flex-1 flex flex-col space-y-6">
 				<div className="flex items-center justify-between">
 					<h2 className="text-lg font-medium">Progress</h2>
 					<Select value={selectedTimeFrame} onValueChange={handleTimeFrameChange}>
@@ -116,90 +115,113 @@ export const ProgressPage = () => {
 						</SelectContent>
 					</Select>
 				</div>
-				<Carousel
-					opts={{
-						align: "center",
-						loop: true
-					}}
-					className="w-full"
-				>
-					<CarouselContent>
-						<CarouselItem>
-							<h3 className="text-sm font-medium mb-4">Calorie Consumption</h3>
-							<div className="h-[300px]">
-								<ResponsiveContainer width="100%" height="100%">
-									<BarChart data={progressData} onClick={handleChartClick}>
-										<CartesianGrid strokeDasharray="3 3" />
-										<XAxis
-											dataKey="date"
-											tick={{ fontSize: 9 }}
-											tickFormatter={(value) => `${getMonthName(new Date(value))} ${new Date(value).getDate()}`}
-											interval={"equidistantPreserveStart"}
-										/>
-										<YAxis tick={{ fontSize: 11 }} />
-										<Tooltip content={CustomTooltip} />
-										<Bar dataKey="total_calories" name="Calories" shape={<CustomDashedBar />} />
-									</BarChart>
-								</ResponsiveContainer>
-							</div>
-						</CarouselItem>
-						<CarouselItem>
-							<h3 className="text-sm font-medium mb-4">Other Vitals</h3>
-							<div className="h-[300px]">
-								<ResponsiveContainer width="100%" height="100%">
-									<AreaChart data={progressData} onClick={handleChartClick}>
-										<CartesianGrid strokeDasharray="3 3" />
-										<XAxis
-											dataKey="date"
-											tick={{ fontSize: 9 }}
-											tickFormatter={(value) => `${getMonthName(new Date(value))} ${new Date(value).getDate()}`}
-											interval={"equidistantPreserveStart"}
-										/>
-										<YAxis tick={{ fontSize: 11 }} />
-										<Tooltip />
-										<Legend />
-										<Area
-											type="monotone"
-											dataKey="total_protein"
-											stackId="1"
-											stroke="#8884d8"
-											fill="#8884d8"
-											name="Protein"
-										/>
-										<Area type="monotone" dataKey="total_fat" stackId="1" stroke="#82ca9d" fill="#82ca9d" name="Fat" />
-										<Area
-											type="monotone"
-											dataKey="total_fiber"
-											stackId="1"
-											stroke="#ffc658"
-											fill="#ffc658"
-											name="Fiber"
-										/>
-									</AreaChart>
-								</ResponsiveContainer>
-							</div>
-						</CarouselItem>
-					</CarouselContent>
-					<div className="mt-2 flex justify-between">
-						<div className="flex gap-2">
-							<CarouselPrevious />
-							<CarouselNext />
-						</div>
-						<CarouselDots />
+				{progressData.length === 0 ? (
+					<div className="flex flex-1 items-center justify-center">
+						<EmptyDataState />
 					</div>
-				</Carousel>
+				) : (
+					<>
+						<Carousel
+							opts={{
+								align: "center",
+								loop: true
+							}}
+							className="w-full"
+						>
+							<CarouselContent>
+								<CarouselItem>
+									<h3 className="text-sm font-medium mb-4">Calorie Consumption</h3>
+									<div className="h-[300px]">
+										<ResponsiveContainer width="100%" height="100%">
+											<BarChart
+												data={progressData}
+												onClick={handleChartClick}
+												margin={{ top: 10, right: 10, left: -25, bottom: 0 }}
+											>
+												<CartesianGrid strokeDasharray="3 3" />
+												<XAxis
+													dataKey="date"
+													tick={{ fontSize: 9 }}
+													tickFormatter={(value) => `${getMonthName(new Date(value))} ${new Date(value).getDate()}`}
+													interval={"equidistantPreserveStart"}
+												/>
+												<YAxis tick={{ fontSize: 11 }} />
+												<Tooltip content={CustomTooltip} />
+												<Bar dataKey="total_calories" name="Calories" shape={<CustomDashedBar />} />
+											</BarChart>
+										</ResponsiveContainer>
+									</div>
+								</CarouselItem>
+								<CarouselItem>
+									<h3 className="text-sm font-medium mb-4">Other Vitals</h3>
+									<div className="h-[300px]">
+										<ResponsiveContainer width="100%" height="100%">
+											<AreaChart
+												data={progressData}
+												onClick={handleChartClick}
+												margin={{ top: 10, right: 10, left: -25, bottom: 0 }}
+											>
+												<CartesianGrid strokeDasharray="3 3" />
+												<XAxis
+													dataKey="date"
+													tick={{ fontSize: 9 }}
+													tickFormatter={(value) => `${getMonthName(new Date(value))} ${new Date(value).getDate()}`}
+													interval={"equidistantPreserveStart"}
+												/>
+												<YAxis tick={{ fontSize: 11 }} />
+												<Tooltip />
+												<Legend />
+												<Area
+													type="monotone"
+													dataKey="total_protein"
+													stackId="1"
+													stroke="#8884d8"
+													fill="#8884d8"
+													name="Protein"
+												/>
+												<Area
+													type="monotone"
+													dataKey="total_fat"
+													stackId="1"
+													stroke="#82ca9d"
+													fill="#82ca9d"
+													name="Fat"
+												/>
+												<Area
+													type="monotone"
+													dataKey="total_fiber"
+													stackId="1"
+													stroke="#ffc658"
+													fill="#ffc658"
+													name="Fiber"
+												/>
+											</AreaChart>
+										</ResponsiveContainer>
+									</div>
+								</CarouselItem>
+							</CarouselContent>
+							<div className="mt-2 flex justify-between">
+								<div className="flex gap-2">
+									<CarouselPrevious />
+									<CarouselNext />
+								</div>
+								<CarouselDots />
+							</div>
+						</Carousel>
 
-				<div className="space-y-4">
-					{!selectedDate ? (
-						<EmptyState />
-					) : (
-						<DailyConsumptionDetails
-							selectedDate={selectedDate}
-							selectedDayData={selectedDayData}
-							onClear={() => setSelectedDate(null)}
-						/>
-					)}
-				</div>
+						<div className="space-y-4">
+							{!selectedDate ? (
+								<EmptyState />
+							) : (
+								<DailyConsumptionDetails
+									selectedDate={selectedDate}
+									selectedDayData={selectedDayData}
+									onClear={() => setSelectedDate(null)}
+								/>
+							)}
+						</div>
+					</>
+				)}
 			</div>
 
 			<Navigation />
@@ -221,6 +243,44 @@ const EmptyState = () => (
 	</Card>
 );
 
+const motivationalQuotes = [
+	{ title: "It's a little quiet here...", text: "No progress captured for this timeframe yet." },
+	{ title: "Ready, Set, Track!", text: "Logging your meals helps you stay accountable." },
+	{ title: "Knowledge is Power", text: "Track what you eat to understand your habits better." },
+	{ title: "Small Steps, Big Results", text: "Every meal tracked is a step towards your goal." },
+	{ title: "Be Mindful", text: "Awareness of what you consume is the first step to health." },
+	{ title: "Data Driven Health", text: "Turn your meals into data and your data into progress." }
+];
+
+const EmptyDataState = () => {
+	const [quoteIndex, setQuoteIndex] = useState(0);
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setQuoteIndex((prev) => (prev + 1) % motivationalQuotes.length);
+		}, 15000); // 15 seconds
+		return () => clearInterval(interval);
+	}, []);
+
+	const currentQuote = motivationalQuotes[quoteIndex];
+
+	return (
+		<Card className="p-8 text-center border-dashed bg-muted/30 w-full max-w-sm transition-all duration-500 relative overflow-hidden">
+			<div className="flex flex-col items-center gap-4">
+				<div className="p-4 rounded-full bg-primary/10 transition-transform duration-500 hover:scale-110">
+					<Sparkles className="size-8 text-primary animate-pulse" />
+				</div>
+				<div className="h-20 flex flex-col justify-center transition-opacity duration-300">
+					<h3 className="font-medium text-base text-foreground transition-all duration-300">{currentQuote.title}</h3>
+					<p className="text-sm text-muted-foreground mt-2 max-w-[250px] mx-auto transition-all duration-300">
+						{currentQuote.text}
+					</p>
+				</div>
+			</div>
+		</Card>
+	);
+};
+
 const DailyConsumptionDetails = ({
 	selectedDate,
 	selectedDayData,
@@ -233,7 +293,7 @@ const DailyConsumptionDetails = ({
 	const transformedTrackings = transformToTrackingResults(selectedDayData?.daily_trackings || []);
 
 	return (
-		<Card className="p-3">
+		<Card className="p-3 gap-4">
 			<div className="flex items-center justify-between gap-2">
 				<div>
 					<h3 className="font-medium text-sm">

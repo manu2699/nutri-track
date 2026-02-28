@@ -1,79 +1,155 @@
+import { Bean, Droplets, Flame, Wheat } from "lucide-react";
 import { motion } from "motion/react";
 
-interface WaveProgressCardProps {
-	percentage: number;
+export interface DashboardStatsCardProps {
+	caloriesConsumed: number;
+	caloriesTarget: number;
+	proteinConsumed: number;
+	proteinTarget: number;
+	fatConsumed: number;
+	fatTarget: number;
+	fiberConsumed: number;
+	fiberTarget: number;
 	className?: string;
-	children?: React.ReactNode;
 }
 
-export const WaveProgressCard: React.FC<WaveProgressCardProps> = ({ percentage, className = "", children }) => {
-	const clampedPercentage = Math.max(0, Math.min(100, percentage));
+export const DashboardStatsCard: React.FC<DashboardStatsCardProps> = ({
+	caloriesConsumed,
+	caloriesTarget,
+	proteinConsumed,
+	proteinTarget,
+	fatConsumed,
+	fatTarget,
+	fiberConsumed,
+	fiberTarget,
+	className = ""
+}) => {
+	const calPercentage = Math.min(100, Math.max(0, (caloriesConsumed / (caloriesTarget || 1)) * 100));
+	const calRemaining = Math.max(0, Math.round(caloriesTarget - caloriesConsumed));
+
+	const radius = 84;
+	const strokeWidth = 8;
+	const normalizedRadius = radius - strokeWidth;
+	const circumference = normalizedRadius * Math.PI;
+
+	const angle = Math.PI - (calPercentage / 100) * Math.PI;
+	const dotX = radius + normalizedRadius * Math.cos(angle);
+	const dotY = radius - normalizedRadius * Math.sin(angle);
 
 	return (
-		<div className={`relative overflow-hidden rounded-xl shadow-md border bg-card w-[200px] h-[200px] ${className}`}>
-			{/* Wave Background */}
-			<motion.div
-				className="absolute inset-0"
-				initial={{ y: "100%" }}
-				animate={{ y: `${100 - clampedPercentage}%` }}
-				transition={{
-					duration: 3,
-					ease: [0.25, 0.1, 0.25, 1]
-				}}
-			>
-				<div className="relative w-full h-full bg-accent">
-					{/** biome-ignore lint/a11y/noSvgWithoutTitle:-- */}
-					<svg
-						className="absolute top-0 left-0 w-full h-10"
-						viewBox="0 0 400 60"
-						preserveAspectRatio="none"
-						style={{ transform: "translateY(-100%)" }}
-					>
-						<motion.path
-							d="M-200,50 Q-150,30 -100,50 Q-50,70 0,50 Q50,30 100,50 Q150,70 200,50 Q250,30 300,50 Q350,70 400,50 Q450,30 500,50 Q550,70 600,50 Q650,30 700,50 Q750,70 800,50 Q850,30 900,50 Q950,70 1000,50 L1000,100 L-200,100 Z"
-							fill="hsl(var(--primary))"
-							opacity={0.2}
-							animate={{
-								x: [-200, 0, 100, -200]
-							}}
-							transition={{
-								duration: 20,
-								repeat: Infinity,
-								ease: "easeInOut"
-							}}
+		<div
+			className={`bg-card text-card-foreground shadow-sm border rounded-xl p-6 flex flex-col gap-8 w-full ${className}`}
+		>
+			<div className="flex flex-col items-center overflow-hidden">
+				<h3 className="text-[15px] font-bold subHeading mb-4 flex items-center gap-1.5">
+					<Flame className="size-4 text-blue-500" />
+					Calories
+				</h3>
+				{/* Semi-Circle Progress */}
+				<div
+					className="relative flex justify-center items-end"
+					style={{ width: radius * 2, height: radius + strokeWidth }}
+				>
+					<svg height={radius + strokeWidth} width={radius * 2} className="absolute bottom-0 overflow-visible">
+						<title>Calories Progress</title>
+						<path
+							d={`M ${strokeWidth} ${radius} A ${normalizedRadius} ${normalizedRadius} 0 0 1 ${radius * 2 - strokeWidth} ${radius}`}
+							fill="transparent"
+							stroke="hsl(var(--accent))"
+							strokeWidth={strokeWidth}
+							strokeLinecap="round"
 						/>
-
-						{/* Secondary sine wave - different frequency and speed */}
 						<motion.path
-							d="M-200,45 Q-125,25 -50,45 Q25,65 100,45 Q175,25 250,45 Q325,65 400,45 Q475,25 550,45 Q625,65 700,45 Q775,25 850,45 Q925,65 1000,45 L1000,100 L-200,100 Z"
-							fill="hsl(var(--accent))"
-							opacity={0.7}
-							animate={{
-								x: [0, -200, 0]
-							}}
-							transition={{
-								duration: 20,
-								repeat: Infinity,
-								ease: "easeInOut"
-							}}
+							initial={{ strokeDashoffset: circumference }}
+							animate={{ strokeDashoffset: circumference - (calPercentage / 100) * circumference }}
+							transition={{ duration: 1, ease: "easeOut" }}
+							d={`M ${strokeWidth} ${radius} A ${normalizedRadius} ${normalizedRadius} 0 0 1 ${radius * 2 - strokeWidth} ${radius}`}
+							fill="transparent"
+							stroke="hsl(var(--primary))"
+							strokeWidth={strokeWidth}
+							strokeDasharray={circumference}
+							strokeLinecap="round"
+						/>
+						<motion.circle
+							initial={{ cx: strokeWidth, cy: radius }}
+							animate={{ cx: dotX, cy: dotY }}
+							transition={{ duration: 1, ease: "easeOut" }}
+							r="6"
+							fill="hsl(var(--primary))"
+							stroke="white"
+							strokeWidth="2"
+							className="drop-shadow-sm"
 						/>
 					</svg>
+					<div className="absolute bottom-1 flex flex-col items-center">
+						<div className="text-lg font-bold subHeading flex items-baseline gap-1">
+							{Math.round(caloriesConsumed)}
+							<span className="text-sm font-medium text-muted-foreground font-sans">kcal</span>
+						</div>
+						<div className="text-xs font-medium text-muted-foreground mt-0.5">Remaining: {calRemaining} kcal</div>
+					</div>
 				</div>
-			</motion.div>
+			</div>
 
-			<div className="absolute inset-0 flex items-center justify-center z-10">
+			{/* Macros Section */}
+			<div className="flex justify-between items-center px-2 gap-9 mt-2">
+				<MacroProgressBar
+					label="Protein"
+					icon={Bean}
+					consumed={proteinConsumed}
+					total={proteinTarget}
+					colorClass="bg-orange-400"
+				/>
+				<MacroProgressBar
+					label="Fat"
+					icon={Droplets}
+					consumed={fatConsumed}
+					total={fatTarget}
+					colorClass="bg-amber-400"
+				/>
+				<MacroProgressBar
+					label="Fiber"
+					icon={Wheat}
+					consumed={fiberConsumed}
+					total={fiberTarget}
+					colorClass="bg-emerald-400"
+				/>
+			</div>
+		</div>
+	);
+};
+
+const MacroProgressBar = ({
+	label,
+	icon: Icon,
+	consumed,
+	total,
+	colorClass
+}: {
+	label: string;
+	icon: React.ElementType;
+	consumed: number;
+	total: number;
+	colorClass: string;
+}) => {
+	const percentage = Math.min(100, Math.max(0, (consumed / (total || 1)) * 100));
+
+	return (
+		<div className="flex flex-col justify-center items-center w-full">
+			<span className="text-[13px] font-bold subHeading mb-2 flex items-center gap-1.5">
+				<Icon className={`size-3.5 ${colorClass.replace("bg-", "text-")}`} />
+				{label}
+			</span>
+			<div className="h-1.5 w-full bg-muted rounded-full overflow-hidden mb-2 flex justify-start">
 				<motion.div
-					initial={{ opacity: 0, scale: 0.9 }}
-					animate={{ opacity: 1, scale: 1 }}
-					transition={{
-						duration: 0.8,
-						delay: 2 * 0.3,
-						ease: [0.25, 0.1, 0.25, 1]
-					}}
-					className="text-center px-4"
-				>
-					{children}
-				</motion.div>
+					initial={{ width: 0 }}
+					animate={{ width: `${percentage}%` }}
+					transition={{ duration: 1, ease: "easeOut" }}
+					className={`h-full rounded-full ${colorClass}`}
+				/>
+			</div>
+			<div className="text-sm text-muted-foreground font-medium flex items-center gap-1">
+				<span className="text-foreground font-bold text-base">{Math.round(consumed)}</span> / {total}g
 			</div>
 		</div>
 	);
