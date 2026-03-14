@@ -5,6 +5,7 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  PNPM_VERSION = "9.15.4"
 
 # Required for SPA routing (React Router)
 [[redirects]]
