@@ -54,7 +54,7 @@ h6,
 
 .page {
 	/* Mobile first base styles */
-	padding: 0.5rem 1rem;
+	padding: 1rem;
 	min-height: 100%;
 	width: 100%;
 	margin: 0 auto;

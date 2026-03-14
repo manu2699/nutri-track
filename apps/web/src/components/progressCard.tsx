@@ -38,11 +38,11 @@ export const DashboardStatsCard: React.FC<DashboardStatsCardProps> = ({
 
 	return (
 		<div
-			className={`bg-card text-card-foreground shadow-sm border rounded-xl p-6 flex flex-col gap-8 w-full ${className}`}
+			className={`bg-card text-card-foreground shadow-sm border rounded-xl p-6 flex flex-col gap-6 w-full ${className}`}
 		>
 			<div className="flex flex-col items-center overflow-hidden">
 				<h3 className="text-[15px] font-bold subHeading mb-4 flex items-center gap-1.5">
-					<Flame className="size-4 text-blue-500" />
+					<Flame className="size-4 text-primary" />
 					Calories
 				</h3>
 				{/* Semi-Circle Progress */}
@@ -137,7 +137,7 @@ const MacroProgressBar = ({
 	return (
 		<div className="flex flex-col justify-center items-center w-full">
 			<span className="text-[13px] font-bold subHeading mb-2 flex items-center gap-1.5">
-				<Icon className={`size-3.5 ${colorClass.replace("bg-", "text-")}`} />
+				<Icon className={`size-3.5 text-primary ${colorClass.replace("bg-", "text-")}`} />
 				{label}
 			</span>
 			<div className="h-1.5 w-full bg-muted rounded-full overflow-hidden mb-2 flex justify-start">

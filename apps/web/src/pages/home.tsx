@@ -69,7 +69,7 @@ export const HomePage = () => {
 				<p className="text-xs">{getDisplayTime(new Date())}</p>
 			</div>
 
-			<div className="w-full px-2 mt-2 mb-2">
+			<div className="w-full my-2">
 				<DashboardStatsCard
 					caloriesConsumed={consumedStats.total?.calories || 0}
 					caloriesTarget={currentUser.bmr || 2000}

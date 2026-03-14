@@ -64,12 +64,12 @@ export async function loadMockTrackingData(startDate: Date, endDate: Date) {
 export async function createMockUser() {
 	const userController = useDataStore.getState().userController;
 	const user: UserInterface = {
-		name: `Deva`,
-		email: `deva@example.com`,
+		name: `Heisenberg`,
+		email: `berg@mus.iq`,
 		age: 25,
 		gender: `male`,
 		height: 174,
-		weight: 79,
+		weight: 77,
 		body_fat: 23,
 		bmi: 24.8,
 		activity_level: ActivityLevelEnum.LightlyActive,

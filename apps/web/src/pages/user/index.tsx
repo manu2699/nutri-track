@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import { calculateBMR, calculateLeanBodyMass, calculateProteinRequired } from "@nutri-track/core";
 import { Card } from "@nutri-track/ui";
 
 import { Navigation } from "@/components/navigation";
@@ -12,7 +11,7 @@ import { formSections } from "./constants";
 
 export const UserPage = () => {
 	const currentUser = useDataStore((s) => s.currentUser);
-	const updateUser = useDataStore((s) => s.userController?.updateUser);
+
 	const [editMode, setEditMode] = useState<Record<string, boolean>>({});
 	const [form, setForm] = useState<UserInterface>(currentUser || ({} as UserInterface));
 
@@ -27,29 +26,21 @@ export const UserPage = () => {
 	const handleChange = (field: keyof UserInterface, value: string | number) => setForm({ ...form, [field]: value });
 
 	const handleSave = async (field: keyof UserInterface) => {
-		const updatedForm = { ...form };
-
-		// If weight or height changed, recalculate dependent fields
-		if (field === "weight" || field === "height") {
-			const weight = Number(updatedForm.weight);
-			const height = Number(updatedForm.height);
-			const bodyFat = Number(updatedForm.body_fat) || 0;
-			const activityLevel = updatedForm.activity_level || "sedentary";
-			const leanBodyMass = calculateLeanBodyMass(weight, bodyFat);
-			updatedForm.bmi = weight && height ? +(weight / (height / 100) ** 2).toFixed(2) : 0;
-			updatedForm.bmr = calculateBMR(leanBodyMass);
-			updatedForm.protein_required = calculateProteinRequired(leanBodyMass, activityLevel);
-		}
-
-		if (updateUser && currentUser.id) {
-			await updateUser(currentUser.id, updatedForm);
+		if (currentUser.id) {
+			const updatedUser = await useDataStore
+				.getState()
+				.userController?.updateUser(currentUser.id, { [field]: form[field] });
+			if (updatedUser) {
+				useDataStore.getState().setCurrentUser(updatedUser);
+				setForm(updatedUser);
+			}
 		}
 		setEditMode({ ...editMode, [field]: false });
 	};
 
 	return (
 		<div className="page h-full">
-			<div className="flex flex-col gap-6">
+			<div className="flex flex-col gap-2">
 				{formSections.map((section, idx) => {
 					if (section.renderer) {
 						return (
@@ -67,9 +58,9 @@ export const UserPage = () => {
 					}
 
 					return (
-						<div key={section.title ?? idx} className="space-y-3 border p-2 py-4 rounded-md">
+						<div key={section.title ?? idx} className="border p-2 px-4 rounded-md">
 							{section.title ? (
-								<h3 className="font-medium text-grey-500 border-b-2 border-dashed border-secondary pb-2 flex items-center gap-2">
+								<h3 className="font-medium text-neutral-500 border-b-2 border-dashed border-secondary pb-2 px-2 mb-2 flex items-center gap-2 tracking-wider uppercase monoFont">
 									{section.icon ? <span>{section.icon}</span> : null}
 									{section.title}
 								</h3>

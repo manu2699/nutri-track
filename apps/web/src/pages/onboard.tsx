@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
-import { ActivityLevelEnum, calculateBMI, calculateBodyFateBasedOnBMI, regions } from "@nutri-track/core";
+import { ActivityLevelEnum, calculateBMI, calculateBodyFatBasedOnBMI, regions } from "@nutri-track/core";
 import {
 	Button,
 	Input,
@@ -153,7 +153,7 @@ export const OnBoardFromPage = () => {
 			setFormData((prev) => ({
 				...prev,
 				bmi: calculateBMI(Number(prev.weight) || 0, Number(value) || 0),
-				bodyFat: calculateBodyFateBasedOnBMI(
+				bodyFat: calculateBodyFatBasedOnBMI(
 					calculateBMI(Number(prev.weight) || 0, Number(value) || 0),
 					Number(prev.age) || 0,
 					prev.gender
@@ -164,7 +164,7 @@ export const OnBoardFromPage = () => {
 		if (id === "bmi") {
 			setFormData((prev) => ({
 				...prev,
-				bodyFat: calculateBodyFateBasedOnBMI(Number(value) || 0, Number(prev.age) || 0, prev.gender)
+				bodyFat: calculateBodyFatBasedOnBMI(Number(value) || 0, Number(prev.age) || 0, prev.gender)
 			}));
 			return;
 		}

@@ -119,19 +119,33 @@ export const MealAccordion: React.FC<MealAccordionProps> = ({
 
 					return (
 						<AccordionItem key={key} value={key}>
-							<AccordionTrigger className="hover:no-underline py-3">
+							<AccordionTrigger className="hover:no-underline py-3 items-center">
 								<div className="flex items-center justify-between w-full">
 									<div className="flex items-center gap-3">
 										<mealTypeInfo.icon className="size-4 text-primary" />
 										<span className="text-sm font-medium">{mealTypeInfo.name}</span>
-										{mealTrackings.length > 0 && (
-											<span className="text-xs text-gray-500">({mealTrackings.length} items)</span>
-										)}
 									</div>
-									<div className="flex items-center gap-1 text-xs">
-										<Flame className="size-3" />
-										<span className="font-medium">{Math.round(mealCalories)}</span>
-										<span className="text-gray-500">kcal</span>
+									<div className="flex items-center gap-3 pr-2">
+										<div className="flex items-center gap-1 text-xs">
+											<Flame className="size-3" />
+											<span className="font-medium">{Math.round(mealCalories)}</span>
+											<span className="text-gray-500">kcal</span>
+										</div>
+										{editable && (
+											<Button
+												size={BUTTON_SIZES.ICON}
+												variant={BUTTON_VARIANTS.OUTLINE}
+												className="ml-2 text-xs p-0 rounded-full"
+												onClick={(e) => {
+													e.preventDefault();
+													e.stopPropagation();
+													handleOpenNewEntry(mealTypeInfo.type);
+												}}
+											>
+												<Plus className="size-4 sm:mr-1" />
+												<span className="hidden sm:inline">Add</span>
+											</Button>
+										)}
 									</div>
 								</div>
 							</AccordionTrigger>
@@ -163,18 +177,6 @@ export const MealAccordion: React.FC<MealAccordionProps> = ({
 											/>
 										))}
 									</div>
-
-									{/* Add button for editable mode */}
-									{editable && (
-										<Button
-											size={BUTTON_SIZES.SMALL}
-											className="self-end mr-auto mt-2"
-											onClick={() => handleOpenNewEntry(mealTypeInfo.type)}
-										>
-											<Plus className="size-4" />
-											Add
-										</Button>
-									)}
 								</div>
 							</AccordionContent>
 						</AccordionItem>

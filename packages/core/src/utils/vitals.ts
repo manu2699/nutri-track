@@ -4,7 +4,7 @@
 
 // Function to calculate BMI
 export const calculateBMI = (weight: number, height: number): number => {
-	return Number((weight / Math.pow(height / 100, 2)).toFixed(2));
+	return Number((weight / (height / 100) ** 2).toFixed(2));
 };
 
 export const getBMIRange = (bmi: number): string => {
@@ -15,7 +15,7 @@ export const getBMIRange = (bmi: number): string => {
 };
 
 // Body Fat Percentage based on BMI - Approx method
-export const calculateBodyFateBasedOnBMI = (bmi: number, age: number, gender: string): number => {
+export const calculateBodyFatBasedOnBMI = (bmi: number, age: number, gender: string): number => {
 	let bodyFat = 0;
 
 	if (gender.toLocaleLowerCase() === "male" && age >= 18) {
@@ -66,4 +66,9 @@ const PROTEIN_ACTIVITY_LEVEL_MAP = {
 // Minimum Protien Required Per day
 export const calculateProteinRequired = (leanBodyMass: number, activityLevel: ActivityLevelTypes): number => {
 	return Math.round(leanBodyMass * PROTEIN_ACTIVITY_LEVEL_MAP[activityLevel]);
+};
+
+// Function: Active Metabolic Rate
+export const calculateAMR = (bmr: number, activityLevel: ActivityLevelTypes): number => {
+	return Math.round(bmr * PROTEIN_ACTIVITY_LEVEL_MAP[activityLevel]);
 };

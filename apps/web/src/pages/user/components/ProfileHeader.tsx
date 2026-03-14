@@ -44,7 +44,7 @@ export const ProfileHeader = ({
 	});
 
 	return (
-		<Card className="p-4 rounded-md shadow-sm border bg-card">
+		<Card className="p-4 rounded-md shadow-none border bg-card">
 			<div className="flex flex-col gap-4">
 				<div className="flex items-center gap-4">
 					<div className="w-14 h-14 rounded-full bg-accent text-accent-foreground flex shrink-0 items-center justify-center text-2xl font-black shadow-sm border border-border/50">
@@ -69,7 +69,7 @@ export const ProfileHeader = ({
 							<div key={field.id} className="flex items-center justify-between gap-4">
 								<div className="flex items-center gap-2.5 text-muted-foreground min-w-[80px]">
 									{field.icon ? field.icon : null}
-									<span className="text-[11px] font-bold uppercase tracking-wider">{field.label}</span>
+									<span className="text-neutral-600 monoFont">{field.label}</span>
 								</div>
 								<div className="flex-1 flex justify-end min-w-0">
 									<RenderField {...renderFieldProps(field)} />

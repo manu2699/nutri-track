@@ -3,6 +3,7 @@ import {
 	Droplet,
 	Dumbbell,
 	Flame,
+	Goal,
 	Hash,
 	Mail,
 	MapPin,
@@ -22,8 +23,18 @@ export const formSections: Section[] = [
 		renderer: (args) => (
 			<ProfileHeader
 				picField={null}
-				nameField={{ id: "name", label: "Name", type: "text", icon: <UserIcon className="size-4 text-emerald-500" /> }}
-				ageField={{ id: "age", label: "Age", type: "number", icon: <Hash className="size-4 text-emerald-500" /> }}
+				nameField={{
+					id: "name",
+					label: "Name",
+					type: "text",
+					icon: <UserIcon className="size-4 text-emerald-500" />
+				}}
+				ageField={{
+					id: "age",
+					label: "Age",
+					type: "number",
+					icon: <Hash className="size-4 text-emerald-500" />
+				}}
 				otherFields={[
 					{
 						id: "gender",
@@ -35,7 +46,12 @@ export const formSections: Section[] = [
 						],
 						icon: <UserIcon className="size-4 text-emerald-500" />
 					},
-					{ id: "email", label: "Email", type: "text", icon: <Mail className="size-4 text-emerald-500" /> }
+					{
+						id: "email",
+						label: "Email",
+						type: "text",
+						icon: <Mail className="size-4 text-emerald-500" />
+					}
 				]}
 				{...args}
 			/>
@@ -45,9 +61,24 @@ export const formSections: Section[] = [
 		title: "Vitals",
 		icon: <Activity className="size-4 text-emerald-500" />,
 		fields: [
-			{ id: "weight", label: "Weight (kg)", type: "number", icon: <Scale className="size-4 text-emerald-500" /> },
-			{ id: "height", label: "Height (cm)", type: "number", icon: <Ruler className="size-4 text-blue-500" /> },
-			{ id: "body_fat", label: "Body Fat (%)", type: "number", icon: <Droplet className="size-4 text-cyan-500" /> },
+			{
+				id: "weight",
+				label: "Weight (kg)",
+				type: "number",
+				icon: <Scale className="size-4 text-emerald-500" />
+			},
+			{
+				id: "height",
+				label: "Height (cm)",
+				type: "number",
+				icon: <Ruler className="size-4 text-blue-500" />
+			},
+			{
+				id: "body_fat",
+				label: "Body Fat (%)",
+				type: "number",
+				icon: <Droplet className="size-4 text-cyan-500" />
+			},
 			{
 				id: "bmi",
 				label: "BMI",
@@ -55,12 +86,43 @@ export const formSections: Section[] = [
 				readonly: true,
 				icon: <Activity className="size-4 text-indigo-500" />
 			},
-			{ id: "bmr", label: "BMR", type: "number", readonly: true, icon: <Flame className="size-4 text-orange-500" /> },
+			{
+				id: "bmr",
+				label: "BMR",
+				type: "number",
+				readonly: true,
+				icon: <Flame className="size-4 text-orange-500" />
+			},
 			{
 				id: "protein_required",
 				label: "Protein Required (g)",
 				type: "number",
 				readonly: true,
+				icon: <Dumbbell className="size-4 text-rose-500" />
+			},
+			{
+				id: "amr",
+				label: "AMR",
+				type: "number",
+				readonly: true,
+				icon: <Flame className="size-4 text-orange-500" />
+			}
+		]
+	},
+	{
+		title: "Goals",
+		icon: <Goal className="size-4 text-emerald-500" />,
+		fields: [
+			{
+				id: "target_calories",
+				label: "Target Calories",
+				type: "number",
+				icon: <Flame className="size-4 text-orange-500" />
+			},
+			{
+				id: "target_protein",
+				label: "Target Protein (g)",
+				type: "number",
 				icon: <Dumbbell className="size-4 text-rose-500" />
 			}
 		]
